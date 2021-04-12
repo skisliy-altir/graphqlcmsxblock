@@ -1,0 +1,19 @@
+<div class="myxblock_block">
+    <h2>CMS Content Block</h2>
+    
+    <div>
+        <label>Clause:</label>
+        <select id="clause">
+            <option value="">Select</option>
+            {% for clause in clauses %}
+                {% if self.clause == clause.slug %}
+                    <option value="{{ clause.slug }}" selected="selected">{{clause.title}}</option>
+                {% else %}
+                    <option value="{{ clause.slug }}" >{{clause.title}}</option>
+                {% endif %}
+            {% endfor %}        
+        </select>
+        <div id="clauseView"></div>
+    </div>
+
+</div>

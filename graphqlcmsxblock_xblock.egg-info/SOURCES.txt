@@ -1,0 +1,13 @@
+setup.py
+graphqlcmsxblock/__init__.py
+graphqlcmsxblock/graphqlcmsxblock.py
+graphqlcmsxblock/static/README.txt
+graphqlcmsxblock/static/css/graphqlcmsxblock.css
+graphqlcmsxblock/static/html/graphqlcmsxblock.html
+graphqlcmsxblock/static/js/src/graphqlcmsxblock.js
+graphqlcmsxblock_xblock.egg-info/PKG-INFO
+graphqlcmsxblock_xblock.egg-info/SOURCES.txt
+graphqlcmsxblock_xblock.egg-info/dependency_links.txt
+graphqlcmsxblock_xblock.egg-info/entry_points.txt
+graphqlcmsxblock_xblock.egg-info/requires.txt
+graphqlcmsxblock_xblock.egg-info/top_level.txt
