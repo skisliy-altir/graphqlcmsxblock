@@ -5,6 +5,8 @@ graphqlcmsxblock/static/README.txt
 graphqlcmsxblock/static/css/graphqlcmsxblock.css
 graphqlcmsxblock/static/html/graphqlcmsxblock.html
 graphqlcmsxblock/static/js/src/graphqlcmsxblock.js
+graphqlcmsxblock/studio/html/cmsBlock.html
+graphqlcmsxblock/studio/js/cmsBlock.js
 graphqlcmsxblock_xblock.egg-info/PKG-INFO
 graphqlcmsxblock_xblock.egg-info/SOURCES.txt
 graphqlcmsxblock_xblock.egg-info/dependency_links.txt

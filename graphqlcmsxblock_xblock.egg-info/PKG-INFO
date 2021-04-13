@@ -1,10 +1,10 @@
 Metadata-Version: 1.0
 Name: graphqlcmsxblock-xblock
 Version: 0.1
-Summary: graphqlcmsxblock XBlock
+Summary: GraphQl CMS XBlock
 Home-page: UNKNOWN
-Author: UNKNOWN
-Author-email: UNKNOWN
-License: UNKNOWN
-Description: UNKNOWN
-Platform: UNKNOWN
+Author: Jonathan Arias
+Author-email: jonathan@northek.ca
+License: AGPL v3
+Description: An xblock to pull cms content from a headless-cms with graphql driver
+Platform: OpenEdx

@@ -23,6 +23,8 @@ class GraphQlCmsXBlock(XBlock):
 
     cmsApi = 'https://dev.cms.intellcreative.ca/api'
 
+    icon_class = 'other'
+
     def student_view(self, context=None):
         """
         The primary view of the GraphQL CMS XBlock, shown to students

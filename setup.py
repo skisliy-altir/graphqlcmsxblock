@@ -1,5 +1,7 @@
 """Setup for graphqlcmsxblock XBlock."""
 
+# https://github.com/ibleducation/jupyter-edx-colab-cloud-xblock
+
 from __future__ import absolute_import
 
 import os
@@ -26,8 +28,8 @@ def package_data(pkg, roots):
 setup(
     name='graphqlcmsxblock-xblock',
     version='0.1',
-    description='graphqlcmsxblock XBlock',   # TODO: write a better description.
-    license='UNKNOWN',          # TODO: choose a license: 'AGPL v3' and 'Apache 2.0' are popular.
+    description='graphqlcmsxblock XBlock',
+    license='AGPL v3', 
     packages=[
         'graphqlcmsxblock',
     ],
@@ -39,5 +41,5 @@ setup(
             'graphqlcmsxblock = graphqlcmsxblock:GraphQlCmsXBlock',
         ]
     },
-    package_data=package_data("graphqlcmsxblock", ["static", "public"]),
+    package_data=package_data("graphqlcmsxblock", ["static", "public", "studio", "translations"]),
 )
