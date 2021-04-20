@@ -5,23 +5,66 @@ function CmsBlock(runtime, element) {
     var handlerSubSectionUrl = runtime.handlerUrl(element, 'select_cms_block_subsections');
     var cmsHost = ''
 
-    $('#clause').on('change', function() {
+
+    $('#entry').on('change', function() {
+        var parts = this.value.split('::')
+        var type = parts[0]
+        var slug = parts[1]
+        var request = {}
+        request[type] = slug
+
         $.ajax({
             type: "POST",
             url: handlerUrl,
-            data: JSON.stringify({"clause": this.value}),
+            data: JSON.stringify(request),
             success: function(result){
                 cmsHost = result.cmsHost;
-                $('#clauseView').first().html(
-                    '<form id="clause" onChange="updateSelection(this)" onsubmit="javascript:void(0);" entry-type="clause">' + 
-                        renderField('lmsText', result.clause) + 
-                        renderField('lmsAdvancedConcepts', result.clause) + 
-                        renderField('cmsAsset', result.clause) + 
-                    '</form>'
-                )
+                render_entry(type, result.entry)
             }
         });
     });
+
+    render_entry = function(type, entry) {
+        switch(type){
+            case 'clause':
+                $('#generalView').first().html(
+                    '<form id="clause" onChange="updateSelection(this)" onsubmit="javascript:void(0);" entry-type="clause">' + 
+                        renderField('clauseText', entry) + 
+                        renderField('lmsText', entry) + 
+                        renderField('lmsAdvancedConcepts', entry) + 
+                        renderField('platformText', entry) + 
+                        renderField('platformAdvancedConcepts', entry) + 
+                        renderField('cmsAsset', entry) + 
+                        renderField('faq', entry) + 
+                        renderField('tip', entry) + 
+                    '</form>'
+                )
+                break;
+
+            case 'course':
+                $('#generalView').first().html(
+                    '<form id="course" onChange="updateSelection(this)" onsubmit="javascript:void(0);" entry-type="course">' + 
+                        renderField('contentBlock', entry) + 
+                        renderField('cmsAsset', entry) + 
+                        renderField('faq', entry) + 
+                        renderField('tip', entry) + 
+                    '</form>'
+                )
+                break;
+            
+            case 'page':
+                $('#generalView').first().html(
+                    '<form id="page" onChange="updateSelection(this)" onsubmit="javascript:void(0);" entry-type="page">' + 
+                        renderField('contentBlock', entry) + 
+                        renderField('cmsAsset', entry) + 
+                        renderField('faq', entry) + 
+                        renderField('tip', entry) + 
+                    '</form>'
+                )
+                break;
+        }
+        
+    }
 
 
     renderField = function(type, entry){
@@ -30,6 +73,11 @@ function CmsBlock(runtime, element) {
 
         let base = '<div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">';
         switch(type){
+            case 'clauseText': 
+                base += '<label><input type="checkbox" name="' + type + '" checked="checked"/> Include Clause Text</label>';
+                base += entry.clauseText;
+                break;
+
             case 'lmsText':
                 base += '<label><input type="checkbox" name="' + type + '" checked="checked"/> Include LMS Text</label>';
                 base += entry.lmsText;
@@ -38,6 +86,26 @@ function CmsBlock(runtime, element) {
             case 'lmsAdvancedConcepts':
                 base += '<label><input type="checkbox" name="' + type + '" checked="checked"/> Include LMS Advanced Concepts</label>';
                 base += entry.lmsAdvancedConcepts
+                break;
+
+            case 'platformText':
+                base += '<label><input type="checkbox" name="' + type + '" checked="checked"/> Include Platform Text</label>';
+                base += entry.platformText;
+                break;
+
+            case 'platformAdvancedConcepts':
+                base += '<label><input type="checkbox" name="' + type + '" checked="checked"/> Include Platform Advanced Concepts</label>';
+                base += entry.platformAdvancedConcepts;
+                break;
+
+            case 'contentBlock':
+                entry.contentBlock.forEach( function(elem) {
+                    base += '<label><input type="checkbox" name="' + type + '[' + elem.id + ']" checked="checked"/> Include Content Block</label>';
+                    base += '<div>' + 
+                        '<h5>' + elem.blockTitle +'</h5>' + 
+                            '<div>' + elem.blockContent + '</div>' + 
+                        '</div>';
+                })
                 break;
 
             case 'cmsAsset':
@@ -51,6 +119,30 @@ function CmsBlock(runtime, element) {
                                 '</div>' + 
                             '</div>';
                     }
+                })
+                break;
+
+            case 'faq':
+                entry.faq.forEach( function(elem){
+                    base += '<label><input type="checkbox" name="' + type + '[' + elem.id + ']" checked="checked"/> Include FAQ</label>';
+                    base += 
+                        '<div>' + 
+                            '<h5>' + elem.question + '</h5>' + 
+                            '<div>' + elem.answer + '</div>' + 
+                        '</div>';
+                    
+                })
+                break;
+
+            case 'tip':
+                entry.tip.forEach( function(elem){
+                    base += '<label><input type="checkbox" name="' + type + '[' + elem.id + ']" checked="checked"/> Include Tip</label>';
+                    base += 
+                        '<div>' + 
+                            '<h5>' + elem.tipTitle + '</h5>' + 
+                            '<div>' + elem.tipContent + '</div>' + 
+                        '</div>';
+                    
                 })
                 break;
         }
@@ -77,21 +169,5 @@ function CmsBlock(runtime, element) {
 
     $(function ($) {
         /* Here's where you'd do things on page load. */
-        if( $('#clause').val() != ''  )
-            $.ajax({
-                type: "POST",
-                url: handlerUrl,
-                data: JSON.stringify({"clause": $('#clause').val() }),
-                success: function(result){
-                    cmsHost = result.cmsHost;
-                    $('#clauseView').first().html(
-                        '<form id="clause" onChange="updateSelection(this)" onsubmit="javascript:void(0);" entry-type="clause">' + 
-                            renderField('lmsText', result.clause) + 
-                            renderField('lmsAdvancedConcepts', result.clause) + 
-                            renderField('cmsAsset', result.clause) + 
-                        '</form>'
-                    )
-                }
-            });
     });
 }

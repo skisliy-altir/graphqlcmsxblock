@@ -1,19 +1,75 @@
 <div class="myxblock_block">
     <h2>CMS Content Block</h2>
-    
+
+
     <div>
-        <label>Clause:</label>
-        <select id="clause">
-            <option value="">Select</option>
-            {% for clause in clauses %}
-                {% if self.clause == clause.slug %}
-                    <option value="{{ clause.slug }}" selected="selected">{{clause.title}}</option>
-                {% else %}
-                    <option value="{{ clause.slug }}" >{{clause.title}}</option>
-                {% endif %}
-            {% endfor %}        
+        <label>Select Entry:</label>
+        <select id="entry">
+            <option value="">Please select...</option>
+            <optgroup label="clause">
+                {% for clause in clauses %}
+                    {% if self.entrySlug == clause.slug and self.entryType == 'clause' %}
+                        <option value="clause::{{ clause.slug }}" selected="selected">{{clause.title}}</option>
+                    {% else %}
+                        <option value="clause::{{ clause.slug }}" >{{clause.title}}</option>
+                    {% endif %}
+                {% endfor %}        
+            </optgroup>
+            <optgroup label="course">
+                {% for course in courses %}
+                    {% if self.entrySlug == course.slug and self.entryType == 'course' %}
+                        <option value="course::{{ course.slug }}" selected="selected">{{course.title}}</option>
+                    {% else %}
+                        <option value="course::{{ course.slug }}" >{{course.title}}</option>
+                    {% endif %}
+                {% endfor %}
+            </optgroup>
+            <optgroup label="page">
+                {% for page in pages %}
+                    {% if self.entrySlug == page.slug and self.entryType == 'page' %}
+                        <option value="page::{{ page.slug }}" selected="selected">{{page.title}}</option>
+                    {% else %}
+                        <option value="page::{{ page.slug }}" >{{page.title}}</option>
+                    {% endif %}
+                {% endfor %}   
+            </optgroup>
         </select>
-        <div id="clauseView"></div>
     </div>
 
+    <div id="generalView">
+        {% for section in sections %}
+            <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
+                <p>{{ section | safe }}</p>
+            </div>
+        {% endfor %}
+
+        {% for block in contentBlocks %}
+            <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
+                <h5>{{ block.blockTitle }}</h5>
+                <div>{{ block.blockContent | safe }}</div>
+            </div>
+        {% endfor %}
+    
+        {% for asset in assets %}
+            {% for file in asset.assetfile %}
+                <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
+                    <img src="{{ cmsHost }}{{ file.url }}" class="img-fluid"/>
+                </div>
+            {% endfor %}
+        {% endfor %}
+    
+        {% for faq in faqs %}
+            <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
+                <h5>{{ faq.question }}</h5>
+                <div>{{ faq.answer | safe }}</div>
+            </div>
+        {% endfor %}
+    
+        {% for tip in tips %}
+            <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;"> 
+                <h5>{{ tip.tipTitle }}</h5>
+                <div>{{ tip.tipContent | safe }}</div>
+            </div>
+        {% endfor %}
+    </div>
 </div>

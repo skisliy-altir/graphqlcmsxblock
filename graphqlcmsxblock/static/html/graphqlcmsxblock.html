@@ -1,14 +1,39 @@
 <div class="myxblock_block">
-    <h1>{{ title }}</h1>
-    {% for section in sections %}
-        <p>{{ section | safe }}</p>
-    {% endfor %}
 
-    {% for asset in assets %}
-        {% for file in asset.assetfile %}
+    <div class="clause">
+        <h1>{{ title }}</h1>
+        
+        {% for section in sections %}
+            <p>{{ section | safe }}</p>
+        {% endfor %}
+
+        {% for block in contentBlocks %}
             <div>
-                <img src="{{ cmsHost }}{{ file.url }}" class="img-fluid"/>
+                <h5>{{ block.blockTitle }}</h5>
+                <div>{{ block.blockContent | safe }}</div>
             </div>
         {% endfor %}
-    {% endfor %}
+    
+        {% for asset in assets %}
+            {% for file in asset.assetfile %}
+                <div>
+                    <img src="{{ cmsHost }}{{ file.url }}" class="img-fluid"/>
+                </div>
+            {% endfor %}
+        {% endfor %}
+    
+        {% for faq in faqs %}
+            <div>
+                <h5>{{ faq.question }}</h5>
+                <div>{{ faq.answer | safe }}</div>
+            </div>
+        {% endfor %}
+    
+        {% for tip in tips %}
+            <div>
+                <h5>{{ tip.tipTitle }}</h5>
+                <div>{{ tip.tipContent | safe }}</div>
+            </div>
+        {% endfor %}
+    </div>
 </div>
