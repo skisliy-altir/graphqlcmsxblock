@@ -16,6 +16,9 @@ class GraphQlCmsXBlock(XBlock):
                 title,
                 postDate,
                 ... on clauses_clause_Entry {
+                    coursetag {
+                        slug
+                    },
                     agreementType {
                         title
                     },
@@ -64,6 +67,9 @@ class GraphQlCmsXBlock(XBlock):
                 title,
                 postDate,
                 ... on courses_courses_Entry {
+                    coursetag {
+                        slug
+                    },
                     agreementType {
                         title
                     },
@@ -115,6 +121,9 @@ class GraphQlCmsXBlock(XBlock):
                 title,
                 postDate,
                 ... on pages_page_Entry {
+                    coursetag {
+                        slug
+                    },
                     agreementType {
                         title
                     },
@@ -221,29 +230,44 @@ class GraphQlCmsXBlock(XBlock):
         The primary view of the LMS Admin - GraphQL CMS XBlock, shown to Autors
         """
 
+        # Load Course Top Filter
+        resp =  requests.post(self.cmsApi, json={
+            "query": "query MyQuery { tags(group: \"coursetag\", limit: 30) {slug, title} }"
+        })
+        courseTags = resp.json()['data']['tags']
+        courseTags.sort(key=lambda x: x['title'], reverse=False)
+
+
         # Load Clauses
         resp = requests.post(self.cmsApi, json={
-            "query": "query MyQuery {entries(section: \"clauses\") {slug, title} }"
+            "query": "query MyQuery { entries(section: \"clauses\") {slug, title, \
+                    ... on clauses_clause_Entry { coursetag { slug } } \
+                } }"
         })
         clauses = resp.json()['data']['entries']
         clauses.sort(key=lambda x: x['title'], reverse=False)
 
         # Load Courses
         resp = requests.post(self.cmsApi, json={
-            "query": "query MyQuery {entries(section: \"courses\") {slug, title} }"
+            "query": "query MyQuery { entries(section: \"courses\") {slug, title \
+                    ... on courses_courses_Entry { coursetag { slug } } \
+                } }"
         })
         courses = resp.json()['data']['entries']
         courses.sort(key=lambda x: x['title'], reverse=False)
 
         # Load Pages
         resp = requests.post(self.cmsApi, json={
-            "query": "query MyQuery {entries(section: \"pages\") {slug, title} }"
+            "query": "query MyQuery { entries(section: \"pages\") {slug, title \
+                    ... on pages_page_Entry { coursetag { slug } } \
+                } }"
         })
         pages = resp.json()['data']['entries']
         pages.sort(key=lambda x: x['title'], reverse=False)
 
         # Load Selected Entry
         entry = {
+            'coursetag': [],
             'title': '',
             'sections': [],
             'contentBlocks': [],
@@ -257,9 +281,11 @@ class GraphQlCmsXBlock(XBlock):
         frag = Fragment()
         html = self.render_template("studio/html/cmsBlock.html", {
                 'self': self,
+                'courseTags': courseTags,
                 'clauses':  clauses,
                 'courses':  courses,
                 'pages': pages,
+                'selectedCourseTag': entry['coursetag'],
                 'title': entry['title'],
                 'sections': entry['sections'],
                 'contentBlocks': entry['contentBlocks'],
@@ -309,6 +335,10 @@ class GraphQlCmsXBlock(XBlock):
 
         entry = resp.json()['data']['entries'][0]
         title = entry['title']
+        
+        coursetag = '' 
+        if 'coursetag' in entry and len(entry['coursetag']) > 0 :
+            coursetag = entry['coursetag'][0]['slug']
 
         if len(self.entrySections) > 0 :
             for section in self.entrySections : 
@@ -349,6 +379,7 @@ class GraphQlCmsXBlock(XBlock):
 
         return {
             'title': title,
+            'coursetag': coursetag,
             'sections': sections,
             'contentBlocks': contentBlocks,
             'assets': assets,

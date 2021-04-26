@@ -5,6 +5,28 @@ function CmsBlock(runtime, element) {
     var handlerSubSectionUrl = runtime.handlerUrl(element, 'select_cms_block_subsections');
     var cmsHost = ''
 
+    $('#courseFilter').on('change', function(){
+        var filter = this.value
+
+        $("#entry option").each(function(){
+
+            var courseTag =  $(this).attr('attr-course')
+
+            if( filter == '' ){
+                $(this).removeAttr('hidden')
+            }
+            else if( typeof courseTag == 'undefiend' && filter != '' ){
+                // options without course defined
+                $(this).attr('hidden', 'hidden')
+            }
+            else {
+                if( courseTag == filter )
+                    $(this).removeAttr('hidden')
+                else
+                    $(this).attr('hidden','hidden')
+            }
+        });
+    });
 
     $('#entry').on('change', function() {
         var parts = this.value.split('::')

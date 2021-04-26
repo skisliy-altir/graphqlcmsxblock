@@ -1,36 +1,41 @@
 <div class="myxblock_block">
     <h2>CMS Content Block</h2>
 
+    <div>
+        <label>Select Course:</label><br />
+        <select id="courseFilter" style="width: 400px;">
+            <option value="">All CourseTags</option>
+            {% for tag in courseTags %}
+                <option value="{{ tag.slug }}" {% if selectedCourseTag == tag.slug %} selected="selected" {% endif %}>{{tag.title}}</option>
+            {% endfor %}        
+        </select>
+    </div>
+
+    <br /><br />
 
     <div>
-        <label>Select Entry:</label>
-        <select id="entry">
+        <label>Select Entry:</label><br />
+        <select id="entry"  style="width:400px;">
             <option value="">Please select...</option>
             <optgroup label="clause">
                 {% for clause in clauses %}
-                    {% if self.entrySlug == clause.slug and self.entryType == 'clause' %}
-                        <option value="clause::{{ clause.slug }}" selected="selected">{{clause.title}}</option>
-                    {% else %}
-                        <option value="clause::{{ clause.slug }}" >{{clause.title}}</option>
-                    {% endif %}
+                    <option value="clause::{{ clause.slug }}" 
+                        {% if self.entrySlug == clause.slug and self.entryType == 'clause' %} selected="selected" {% endif %}
+                        attr-course="{% if 'coursetag' in clause and clause.coursetag|length >= 1 %}{{ clause.coursetag.0.slug }}{% endif %}">{{clause.title}}</option>
                 {% endfor %}        
             </optgroup>
             <optgroup label="course">
                 {% for course in courses %}
-                    {% if self.entrySlug == course.slug and self.entryType == 'course' %}
-                        <option value="course::{{ course.slug }}" selected="selected">{{course.title}}</option>
-                    {% else %}
-                        <option value="course::{{ course.slug }}" >{{course.title}}</option>
-                    {% endif %}
+                    <option value="course::{{ course.slug }}"
+                        {% if self.entrySlug == course.slug and self.entryType == 'course' %} selected="selected" {% endif %}
+                        attr-course="{% if 'coursetag' in course and course.coursetag|length >= 1 %}{{ course.coursetag.0.slug }}{% endif %}">{{course.title}}</option>
                 {% endfor %}
             </optgroup>
             <optgroup label="page">
                 {% for page in pages %}
-                    {% if self.entrySlug == page.slug and self.entryType == 'page' %}
-                        <option value="page::{{ page.slug }}" selected="selected">{{page.title}}</option>
-                    {% else %}
-                        <option value="page::{{ page.slug }}" >{{page.title}}</option>
-                    {% endif %}
+                    <option value="page::{{ page.slug }}"
+                        {% if self.entrySlug == page.slug and self.entryType == 'page' %} selected="selected" {% endif %}
+                        attr-course="{% if 'coursetag' in page and page.coursetag|length >= 1 %}{{ page.coursetag.0.slug }}{% endif %}" >{{page.title}}</option>
                 {% endfor %}   
             </optgroup>
         </select>
