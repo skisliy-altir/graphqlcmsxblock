@@ -73,7 +73,18 @@ function CmsBlock(runtime, element) {
                     '</form>'
                 )
                 break;
-            
+                            
+            case 'lesson':
+                $('#generalView').first().html(
+                    '<form id="lesson" onChange="updateSelection(this)" onsubmit="javascript:void(0);" entry-type="lesson">' + 
+                        renderField('contentBlock', entry) + 
+                        renderField('cmsAsset', entry) + 
+                        renderField('faq', entry) + 
+                        renderField('tip', entry) + 
+                    '</form>'
+                )
+                break;
+                
             case 'page':
                 $('#generalView').first().html(
                     '<form id="page" onChange="updateSelection(this)" onsubmit="javascript:void(0);" entry-type="page">' + 

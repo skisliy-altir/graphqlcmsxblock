@@ -31,6 +31,13 @@
                         attr-course="{% if 'coursetag' in course and course.coursetag|length >= 1 %}{{ course.coursetag.0.slug }}{% endif %}">{{course.title}}</option>
                 {% endfor %}
             </optgroup>
+            <optgroup label="lesson">
+                {% for lesson in lessons %}
+                    <option value="lesson::{{ lesson.slug }}"
+                        {% if self.entrySlug == lesson.slug and self.entryType == 'lesson' %} selected="selected" {% endif %}
+                        attr-course="{% if 'coursetag' in lesson and lesson.coursetag|length >= 1 %}{{ lesson.coursetag.0.slug }}{% endif %}" >{{lesson.title}}</option>
+                {% endfor %}   
+            </optgroup>
             <optgroup label="page">
                 {% for page in pages %}
                     <option value="page::{{ page.slug }}"
