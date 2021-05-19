@@ -116,6 +116,61 @@ class GraphQlCmsXBlock(XBlock):
                 } 
             } """
 
+    lessonGraphQlQuery = """{
+                slug,
+                title,
+                postDate,
+                ... on lessons_lesson_Entry {
+                    coursetag {
+                        slug
+                    },
+                    agreementType {
+                        title
+                    },
+                    contentBlock {
+                        ... on contentBlock_contentBlock_BlockType {
+                            id,
+                            blockTitle,
+                            blockContent,
+                            contentUsedFor
+                        }
+                    },
+                    cmsAsset {
+                        ... on cmsAsset_cmsAsset_BlockType {
+                            id,
+                            assetTitle,
+                            assetType,
+                            assetUsedFor,
+                            assetfile  {
+                                url
+                            }
+                        }
+                    },
+                    faq{
+                        ... on faq_faq_BlockType {
+                            id,
+                            question,
+                            answer
+                        }
+                    },
+                    tip{
+                        ... on tip_tip_BlockType {
+                            id,
+                            tipTitle,
+                            tipContent,
+                            tipType{
+                                title
+                            },
+                            tipIcon{
+                                url
+                            },
+                            tipCssClass
+                        }
+                    }
+                } 
+            }
+    """
+
     pageGraphQlQuery = """ {
                 slug,
                 title,
@@ -256,6 +311,15 @@ class GraphQlCmsXBlock(XBlock):
         courses = resp.json()['data']['entries']
         courses.sort(key=lambda x: x['title'], reverse=False)
 
+        # Load Lessons
+        resp = requests.post(self.cmsApi, json={
+            "query": "query MyQuery { entries(section: \"lessons\") {slug, title \
+                    ... on lessons_lesson_Entry { coursetag { slug } } \
+                } }"
+        })
+        lessons = resp.json()['data']['entries']
+        lessons.sort(key=lambda x: x['title'], reverse=False)
+
         # Load Pages
         resp = requests.post(self.cmsApi, json={
             "query": "query MyQuery { entries(section: \"pages\") {slug, title \
@@ -283,6 +347,7 @@ class GraphQlCmsXBlock(XBlock):
                 'self': self,
                 'courseTags': courseTags,
                 'clauses':  clauses,
+                'lessons': lessons,
                 'courses':  courses,
                 'pages': pages,
                 'selectedCourseTag': entry['coursetag'],
@@ -417,6 +482,19 @@ class GraphQlCmsXBlock(XBlock):
             self.entrySections = []
             resp = requests.post(self.cmsApi, json={
                 "query": "query MyQuery {entries(section: \"courses\", slug: \"" + self.entrySlug + "\" limit: 1) " + self.courseGraphQlQuery + " }"
+            })
+            entry = resp.json()['data']['entries'][0]
+            return {
+                "cmsHost": self.cmsApi.replace('/api', ''),
+                "entry": entry
+            }
+        
+        if 'lesson' in data:
+            self.entryType = 'lesson'
+            self.entrySlug = data['lesson']
+            self.entrySections = []
+            resp = requests.post(self.cmsApi, json={
+                "query": "query MyQuery {entries(section: \"lessons\", slug: \"" + self.entrySlug + "\" limit: 1) " + self.lessonGraphQlQuery + " }"
             })
             entry = resp.json()['data']['entries'][0]
             return {
