@@ -5,27 +5,9 @@ function CmsBlock(runtime, element) {
     var handlerSubSectionUrl = runtime.handlerUrl(element, 'select_cms_block_subsections');
     var cmsHost = ''
 
-    $('#courseFilter').on('change', function(){
+    $('#courseFilter').on('change', function() {
         var filter = this.value
-
-        $("#entry option").each(function(){
-
-            var courseTag =  $(this).attr('attr-course')
-
-            if( filter == '' ){
-                $(this).removeAttr('hidden')
-            }
-            else if( typeof courseTag == 'undefiend' && filter != '' ){
-                // options without course defined
-                $(this).attr('hidden', 'hidden')
-            }
-            else {
-                if( courseTag == filter )
-                    $(this).removeAttr('hidden')
-                else
-                    $(this).attr('hidden','hidden')
-            }
-        });
+        update_entry_options(filter)
     });
 
     $('#entry').on('change', function() {
@@ -45,6 +27,32 @@ function CmsBlock(runtime, element) {
             }
         });
     });
+
+    update_entry_options = function(filter){
+        const types = ['clauses', 'courses', 'lessons', 'pages']
+        const singularTypes = ['clause', 'course', 'lesson', 'page']
+
+        for(index in types){
+            var typeKey = types[index]
+            var singularType = singularTypes[index]
+            
+            $('#' + typeKey + 'Options').empty()
+
+            window[typeKey].forEach( function(elem){
+                if( filter == '' || (elem.coursetag.length > 0 && elem.coursetag[0].slug == filter) )
+                {
+                    var option = document.createElement('option');
+                    option.appendChild( document.createTextNode(elem.title) );        
+                    option.value = singularType + '::' + elem.slug; 
+
+                    if( window.entrySlug != '' && window.entrySlug == elem.slug && window.entryType != '' && window.entryType == singularType)
+                        option.selected = 'selected'
+
+                    $('#' + typeKey + 'Options').append(option); 
+                }
+            })
+        }
+    }
 
     render_entry = function(type, entry) {
         switch(type){
@@ -202,5 +210,6 @@ function CmsBlock(runtime, element) {
 
     $(function ($) {
         /* Here's where you'd do things on page load. */
+        update_entry_options($('#courseFilter').val())
     });
 }

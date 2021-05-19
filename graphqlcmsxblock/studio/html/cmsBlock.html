@@ -17,36 +17,24 @@
         <label>Select Entry:</label><br />
         <select id="entry"  style="width:400px;">
             <option value="">Please select...</option>
-            <optgroup label="clause">
-                {% for clause in clauses %}
-                    <option value="clause::{{ clause.slug }}" 
-                        {% if self.entrySlug == clause.slug and self.entryType == 'clause' %} selected="selected" {% endif %}
-                        attr-course="{% if 'coursetag' in clause and clause.coursetag|length >= 1 %}{{ clause.coursetag.0.slug }}{% endif %}">{{clause.title}}</option>
-                {% endfor %}        
+            <optgroup label="clause" id="clausesOptions">      
             </optgroup>
-            <optgroup label="course">
-                {% for course in courses %}
-                    <option value="course::{{ course.slug }}"
-                        {% if self.entrySlug == course.slug and self.entryType == 'course' %} selected="selected" {% endif %}
-                        attr-course="{% if 'coursetag' in course and course.coursetag|length >= 1 %}{{ course.coursetag.0.slug }}{% endif %}">{{course.title}}</option>
-                {% endfor %}
+            <optgroup label="course" id="coursesOptions">
             </optgroup>
-            <optgroup label="lesson">
-                {% for lesson in lessons %}
-                    <option value="lesson::{{ lesson.slug }}"
-                        {% if self.entrySlug == lesson.slug and self.entryType == 'lesson' %} selected="selected" {% endif %}
-                        attr-course="{% if 'coursetag' in lesson and lesson.coursetag|length >= 1 %}{{ lesson.coursetag.0.slug }}{% endif %}" >{{lesson.title}}</option>
-                {% endfor %}   
+            <optgroup label="lesson" id="lessonsOptions">
             </optgroup>
-            <optgroup label="page">
-                {% for page in pages %}
-                    <option value="page::{{ page.slug }}"
-                        {% if self.entrySlug == page.slug and self.entryType == 'page' %} selected="selected" {% endif %}
-                        attr-course="{% if 'coursetag' in page and page.coursetag|length >= 1 %}{{ page.coursetag.0.slug }}{% endif %}" >{{page.title}}</option>
-                {% endfor %}   
+            <optgroup label="page" id="pagesOptions">
             </optgroup>
         </select>
     </div>
+    <script>
+        var entrySlug = '{{ self.entrySlug }}';
+        var entryType = '{{ self.entryType }}';
+        var clauses = {{ clauses | safe }};
+        var courses = {{ courses | safe }};
+        var lessons = {{ lessons | safe }};
+        var pages = {{ pages | safe }};
+    </script>
 
     <div id="generalView">
         {% for section in sections %}
