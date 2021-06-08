@@ -225,6 +225,15 @@ class GraphQlCmsXBlock(XBlock):
                 } 
             } """
 
+    testTableGraphQlQuery = """{
+  		... on dev_dev_Entry{
+        tabletest{
+          ... on tabletest_BlockType{
+			col1,
+            col2}
+        }
+      }
+	}"""
 
     # Fields are defined on the class.  You can access them in your code as
     # self.<fieldname>.
@@ -329,6 +338,14 @@ class GraphQlCmsXBlock(XBlock):
         pages = resp.json()['data']['entries']
         pages.sort(key=lambda x: x['title'], reverse=False)
 
+        # Load Tables
+        resp = requests.post(self.cmsApi, json={
+            "query": "query MyQuery { entries(section: \"dev\") {slug, title \
+                } }"
+        })
+        tables = resp.json()['data']['entries']
+        tables.sort(key=lambda x: x['title'], reverse=False)
+        
         # Load Selected Entry
         entry = {
             'coursetag': [],
@@ -345,6 +362,7 @@ class GraphQlCmsXBlock(XBlock):
         frag = Fragment()
         html = self.render_template("studio/html/cmsBlock.html", {
                 'self': self,
+                'tables': tables,
                 'courseTags': courseTags,
                 'clauses':  clauses,
                 'lessons': lessons,

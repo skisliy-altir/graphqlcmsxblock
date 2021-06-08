@@ -36,6 +36,32 @@
         var pages = {{ pages | safe }};
     </script>
 
+    <style>
+    .accordion {
+        background-color: #eee;
+        color: #444;
+        cursor: pointer;
+        padding: 18px;
+        width: 100%;
+        border: none;
+        text-align: left;
+        outline: none;
+        font-size: 15px;
+        transition: 0.4s;
+    }
+
+    .active, .accordion:hover {
+        background-color: #ccc; 
+    }
+
+    .panel {
+        padding: 0 18px;
+        display: none;
+        background-color: white;
+        overflow: hidden;
+        }
+    </style>
+
     <div>
         <button class="accordion">Section 1</button>
         <div class="panel">
@@ -69,6 +95,89 @@
         });
     }
     </script>
+
+    <style>
+        th, td, p, input, h3 {
+            font:15px 'Segoe UI';
+        }
+        table, th, td {
+            border: solid 1px #ddd;
+            border-collapse: collapse;
+            padding: 2px 3px;
+            text-align: center;
+        }
+        th {
+            font-weight:bold;
+        }
+    </style>
+
+    <script>
+        function tableFromJson() {
+            // the json data. (you can change the values for output.)
+            var myBooks = [
+            {
+                "col1": "test 1",
+                "col2": "test 1"
+            },
+            {
+                "col1": "test 2",
+                "col2": "test 2"
+            },
+            {
+                "col1": "test 3",
+                "col2": "test 3"
+            }
+            ]
+
+            // Extract value from table header. 
+            // ('Book ID', 'Book Name', 'Category' and 'Price')
+            var col = [];
+            for (var i = 0; i < myBooks.length; i++) {
+                for (var key in myBooks[i]) {
+                    if (col.indexOf(key) === -1) {
+                        col.push(key);
+                    }
+                }
+            }
+
+            // Create a table.
+            var table = document.createElement("table");
+
+            // Create table header row using the extracted headers above.
+            var tr = table.insertRow(-1);                   // table row.
+
+            for (var i = 0; i < col.length; i++) {
+                var th = document.createElement("th");      // table header.
+                th.innerHTML = col[i];
+                tr.appendChild(th);
+            }
+
+            // add json data to the table as rows.
+            for (var i = 0; i < myBooks.length; i++) {
+
+                tr = table.insertRow(-1);
+
+                for (var j = 0; j < col.length; j++) {
+                    var tabCell = tr.insertCell(-1);
+                    tabCell.innerHTML = myBooks[i][col[j]];
+                }
+            }
+
+            // Now, add the newly created table with json data, to a container.
+            var divShowData = document.getElementById('showData');
+            divShowData.innerHTML = "";
+            divShowData.appendChild(table);
+        }
+    </script>
+
+    <div>
+        <select id="tableEntry" style="width: 400px;">
+            <option value="" disabled selected>Select your table...</option>
+            {% for table in tables %}
+                <option value="{{ table.slug }}">{{table.title}}</option>
+            {% endfor %}        
+        </select>
+    </div>
 
     <div id="generalView">
         {% for section in sections %}
@@ -106,30 +215,4 @@
             </div>
         {% endfor %}
     </div>
-
-    <style>
-        .accordion {
-            background-color: #eee;
-            color: #444;
-            cursor: pointer;
-            padding: 18px;
-            width: 100%;
-            border: none;
-            text-align: left;
-            outline: none;
-            font-size: 15px;
-            transition: 0.4s;
-        }
-
-        .active, .accordion:hover {
-            background-color: #ccc; 
-        }
-
-        .panel {
-            padding: 0 18px;
-            display: none;
-            background-color: white;
-            overflow: hidden;
-        }
-    </style>
 </div>
