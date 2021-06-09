@@ -110,73 +110,18 @@
             font-weight:bold;
         }
     </style>
-
-    <script>
-        function tableFromJson() {
-            // the json data. (you can change the values for output.)
-            var myBooks = [
-            {
-                "col1": "test 1",
-                "col2": "test 1"
-            },
-            {
-                "col1": "test 2",
-                "col2": "test 2"
-            },
-            {
-                "col1": "test 3",
-                "col2": "test 3"
-            }
-            ]
-
-            // Extract value from table header. 
-            // ('Book ID', 'Book Name', 'Category' and 'Price')
-            var col = [];
-            for (var i = 0; i < myBooks.length; i++) {
-                for (var key in myBooks[i]) {
-                    if (col.indexOf(key) === -1) {
-                        col.push(key);
-                    }
-                }
-            }
-
-            // Create a table.
-            var table = document.createElement("table");
-
-            // Create table header row using the extracted headers above.
-            var tr = table.insertRow(-1);                   // table row.
-
-            for (var i = 0; i < col.length; i++) {
-                var th = document.createElement("th");      // table header.
-                th.innerHTML = col[i];
-                tr.appendChild(th);
-            }
-
-            // add json data to the table as rows.
-            for (var i = 0; i < myBooks.length; i++) {
-
-                tr = table.insertRow(-1);
-
-                for (var j = 0; j < col.length; j++) {
-                    var tabCell = tr.insertCell(-1);
-                    tabCell.innerHTML = myBooks[i][col[j]];
-                }
-            }
-
-            // Now, add the newly created table with json data, to a container.
-            var divShowData = document.getElementById('showData');
-            divShowData.innerHTML = "";
-            divShowData.appendChild(table);
-        }
-    </script>
+        
 
     <div>
         <select id="tableEntry" style="width: 400px;">
             <option value="" disabled selected>Select your table...</option>
+            <option value="none">Remove current table</option>
             {% for table in tables %}
                 <option value="{{ table.slug }}">{{table.title}}</option>
             {% endfor %}        
         </select>
+
+        <p id='showData'></p>
     </div>
 
     <div id="generalView">

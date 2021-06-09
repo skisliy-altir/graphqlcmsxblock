@@ -230,7 +230,8 @@ class GraphQlCmsXBlock(XBlock):
         tabletest{
           ... on tabletest_BlockType{
 			col1,
-            col2}
+            col2
+            }
         }
       }
 	}"""
@@ -556,3 +557,21 @@ class GraphQlCmsXBlock(XBlock):
              """<graphqlcmsxblock/>
              """)
         ]
+
+    @XBlock.json_handler
+    def get_table_data(self, data, suffix = ''):
+        slug = data['table']
+        table = []
+        if slug == 'none':
+            return{
+                'table': table
+            }
+
+        resp = requests.post(self.cmsApi, json={
+            "query": "query MyQuery {entries(section: \"dev\", slug: \"" + slug + "\" limit: 1) " + self.testTableGraphQlQuery + " }"
+        })
+        table = resp.json()['data']['entries'][0]['tabletest']
+        return{
+            "table": table
+        }
+        
