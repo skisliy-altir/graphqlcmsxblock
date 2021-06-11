@@ -115,7 +115,6 @@
     <div>
         <select id="tableEntry" style="width: 400px;">
             <option value="" disabled selected>Select your table...</option>
-            <option value="none">Remove current table</option>
             {% for table in tables %}
                 <option value="{{ table.slug }}">{{table.title}}</option>
             {% endfor %}        
