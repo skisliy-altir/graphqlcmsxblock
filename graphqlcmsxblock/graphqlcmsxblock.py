@@ -436,10 +436,12 @@ class GraphQlCmsXBlock(XBlock):
                                     faqs.append(subitem)
                                 elif 'tip' in section :
                                     tips.append(subitem)
+                                elif 'tabletest' in section:
+                                    tables.append(subitem)
                                 
         else: 
             for section in entry :
-                if (type(entry[section])) == str and section not in ['slug', 'title', 'postDate', 'contentBlock', 'cmsAsset', 'faq', 'tip'] :
+                if (type(entry[section])) == str and section not in ['slug', 'title', 'postDate', 'contentBlock', 'cmsAsset', 'faq', 'tip', 'tabletest'] :
                     sections.append(entry[section])
                 elif 'contentBlock' in section:
                     for subitem in entry[section] :
@@ -453,6 +455,9 @@ class GraphQlCmsXBlock(XBlock):
                 elif 'tip' in section :
                     for subitem in entry[section] :
                         tips.append(subitem)
+                elif 'tabletest' in section:
+                    for subitem in entry[section]:
+                        tables.append(subitem)
 
         return {
             'title': title,
