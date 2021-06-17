@@ -1,5 +1,20 @@
 <div class="myxblock_block">
 
+    <style>
+        th, td, p, input, h3 {
+            font:15px 'Segoe UI';
+        }
+        table, th, td {
+            border: solid 1px #ddd;
+            border-collapse: collapse;
+            padding: 2px 3px;
+            text-align: center;
+        }
+        th {
+            font-weight:bold;
+        }
+    </style>
+
     <div class="clause">
         <h1>{{ title }}</h1>
         
@@ -35,5 +50,33 @@
                 <div>{{ tip.tipContent | safe }}</div>
             </div>
         {% endfor %}
+
+        {% if tables|length > 0 %}
+            <div>
+                <table>
+                    {% if hasHeaders %}
+                        <tr>
+                            <th>{{ tables.0.col1 }} </th>
+                            <th> {{ tables.0.col2 }} </th>
+                        </tr>
+
+                        {% for row in tables|slice:"1:" %}
+                            <tr>
+                                <td> {{ row.col1 }} </td>
+                                <td> {{ row.col2 }} </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        {% for row in tables %}
+                            <tr>
+                                <td> {{ row.col1 }} </td>
+                                <td> {{ row.col2 }} </td>
+                            </tr>
+                        {% endfor%}
+                    {% endif %}
+                </table>
+            </div>
+        {% endif %}
+
     </div>
 </div>

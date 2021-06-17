@@ -3,7 +3,6 @@ function CmsBlock(runtime, element) {
 
     var handlerUrl = runtime.handlerUrl(element, 'select_cms_block');
     var handlerSubSectionUrl = runtime.handlerUrl(element, 'select_cms_block_subsections');
-    var handlerTableUrl = runtime.handlerUrl(element, 'get_table_data');
     var cmsHost = ''
 
     $('#courseFilter').on('change', function() {
@@ -17,6 +16,7 @@ function CmsBlock(runtime, element) {
         var slug = parts[1]
         var request = {}
         request[type] = slug
+        console.log(request)
 
         $.ajax({
             type: "POST",
@@ -28,24 +28,6 @@ function CmsBlock(runtime, element) {
             }
         });
     });
-
-    $('#tableEntry').on('change', function(){
-        var filter = this.value
-        console.log(filter)
-        data = {
-            'table':filter
-        }
-
-        $.ajax({
-            type:"POST",
-            url: handlerTableUrl,
-            data: JSON.stringify(data),
-            success: function(result){
-                console.log(result)
-                tableFromJson(result.table)
-            }
-        })
-    })
 
     update_entry_options = function(filter){
         const types = ['clauses', 'courses', 'lessons', 'pages']
@@ -85,7 +67,8 @@ function CmsBlock(runtime, element) {
                         renderField('platformAdvancedConcepts', entry) + 
                         renderField('cmsAsset', entry) + 
                         renderField('faq', entry) + 
-                        renderField('tip', entry) + 
+                        renderField('tip', entry) +
+                        renderField('2table', entry) +
                     '</form>'
                 )
                 break;
@@ -205,6 +188,30 @@ function CmsBlock(runtime, element) {
                     
                 })
                 break;
+                
+            case '2table':
+                base += '<label><input type="checkbox" name="' + type +'"  checked="checked"/> Include Table</label>';
+                base += '<table>' 
+
+                tableData = entry.table
+
+                if(entry.hasHeaders){
+                    base += '<tr>'+
+                        '<th>' + entry.table[0].col1 + '</th>' +
+                        '<th>' + entry.table[0].col2 + '</th>'  +
+                        '</tr>'
+                    tableData = entry.table.slice(1)
+                }
+
+                tableData.forEach(function(elem){
+
+                    base+= '<tr>'
+                    + '<td>' + elem.col1 + '</td>' +
+                    '<td>' + elem.col2 + '</td>'                  
+                    base += '</tr>'
+                })
+                
+                base += '</table>'
         }
         base += '</div>';
         return base;
@@ -231,51 +238,5 @@ function CmsBlock(runtime, element) {
         /* Here's where you'd do things on page load. */
         update_entry_options($('#courseFilter').val())
     });
-
-
-    function tableFromJson(jsonData) {
-        // the json data. (you can change the values for output.)
-        $('#showData').empty()
-        var myBooks = jsonData
-
-        // Extract value from table header. 
-        // ('Book ID', 'Book Name', 'Category' and 'Price')
-        var col = [];
-        for (var i = 0; i < myBooks.length; i++) {
-            for (var key in myBooks[i]) {
-                if (col.indexOf(key) === -1) {
-                    col.push(key);
-                }
-            }
-        }
-
-        // Create a table.
-        var table = document.createElement("table");
-
-        // Create table header row using the extracted headers above.
-        var tr = table.insertRow(-1);                   // table row.
-
-        for (var i = 0; i < col.length; i++) {
-            var th = document.createElement("th");      // table header.
-            th.innerHTML = col[i];
-            tr.appendChild(th);
-        }
-
-        // add json data to the table as rows.
-        for (var i = 0; i < myBooks.length; i++) {
-
-            tr = table.insertRow(-1);
-
-            for (var j = 0; j < col.length; j++) {
-                var tabCell = tr.insertCell(-1);
-                tabCell.innerHTML = myBooks[i][col[j]];
-            }
-        }
-
-        // Now, add the newly created table with json data, to a container.
-        var divShowData = document.getElementById('showData');
-        divShowData.innerHTML = "";
-        divShowData.appendChild(table);
-    }
 
 }

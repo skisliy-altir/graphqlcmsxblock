@@ -59,6 +59,11 @@ class GraphQlCmsXBlock(XBlock):
                             tipCssClass
                         }
                     }
+                    tabletest{
+                        ... on tabletest_BlockType{
+                            col1, col2
+                        }
+                    }
                 } 
             } """
 
@@ -166,7 +171,7 @@ class GraphQlCmsXBlock(XBlock):
                             },
                             tipCssClass
                         }
-                    }
+                    }                 
                 } 
             }
     """
@@ -221,20 +226,10 @@ class GraphQlCmsXBlock(XBlock):
                             },
                             tipCssClass
                         }
-                    }
+                    }                    
                 } 
             } """
 
-    testTableGraphQlQuery = """{
-  		... on dev_dev_Entry{
-        tabletest{
-          ... on tabletest_BlockType{
-			col1,
-            col2
-            }
-        }
-      }
-	}"""
 
     # Fields are defined on the class.  You can access them in your code as
     # self.<fieldname>.
@@ -266,8 +261,10 @@ class GraphQlCmsXBlock(XBlock):
             'contentBlocks': [],
             'assets': [],
             'faqs': [],
-            'tips': []
+            'tips': [],
+            'tables': []
         }
+
         if self.entrySlug is not '':
             entry = self.load_selected_entry()
             
@@ -281,7 +278,8 @@ class GraphQlCmsXBlock(XBlock):
             'contentBlocks': entry['contentBlocks'],
             'assets': entry['assets'],
             'faqs': entry['faqs'],
-            'tips': entry['tips']
+            'tips': entry['tips'],
+            'tables': entry['tables']
         })
         frag.add_content(html)
         frag.add_css(self.resource_string("static/css/graphqlcmsxblock.css"))
@@ -338,14 +336,6 @@ class GraphQlCmsXBlock(XBlock):
         })
         pages = resp.json()['data']['entries']
         pages.sort(key=lambda x: x['title'], reverse=False)
-
-        # Load Tables
-        resp = requests.post(self.cmsApi, json={
-            "query": "query MyQuery { entries(section: \"dev\") {slug, title \
-                } }"
-        })
-        tables = resp.json()['data']['entries']
-        tables.sort(key=lambda x: x['title'], reverse=False)
         
         # Load Selected Entry
         entry = {
@@ -355,7 +345,8 @@ class GraphQlCmsXBlock(XBlock):
             'contentBlocks': [],
             'assets': [],
             'faqs': [],
-            'tips': []
+            'tips': [],
+            'tables': []
         }
         if self.entrySlug is not '':
             entry = self.load_selected_entry()
@@ -363,7 +354,6 @@ class GraphQlCmsXBlock(XBlock):
         frag = Fragment()
         html = self.render_template("studio/html/cmsBlock.html", {
                 'self': self,
-                'tables': tables,
                 'courseTags': courseTags,
                 'clauses':  clauses,
                 'lessons': lessons,
@@ -375,7 +365,8 @@ class GraphQlCmsXBlock(XBlock):
                 'contentBlocks': entry['contentBlocks'],
                 'assets': entry['assets'],
                 'faqs': entry['faqs'],
-                'tips': entry['tips']
+                'tips': entry['tips'],
+                'tables': entry['tables']
             })
         frag.add_content(html)
         frag.add_javascript(self.resource_string("studio/js/cmsBlock.js"))
@@ -401,6 +392,7 @@ class GraphQlCmsXBlock(XBlock):
         assets = []
         faqs = []
         tips = []
+        tables = []
 
         if self.entryType == 'clause':    
             resp = requests.post(self.cmsApi, json={
@@ -444,6 +436,7 @@ class GraphQlCmsXBlock(XBlock):
                                     faqs.append(subitem)
                                 elif 'tip' in section :
                                     tips.append(subitem)
+                                
         else: 
             for section in entry :
                 if (type(entry[section])) == str and section not in ['slug', 'title', 'postDate', 'contentBlock', 'cmsAsset', 'faq', 'tip'] :
@@ -468,7 +461,8 @@ class GraphQlCmsXBlock(XBlock):
             'contentBlocks': contentBlocks,
             'assets': assets,
             'faqs': faqs,
-            'tips': tips
+            'tips': tips,
+            'tables': tables
         }
 
     @XBlock.json_handler
@@ -557,21 +551,3 @@ class GraphQlCmsXBlock(XBlock):
              """<graphqlcmsxblock/>
              """)
         ]
-
-    @XBlock.json_handler
-    def get_table_data(self, data, suffix = ''):
-        slug = data['table']
-        table = []
-        if slug == 'none':
-            return{
-                'table': table
-            }
-
-        resp = requests.post(self.cmsApi, json={
-            "query": "query MyQuery {entries(section: \"dev\", slug: \"" + slug + "\" limit: 1) " + self.testTableGraphQlQuery + " }"
-        })
-        table = resp.json()['data']['entries'][0]['tabletest']
-        return{
-            "table": table
-        }
-        
