@@ -88,9 +88,9 @@
         {% endfor %}
 
         {% for table in tables2 %}
-            <div>
+            <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
                 <table>
-                    {% if table.hasheaderrow.0 == 'yes' %}
+                    {% if table.hasHeaderRow.0 == 'yes' %}
                         <tr>
                             <th> {{ table.table2col.0.col1 }} </th>
                             <th> {{ table.table2col.0.col2 }} </th>
@@ -111,14 +111,13 @@
                         {% endfor%}
                     {% endif %}
                 </table>
-                <br>
             </div>
         {% endfor %}
 
         {% for table in tables3 %}
-            <div>
+            <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
                 <table>
-                    {% if table.hasheaderrow.0 == 'yes' %}
+                    {% if table.hasHeaderRow.0 == 'yes' %}
                         <tr>
                             <th> {{ table.table3col.0.col1 }} </th>
                             <th> {{ table.table3col.0.col2 }} </th>
@@ -142,14 +141,13 @@
                         {% endfor%}
                     {% endif %}
                 </table>
-                <br>
             </div>
         {% endfor %}
 
         {% for table in tables4 %}
-            <div>
+            <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
                 <table>
-                    {% if table.hasheaderrow.0 == 'yes' %}
+                    {% if table.hasHeaderRow.0 == 'yes' %}
                         <tr>
                             <th> {{ table.table4col.0.col1 }} </th>
                             <th> {{ table.table4col.0.col2 }} </th>
@@ -176,7 +174,6 @@
                         {% endfor%}
                     {% endif %}
                 </table>
-                <br>
             </div>
         {% endfor %}
 

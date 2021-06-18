@@ -207,7 +207,7 @@ function CmsBlock(runtime, element) {
 
                     tableData = elem.table2col
 
-                    if(elem.hasheaderrow == "yes"){
+                    if(elem.hasHeaderRow == "yes"){
                         base += '<tr>'+
                             '<th>' + tableData[0].col1 + '</th>' +
                             '<th>' + tableData[0].col2 + '</th>'  +
@@ -234,7 +234,7 @@ function CmsBlock(runtime, element) {
 
                     tableData = elem.table3col
 
-                    if(elem.hasheaderrow == "yes"){
+                    if(elem.hasHeaderRow == "yes"){
                         base += '<tr>'+
                             '<th>' + tableData[0].col1 + '</th>' +
                             '<th>' + tableData[0].col2 + '</th>'  +
@@ -263,7 +263,7 @@ function CmsBlock(runtime, element) {
 
                     tableData = elem.table4col
 
-                    if(elem.hasheaderrow == "yes"){
+                    if(elem.hasHeaderRow == "yes"){
                         base += '<tr>'+
                             '<th>' + tableData[0].col1 + '</th>' +
                             '<th>' + tableData[0].col2 + '</th>'  +

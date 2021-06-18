@@ -61,7 +61,7 @@ class GraphQlCmsXBlock(XBlock):
                     }
                     table2colMatrix{
                         ... on table2colMatrix_matrix2col_BlockType{
-                            hasheaderrow,
+                            hasHeaderRow,
                             table2col{
                                 ... on table2col_BlockType{
                                     col1, col2
@@ -145,7 +145,7 @@ class GraphQlCmsXBlock(XBlock):
                     }
                     table2colMatrix{
                         ... on table2colMatrix_matrix2col_BlockType{
-                            hasheaderrow,
+                            hasHeaderRow,
                             table2col{
                                 ... on table2col_BlockType{
                                     col1, col2
@@ -229,7 +229,7 @@ class GraphQlCmsXBlock(XBlock):
                     }
                     table2colMatrix{
                         ... on table2colMatrix_matrix2col_BlockType{
-                            hasheaderrow,
+                            hasHeaderRow,
                             table2col{
                                 ... on table2col_BlockType{
                                     col1, col2
@@ -314,7 +314,7 @@ class GraphQlCmsXBlock(XBlock):
                     }
                     table2colMatrix{
                         ... on table2colMatrix_matrix2col_BlockType{
-                            hasheaderrow,
+                            hasHeaderRow,
                             table2col{
                                 ... on table2col_BlockType{
                                     col1, col2
