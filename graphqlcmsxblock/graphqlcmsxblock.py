@@ -59,9 +59,34 @@ class GraphQlCmsXBlock(XBlock):
                             tipCssClass
                         }
                     }
-                    tabletest{
-                        ... on tabletest_BlockType{
-                            col1, col2
+                    table2colMatrix{
+                        ... on table2colMatrix_matrix2col_BlockType{
+                            hasheaderrow,
+                            table2col{
+                                ... on table2col_BlockType{
+                                    col1, col2
+                                }
+                            }                        
+                        }
+                    }
+                    table3colMatrix{
+                        ... on table3colMatrix_matrix3col_BlockType{
+                            hasHeaderRow,
+                            table3col{
+                                ... on table3col_BlockType{
+                                    col1, col2, col3
+                                }
+                            }
+                        }
+                    }
+                    table4colMatrix{
+                        ... on table4colMatrix_matrix4col_BlockType{
+                            hasHeaderRow,
+                            table4col{
+                                ... on table4col_BlockType{
+                                    col1, col2, col3, col4
+                                }
+                            }
                         }
                     }
                 } 
@@ -118,6 +143,36 @@ class GraphQlCmsXBlock(XBlock):
                             tipCssClass
                         }
                     }
+                    table2colMatrix{
+                        ... on table2colMatrix_matrix2col_BlockType{
+                            hasheaderrow,
+                            table2col{
+                                ... on table2col_BlockType{
+                                    col1, col2
+                                }
+                            }                        
+                        }
+                    }
+                    table3colMatrix{
+                        ... on table3colMatrix_matrix3col_BlockType{
+                            hasHeaderRow,
+                            table3col{
+                                ... on table3col_BlockType{
+                                    col1, col2, col3
+                                }
+                            }
+                        }
+                    }
+                    table4colMatrix{
+                        ... on table4colMatrix_matrix4col_BlockType{
+                            hasHeaderRow,
+                            table4col{
+                                ... on table4col_BlockType{
+                                    col1, col2, col3, col4
+                                }
+                            }
+                        }
+                    }                    
                 } 
             } """
 
@@ -170,6 +225,36 @@ class GraphQlCmsXBlock(XBlock):
                                 url
                             },
                             tipCssClass
+                        }
+                    }
+                    table2colMatrix{
+                        ... on table2colMatrix_matrix2col_BlockType{
+                            hasheaderrow,
+                            table2col{
+                                ... on table2col_BlockType{
+                                    col1, col2
+                                }
+                            }                        
+                        }
+                    }
+                    table3colMatrix{
+                        ... on table3colMatrix_matrix3col_BlockType{
+                            hasHeaderRow,
+                            table3col{
+                                ... on table3col_BlockType{
+                                    col1, col2, col3
+                                }
+                            }
+                        }
+                    }
+                    table4colMatrix{
+                        ... on table4colMatrix_matrix4col_BlockType{
+                            hasHeaderRow,
+                            table4col{
+                                ... on table4col_BlockType{
+                                    col1, col2, col3, col4
+                                }
+                            }
                         }
                     }                 
                 } 
@@ -226,6 +311,36 @@ class GraphQlCmsXBlock(XBlock):
                             },
                             tipCssClass
                         }
+                    }
+                    table2colMatrix{
+                        ... on table2colMatrix_matrix2col_BlockType{
+                            hasheaderrow,
+                            table2col{
+                                ... on table2col_BlockType{
+                                    col1, col2
+                                }
+                            }   
+                        }
+                    }
+                    table3colMatrix{
+                        ... on table3colMatrix_matrix3col_BlockType{
+                            hasHeaderRow,
+                            table3col{
+                                ... on table3col_BlockType{
+                                    col1, col2, col3
+                                }
+                            }
+                        }
+                    }
+                    table4colMatrix{
+                        ... on table4colMatrix_matrix4col_BlockType{
+                            hasHeaderRow,
+                            table4col{
+                                ... on table4col_BlockType{
+                                   col1, col2, col3, col4
+                                }
+                            }
+                        }
                     }                    
                 } 
             } """
@@ -262,7 +377,9 @@ class GraphQlCmsXBlock(XBlock):
             'assets': [],
             'faqs': [],
             'tips': [],
-            'tables': []
+            'tables2': [],
+            'tables3': [],
+            'tables4': []
         }
 
         if self.entrySlug is not '':
@@ -279,7 +396,9 @@ class GraphQlCmsXBlock(XBlock):
             'assets': entry['assets'],
             'faqs': entry['faqs'],
             'tips': entry['tips'],
-            'tables': entry['tables']
+            'tables2': entry['tables2'],
+            'tables3': entry['tables3'],
+            'tables4': entry['tables4']
         })
         frag.add_content(html)
         frag.add_css(self.resource_string("static/css/graphqlcmsxblock.css"))
@@ -346,7 +465,9 @@ class GraphQlCmsXBlock(XBlock):
             'assets': [],
             'faqs': [],
             'tips': [],
-            'tables': []
+            'tables2': [],
+            'tables3': [],
+            'tables4': []
         }
         if self.entrySlug is not '':
             entry = self.load_selected_entry()
@@ -366,7 +487,9 @@ class GraphQlCmsXBlock(XBlock):
                 'assets': entry['assets'],
                 'faqs': entry['faqs'],
                 'tips': entry['tips'],
-                'tables': entry['tables']
+                'tables2': entry['tables2'],
+                'tables3': entry['tables3'],
+                'tables4': entry['tables4']
             })
         frag.add_content(html)
         frag.add_javascript(self.resource_string("studio/js/cmsBlock.js"))
@@ -392,7 +515,9 @@ class GraphQlCmsXBlock(XBlock):
         assets = []
         faqs = []
         tips = []
-        tables = []
+        tables2 = []
+        tables3 = []
+        tables4 = []
 
         if self.entryType == 'clause':    
             resp = requests.post(self.cmsApi, json={
@@ -436,12 +561,16 @@ class GraphQlCmsXBlock(XBlock):
                                     faqs.append(subitem)
                                 elif 'tip' in section :
                                     tips.append(subitem)
-                                elif 'tabletest' in section:
-                                    tables.append(subitem)
+                                elif 'table2colMatrix' in section:
+                                    tables2.append(subitem)
+                                elif 'table3colMatrix' in section:
+                                    tables3.append(subitem)
+                                elif 'table4colMatrix' in section:
+                                    tables4.append(subitem)
                                 
         else: 
             for section in entry :
-                if (type(entry[section])) == str and section not in ['slug', 'title', 'postDate', 'contentBlock', 'cmsAsset', 'faq', 'tip', 'tabletest'] :
+                if (type(entry[section])) == str and section not in ['slug', 'title', 'postDate', 'contentBlock', 'cmsAsset', 'faq', 'tip'] :
                     sections.append(entry[section])
                 elif 'contentBlock' in section:
                     for subitem in entry[section] :
@@ -455,9 +584,15 @@ class GraphQlCmsXBlock(XBlock):
                 elif 'tip' in section :
                     for subitem in entry[section] :
                         tips.append(subitem)
-                elif 'tabletest' in section:
+                elif 'table2colMatrix' in section:
                     for subitem in entry[section]:
-                        tables.append(subitem)
+                        tables2.append(subitem)
+                elif 'table3colMatrix' in section:
+                    for subitem in entry[section]:
+                        tables3.append(subitem)
+                elif 'table4colMatrix' in section:
+                    for subitem in entry[section]:
+                        tables4.append(subitem)
 
         return {
             'title': title,
@@ -467,7 +602,9 @@ class GraphQlCmsXBlock(XBlock):
             'assets': assets,
             'faqs': faqs,
             'tips': tips,
-            'tables': tables
+            'tables2': tables2,
+            'tables3': tables3,
+            'tables4': tables4
         }
 
     @XBlock.json_handler

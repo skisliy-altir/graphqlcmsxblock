@@ -68,7 +68,9 @@ function CmsBlock(runtime, element) {
                         renderField('cmsAsset', entry) + 
                         renderField('faq', entry) + 
                         renderField('tip', entry) +
-                        renderField('2table', entry) +
+                        renderField('table2colMatrix', entry) +
+                        renderField('table3colMatrix', entry) +
+                        renderField('table4colMatrix', entry) +
                     '</form>'
                 )
                 break;
@@ -80,6 +82,9 @@ function CmsBlock(runtime, element) {
                         renderField('cmsAsset', entry) + 
                         renderField('faq', entry) + 
                         renderField('tip', entry) + 
+                        renderField('table2colMatrix', entry) +
+                        renderField('table3colMatrix', entry) +
+                        renderField('table4colMatrix', entry) +
                     '</form>'
                 )
                 break;
@@ -91,6 +96,9 @@ function CmsBlock(runtime, element) {
                         renderField('cmsAsset', entry) + 
                         renderField('faq', entry) + 
                         renderField('tip', entry) + 
+                        renderField('table2colMatrix', entry) +
+                        renderField('table3colMatrix', entry) +
+                        renderField('table4colMatrix', entry) +
                     '</form>'
                 )
                 break;
@@ -102,6 +110,9 @@ function CmsBlock(runtime, element) {
                         renderField('cmsAsset', entry) + 
                         renderField('faq', entry) + 
                         renderField('tip', entry) + 
+                        renderField('table2colMatrix', entry) +
+                        renderField('table3colMatrix', entry) +
+                        renderField('table4colMatrix', entry) +
                     '</form>'
                 )
                 break;
@@ -189,29 +200,93 @@ function CmsBlock(runtime, element) {
                 })
                 break;
                 
-            case '2table':
-                base += '<label><input type="checkbox" name="' + type +'"  checked="checked"/> Include Table</label>';
-                base += '<table>' 
+            case 'table2colMatrix':
+                entry.table2colMatrix.forEach( function(elem){
+                    base += '<label><input type="checkbox" name="' + type +'"  checked="checked"/> Include Table</label>';
+                    base += '<table>' 
 
-                tableData = entry.table
+                    tableData = elem.table2col
 
-                if(entry.hasHeaders){
-                    base += '<tr>'+
-                        '<th>' + entry.table[0].col1 + '</th>' +
-                        '<th>' + entry.table[0].col2 + '</th>'  +
+                    if(elem.hasheaderrow == "yes"){
+                        base += '<tr>'+
+                            '<th>' + tableData[0].col1 + '</th>' +
+                            '<th>' + tableData[0].col2 + '</th>'  +
+                            '</tr>'
+                        tableData = elem.table2col.slice(1)
+                    }
+
+                    tableData.forEach(function(rows){
+
+                        base+= '<tr>'
+                        + '<td>' + rows.col1 + '</td>' +
+                        '<td>' + rows.col2 + '</td>' +              
                         '</tr>'
-                    tableData = entry.table.slice(1)
-                }
-
-                tableData.forEach(function(elem){
-
-                    base+= '<tr>'
-                    + '<td>' + elem.col1 + '</td>' +
-                    '<td>' + elem.col2 + '</td>'                  
-                    base += '</tr>'
+                    })
+                    
+                    base += '</table>'
                 })
-                
-                base += '</table>'
+                break;
+
+            case 'table3colMatrix':
+                entry.table3colMatrix.forEach( function(elem){
+                    base += '<label><input type="checkbox" name="' + type +'"  checked="checked"/> Include Table</label>';
+                    base += '<table>' 
+
+                    tableData = elem.table3col
+
+                    if(elem.hasheaderrow == "yes"){
+                        base += '<tr>'+
+                            '<th>' + tableData[0].col1 + '</th>' +
+                            '<th>' + tableData[0].col2 + '</th>'  +
+                            '<th>' + tableData[0].col3 +'</th>' +
+                            '</tr>'
+                        tableData = elem.table3col.slice(1)
+                    }
+
+                    tableData.forEach(function(rows){
+
+                        base+= '<tr>'
+                        + '<td>' + rows.col1 + '</td>' +
+                        '<td>' + rows.col2 + '</td>' + 
+                        '<td>' + rows.col3 + '</td>'             
+                        '</tr>'
+                    })
+                    
+                    base += '</table>'
+                })
+                break;
+
+            case 'table4colMatrix':
+                entry.table4colMatrix.forEach( function(elem){
+                    base += '<label><input type="checkbox" name="' + type +'"  checked="checked"/> Include Table</label>';
+                    base += '<table>' 
+
+                    tableData = elem.table4col
+
+                    if(elem.hasheaderrow == "yes"){
+                        base += '<tr>'+
+                            '<th>' + tableData[0].col1 + '</th>' +
+                            '<th>' + tableData[0].col2 + '</th>'  +
+                            '<th>' + tableData[0].col3 +'</th>' +
+                            '<th>' + tableData[0].col4 +'</th>' +
+                            '</tr>'
+                        tableData = elem.table4col.slice(1)
+                    }
+
+                    tableData.forEach(function(rows){
+
+                        base+= '<tr>'
+                        + '<td>' + rows.col1 + '</td>' +
+                        '<td>' + rows.col2 + '</td>' + 
+                        '<td>' + rows.col3 + '</td>' +
+                        '<td>' + rows.col4 + '</td>' +           
+                        '</tr>'
+                    })
+                    
+                    base += '</table>'
+                })
+                break;
+            
         }
         base += '</div>';
         return base;

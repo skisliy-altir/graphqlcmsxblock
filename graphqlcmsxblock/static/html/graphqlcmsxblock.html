@@ -51,23 +51,23 @@
             </div>
         {% endfor %}
 
-        {% if tables|length > 0 %}
+        {% for table in tables2 %}
             <div>
                 <table>
-                    {% if hasHeaders %}
+                    {% if table.hasheaderrow.0 == 'yes' %}
                         <tr>
-                            <th>{{ tables.0.col1 }} </th>
-                            <th> {{ tables.0.col2 }} </th>
+                            <th> {{ table.table2col.0.col1 }} </th>
+                            <th> {{ table.table2col.0.col2 }} </th>
                         </tr>
 
-                        {% for row in tables|slice:"1:" %}
+                        {% for row in table.table2col|slice:"1:" %}
                             <tr>
                                 <td> {{ row.col1 }} </td>
                                 <td> {{ row.col2 }} </td>
                             </tr>
                         {% endfor %}
                     {% else %}
-                        {% for row in tables %}
+                        {% for row in table.table2col %}
                             <tr>
                                 <td> {{ row.col1 }} </td>
                                 <td> {{ row.col2 }} </td>
@@ -75,8 +75,78 @@
                         {% endfor%}
                     {% endif %}
                 </table>
+                <br>
             </div>
-        {% endif %}
+        {% endfor %}
+
+        <br>
+
+        {% for table in tables3 %}
+            <div>
+                <table>
+                    {% if table.hasheaderrow.0 == 'yes' %}
+                        <tr>
+                            <th> {{ table.table3col.0.col1 }} </th>
+                            <th> {{ table.table3col.0.col2 }} </th>
+                            <th> {{ table.table3col.0.col3 }} </th>
+                        </tr>
+
+                        {% for row in table.table3col|slice:"1:" %}
+                            <tr>
+                                <td> {{ row.col1 }} </td>
+                                <td> {{ row.col2 }} </td>
+                                <td> {{ row.col3 }} </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        {% for row in table.table3col %}
+                            <tr>
+                                <td> {{ row.col1 }} </td>
+                                <td> {{ row.col2 }} </td>
+                                <td> {{ row.col3 }} </td>
+                            </tr>
+                        {% endfor%}
+                    {% endif %}
+                </table>
+                <br>
+            </div>
+        {% endfor %}
+
+        <br> 
+
+        {% for table in tables4 %}
+            <div>
+                <table>
+                    {% if table.hasheaderrow.0 == 'yes' %}
+                        <tr>
+                            <th> {{ table.table4col.0.col1 }} </th>
+                            <th> {{ table.table4col.0.col2 }} </th>
+                            <th> {{ table.table4col.0.col3 }} </th>
+                            <th> {{ table.table4col.0.col4 }} </th>
+                        </tr>
+
+                        {% for row in table.table4col|slice:"1:" %}
+                            <tr>
+                                <td> {{ row.col1 }} </td>
+                                <td> {{ row.col2 }} </td>
+                                <td> {{ row.col3 }} </td>
+                                <td> {{ row.col4 }} </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        {% for row in table.table4col %}
+                            <tr>
+                                <td> {{ row.col1 }} </td>
+                                <td> {{ row.col2 }} </td>
+                                <td> {{ row.col3 }} </td>
+                                <td> {{ row.col4 }} </td>
+                            </tr>
+                        {% endfor%}
+                    {% endif %}
+                </table>
+                <br>
+            </div>
+        {% endfor %}        
 
     </div>
 </div>
