@@ -71,6 +71,7 @@ function CmsBlock(runtime, element) {
                         renderField('table2colMatrix', entry) +
                         renderField('table3colMatrix', entry) +
                         renderField('table4colMatrix', entry) +
+                        renderField('accordionmatrix', entry) +
                     '</form>'
                 )
                 break;
@@ -85,6 +86,7 @@ function CmsBlock(runtime, element) {
                         renderField('table2colMatrix', entry) +
                         renderField('table3colMatrix', entry) +
                         renderField('table4colMatrix', entry) +
+                        renderField('accordionmatrix', entry) +
                     '</form>'
                 )
                 break;
@@ -99,6 +101,7 @@ function CmsBlock(runtime, element) {
                         renderField('table2colMatrix', entry) +
                         renderField('table3colMatrix', entry) +
                         renderField('table4colMatrix', entry) +
+                        renderField('accordionmatrix', entry) +
                     '</form>'
                 )
                 break;
@@ -113,6 +116,7 @@ function CmsBlock(runtime, element) {
                         renderField('table2colMatrix', entry) +
                         renderField('table3colMatrix', entry) +
                         renderField('table4colMatrix', entry) +
+                        renderField('accordionmatrix', entry) +
                     '</form>'
                 )
                 break;
@@ -202,7 +206,7 @@ function CmsBlock(runtime, element) {
                 
             case 'table2colMatrix':
                 entry.table2colMatrix.forEach( function(elem){
-                    base += '<label><input type="checkbox" name="' + type +'"  checked="checked"/> Include Table</label>';
+                    base += '<label><input type="checkbox" name="' + type + '[' + elem.id + ']" checked="checked"/> Include Table</label>';
                     base += '<table>' 
 
                     tableData = elem.table2col
@@ -229,7 +233,7 @@ function CmsBlock(runtime, element) {
 
             case 'table3colMatrix':
                 entry.table3colMatrix.forEach( function(elem){
-                    base += '<label><input type="checkbox" name="' + type +'"  checked="checked"/> Include Table</label>';
+                    base += '<label><input type="checkbox" name="' + type + '[' + elem.id + ']" checked="checked"/> Include Table</label>';
                     base += '<table>' 
 
                     tableData = elem.table3col
@@ -258,7 +262,7 @@ function CmsBlock(runtime, element) {
 
             case 'table4colMatrix':
                 entry.table4colMatrix.forEach( function(elem){
-                    base += '<label><input type="checkbox" name="' + type +'"  checked="checked"/> Include Table</label>';
+                    base += '<label><input type="checkbox" name="' + type + '[' + elem.id + ']" checked="checked"/> Include Table</label>';
                     base += '<table>' 
 
                     tableData = elem.table4col
@@ -284,6 +288,18 @@ function CmsBlock(runtime, element) {
                     })
                     
                     base += '</table>'
+                })
+                break;
+        
+            case 'accordionmatrix':
+                entry.accordionmatrix.forEach( function(elem){
+                    base += '<label><input type="checkbox" name="' + type + '[' + elem.id + ']" checked="checked"/> Include Accordion</label>';
+                    base += 
+                        '<details>' + 
+                            '<summary>' + elem.accordionblocktitle + '</summary>' + 
+                                elem.accordionblockcontent  + 
+                        '</details>';
+                    
                 })
                 break;
             
