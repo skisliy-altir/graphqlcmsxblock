@@ -16,6 +16,7 @@ function CmsBlock(runtime, element) {
         var slug = parts[1]
         var request = {}
         request[type] = slug
+        console.log(request)
 
         $.ajax({
             type: "POST",
@@ -66,7 +67,11 @@ function CmsBlock(runtime, element) {
                         renderField('platformAdvancedConcepts', entry) + 
                         renderField('cmsAsset', entry) + 
                         renderField('faq', entry) + 
-                        renderField('tip', entry) + 
+                        renderField('tip', entry) +
+                        renderField('table2colMatrix', entry) +
+                        renderField('table3colMatrix', entry) +
+                        renderField('table4colMatrix', entry) +
+                        renderField('accordionmatrix', entry) +
                     '</form>'
                 )
                 break;
@@ -78,6 +83,10 @@ function CmsBlock(runtime, element) {
                         renderField('cmsAsset', entry) + 
                         renderField('faq', entry) + 
                         renderField('tip', entry) + 
+                        renderField('table2colMatrix', entry) +
+                        renderField('table3colMatrix', entry) +
+                        renderField('table4colMatrix', entry) +
+                        renderField('accordionmatrix', entry) +
                     '</form>'
                 )
                 break;
@@ -89,6 +98,10 @@ function CmsBlock(runtime, element) {
                         renderField('cmsAsset', entry) + 
                         renderField('faq', entry) + 
                         renderField('tip', entry) + 
+                        renderField('table2colMatrix', entry) +
+                        renderField('table3colMatrix', entry) +
+                        renderField('table4colMatrix', entry) +
+                        renderField('accordionmatrix', entry) +
                     '</form>'
                 )
                 break;
@@ -100,6 +113,10 @@ function CmsBlock(runtime, element) {
                         renderField('cmsAsset', entry) + 
                         renderField('faq', entry) + 
                         renderField('tip', entry) + 
+                        renderField('table2colMatrix', entry) +
+                        renderField('table3colMatrix', entry) +
+                        renderField('table4colMatrix', entry) +
+                        renderField('accordionmatrix', entry) +
                     '</form>'
                 )
                 break;
@@ -186,6 +203,106 @@ function CmsBlock(runtime, element) {
                     
                 })
                 break;
+                
+            case 'table2colMatrix':
+                entry.table2colMatrix.forEach( function(elem){
+                    base += '<label><input type="checkbox" name="' + type + '[' + elem.id + ']" checked="checked"/> Include Table</label>';
+                    base += '<table>' 
+
+                    tableData = elem.table2col
+
+                    if(elem.hasHeaderRow == "yes"){
+                        base += '<tr>'+
+                            '<th>' + tableData[0].col1 + '</th>' +
+                            '<th>' + tableData[0].col2 + '</th>'  +
+                            '</tr>'
+                        tableData = elem.table2col.slice(1)
+                    }
+
+                    tableData.forEach(function(rows){
+
+                        base+= '<tr>'
+                        + '<td>' + rows.col1 + '</td>' +
+                        '<td>' + rows.col2 + '</td>' +              
+                        '</tr>'
+                    })
+                    
+                    base += '</table>'
+                })
+                break;
+
+            case 'table3colMatrix':
+                entry.table3colMatrix.forEach( function(elem){
+                    base += '<label><input type="checkbox" name="' + type + '[' + elem.id + ']" checked="checked"/> Include Table</label>';
+                    base += '<table>' 
+
+                    tableData = elem.table3col
+
+                    if(elem.hasHeaderRow == "yes"){
+                        base += '<tr>'+
+                            '<th>' + tableData[0].col1 + '</th>' +
+                            '<th>' + tableData[0].col2 + '</th>'  +
+                            '<th>' + tableData[0].col3 +'</th>' +
+                            '</tr>'
+                        tableData = elem.table3col.slice(1)
+                    }
+
+                    tableData.forEach(function(rows){
+
+                        base+= '<tr>'
+                        + '<td>' + rows.col1 + '</td>' +
+                        '<td>' + rows.col2 + '</td>' + 
+                        '<td>' + rows.col3 + '</td>'             
+                        '</tr>'
+                    })
+                    
+                    base += '</table>'
+                })
+                break;
+
+            case 'table4colMatrix':
+                entry.table4colMatrix.forEach( function(elem){
+                    base += '<label><input type="checkbox" name="' + type + '[' + elem.id + ']" checked="checked"/> Include Table</label>';
+                    base += '<table>' 
+
+                    tableData = elem.table4col
+
+                    if(elem.hasHeaderRow == "yes"){
+                        base += '<tr>'+
+                            '<th>' + tableData[0].col1 + '</th>' +
+                            '<th>' + tableData[0].col2 + '</th>'  +
+                            '<th>' + tableData[0].col3 +'</th>' +
+                            '<th>' + tableData[0].col4 +'</th>' +
+                            '</tr>'
+                        tableData = elem.table4col.slice(1)
+                    }
+
+                    tableData.forEach(function(rows){
+
+                        base+= '<tr>'
+                        + '<td>' + rows.col1 + '</td>' +
+                        '<td>' + rows.col2 + '</td>' + 
+                        '<td>' + rows.col3 + '</td>' +
+                        '<td>' + rows.col4 + '</td>' +           
+                        '</tr>'
+                    })
+                    
+                    base += '</table>'
+                })
+                break;
+        
+            case 'accordionmatrix':
+                entry.accordionmatrix.forEach( function(elem){
+                    base += '<label><input type="checkbox" name="' + type + '[' + elem.id + ']" checked="checked"/> Include Accordion</label>';
+                    base += 
+                        '<details>' + 
+                            '<summary>' + elem.accordionblocktitle + '</summary>' + 
+                                elem.accordionblockcontent  + 
+                        '</details>';
+                    
+                })
+                break;
+            
         }
         base += '</div>';
         return base;
@@ -212,4 +329,5 @@ function CmsBlock(runtime, element) {
         /* Here's where you'd do things on page load. */
         update_entry_options($('#courseFilter').val())
     });
+
 }
