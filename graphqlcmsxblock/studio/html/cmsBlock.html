@@ -50,6 +50,30 @@
         th {
             font-weight:bold;
         }
+
+        details {
+            border: 1px solid #d4d4d4;    
+            padding: .75em .75em 0;
+            margin-top: 10px;
+            box-shadow:0 0 20px #d4d4d4;
+        }
+
+        summary {	
+            font-weight: bold;
+            margin: -.75em -.75em 0;
+            padding: .75em;
+            background-color: #4F5054;
+            color: #fff;
+        }
+
+        details[open] {
+            padding: .75em;
+            border-bottom: 1px solid #d4d4d4;
+        }
+
+        details[open] summary {
+            border-bottom: 1px solid #d4d4d4;
+               
     </style>       
 
     <div id="generalView">
@@ -177,6 +201,14 @@
                 </table>
             </div>
         {% endfor %}
+
+        {% for accordion in accordions %}
+            <details>
+                <summary>{{ accordion.accordionblocktitle }} </summary>
+                {{ accordion.accordionblockcontent | safe }}
+            </details>
+        {% endfor %}
+        
 
     </div>
 </div>
