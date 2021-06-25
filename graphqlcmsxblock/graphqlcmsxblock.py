@@ -150,7 +150,7 @@ class GraphQlCmsXBlock(XBlock):
                             },
                             tipCssClass
                         }
-                    }
+                    },
                     table2colMatrix{
                         ... on table2colMatrix_matrix2col_BlockType{
                             id,
@@ -161,7 +161,7 @@ class GraphQlCmsXBlock(XBlock):
                                 }
                             }                        
                         }
-                    }
+                    },
                     table3colMatrix{
                         ... on table3colMatrix_matrix3col_BlockType{
                             id,
@@ -172,7 +172,7 @@ class GraphQlCmsXBlock(XBlock):
                                 }
                             }
                         }
-                    }
+                    },
                     table4colMatrix{
                         ... on table4colMatrix_matrix4col_BlockType{
                             id,
@@ -183,7 +183,7 @@ class GraphQlCmsXBlock(XBlock):
                                 }
                             }
                         }
-                    }
+                    },
                     accordionmatrix{
                         ... on accordionmatrix_accordionblock_BlockType{
                             id, accordionblocktitle, accordionblockcontent
@@ -242,7 +242,7 @@ class GraphQlCmsXBlock(XBlock):
                             },
                             tipCssClass
                         }
-                    }
+                    },
                     table2colMatrix{
                         ... on table2colMatrix_matrix2col_BlockType{
                             id,
@@ -253,7 +253,7 @@ class GraphQlCmsXBlock(XBlock):
                                 }
                             }                        
                         }
-                    }
+                    },
                     table3colMatrix{
                         ... on table3colMatrix_matrix3col_BlockType{
                             id,
@@ -264,7 +264,7 @@ class GraphQlCmsXBlock(XBlock):
                                 }
                             }
                         }
-                    }
+                    },
                     table4colMatrix{
                         ... on table4colMatrix_matrix4col_BlockType{
                             id,
@@ -275,7 +275,7 @@ class GraphQlCmsXBlock(XBlock):
                                 }
                             }
                         }
-                    }     
+                    },     
                     accordionmatrix{
                         ... on accordionmatrix_accordionblock_BlockType{
                             id, accordionblocktitle, accordionblockcontent
@@ -335,7 +335,7 @@ class GraphQlCmsXBlock(XBlock):
                             },
                             tipCssClass
                         }
-                    }
+                    },
                     table2colMatrix{
                         ... on table2colMatrix_matrix2col_BlockType{
                             id,
@@ -346,7 +346,7 @@ class GraphQlCmsXBlock(XBlock):
                                 }
                             }   
                         }
-                    }
+                    },
                     table3colMatrix{
                         ... on table3colMatrix_matrix3col_BlockType{
                             id,
@@ -357,7 +357,7 @@ class GraphQlCmsXBlock(XBlock):
                                 }
                             }
                         }
-                    }
+                    },
                     table4colMatrix{
                         ... on table4colMatrix_matrix4col_BlockType{
                             id,
@@ -368,7 +368,7 @@ class GraphQlCmsXBlock(XBlock):
                                 }
                             }
                         }
-                    }
+                    },
                     accordionmatrix{
                         ... on accordionmatrix_accordionblock_BlockType{
                             id, accordionblocktitle, accordionblockcontent
