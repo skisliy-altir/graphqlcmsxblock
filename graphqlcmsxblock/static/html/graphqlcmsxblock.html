@@ -141,27 +141,27 @@
                 <table>
                     {% if table.hasHeaderRow.0 == 'yes' %}
                         <tr>
-                            <th> {{ table.table4col.0.col1 }} </th>
-                            <th> {{ table.table4col.0.col2 }} </th>
-                            <th> {{ table.table4col.0.col3 }} </th>
-                            <th> {{ table.table4col.0.col4 }} </th>
+                            <th> {{ table.table4col.0.col1 | safe }} </th>
+                            <th> {{ table.table4col.0.col2 | safe }} </th>
+                            <th> {{ table.table4col.0.col3 | safe }} </th>
+                            <th> {{ table.table4col.0.col4 | safe }} </th>
                         </tr>
 
                         {% for row in table.table4col|slice:"1:" %}
                             <tr>
-                                <td> {{ row.col1 }} </td>
-                                <td> {{ row.col2 }} </td>
-                                <td> {{ row.col3 }} </td>
-                                <td> {{ row.col4 }} </td>
+                                <td> {{ row.col1 | safe }} </td>
+                                <td> {{ row.col2 | safe }} </td>
+                                <td> {{ row.col3 | safe }} </td>
+                                <td> {{ row.col4 | safe }} </td>
                             </tr>
                         {% endfor %}
                     {% else %}
                         {% for row in table.table4col %}
                             <tr>
-                                <td> {{ row.col1 }} </td>
-                                <td> {{ row.col2 }} </td>
-                                <td> {{ row.col3 }} </td>
-                                <td> {{ row.col4 }} </td>
+                                <td> {{ row.col1 | safe }} </td>
+                                <td> {{ row.col2 | safe }} </td>
+                                <td> {{ row.col3 | safe }} </td>
+                                <td> {{ row.col4 | safe }} </td>
                             </tr>
                         {% endfor %}
                     {% endif %}

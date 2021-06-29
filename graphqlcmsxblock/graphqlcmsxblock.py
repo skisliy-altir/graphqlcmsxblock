@@ -151,6 +151,39 @@ class GraphQlCmsXBlock(XBlock):
                             tipCssClass
                         }
                     },
+                    table2colMatrix{
+                        ... on table2colMatrix_matrix2col_BlockType{
+                            id,
+                            hasHeaderRow,
+                            table2col{
+                                ... on table2col_BlockType{
+                                    col1, col2
+                                }
+                            }                        
+                        }
+                    },
+                    table3colMatrix{
+                        ... on table3colMatrix_matrix3col_BlockType{
+                            id,
+                            hasHeaderRow,
+                            table3col{
+                                ... on table3col_BlockType{
+                                    col1, col2, col3
+                                }
+                            }
+                        }
+                    },
+                    table4colMatrix{
+                        ... on table4colMatrix_matrix4col_BlockType{
+                            id,
+                            hasHeaderRow,
+                            table4col{
+                                ... on table4col_BlockType{
+                                    col1, col2, col3, col4
+                                }
+                            }
+                        }
+                    },
                     accordionmatrix{
                         ... on accordionmatrix_accordionblock_BlockType{
                             id, accordionblocktitle, accordionblockcontent
@@ -209,7 +242,40 @@ class GraphQlCmsXBlock(XBlock):
                             },
                             tipCssClass
                         }
-                    },    
+                    },
+                    table2colMatrix{
+                        ... on table2colMatrix_matrix2col_BlockType{
+                            id,
+                            hasHeaderRow,
+                            table2col{
+                                ... on table2col_BlockType{
+                                    col1, col2
+                                }
+                            }                        
+                        }
+                    },
+                    table3colMatrix{
+                        ... on table3colMatrix_matrix3col_BlockType{
+                            id,
+                            hasHeaderRow,
+                            table3col{
+                                ... on table3col_BlockType{
+                                    col1, col2, col3
+                                }
+                            }
+                        }
+                    },
+                    table4colMatrix{
+                        ... on table4colMatrix_matrix4col_BlockType{
+                            id,
+                            hasHeaderRow,
+                            table4col{
+                                ... on table4col_BlockType{
+                                    col1, col2, col3, col4
+                                }
+                            }
+                        }
+                    },                        
                     accordionmatrix{
                         ... on accordionmatrix_accordionblock_BlockType{
                             id, accordionblocktitle, accordionblockcontent
@@ -269,6 +335,39 @@ class GraphQlCmsXBlock(XBlock):
                             tipCssClass
                         }
                     },
+                    table2colMatrix{
+                        ... on table2colMatrix_matrix2col_BlockType{
+                            id,
+                            hasHeaderRow,
+                            table2col{
+                                ... on table2col_BlockType{
+                                    col1, col2
+                                }
+                            }                        
+                        }
+                    },
+                    table3colMatrix{
+                        ... on table3colMatrix_matrix3col_BlockType{
+                            id,
+                            hasHeaderRow,
+                            table3col{
+                                ... on table3col_BlockType{
+                                    col1, col2, col3
+                                }
+                            }
+                        }
+                    },
+                    table4colMatrix{
+                        ... on table4colMatrix_matrix4col_BlockType{
+                            id,
+                            hasHeaderRow,
+                            table4col{
+                                ... on table4col_BlockType{
+                                    col1, col2, col3, col4
+                                }
+                            }
+                        }
+                    },                    
                     accordionmatrix{
                         ... on accordionmatrix_accordionblock_BlockType{
                             id, accordionblocktitle, accordionblockcontent
