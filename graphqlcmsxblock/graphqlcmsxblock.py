@@ -527,6 +527,7 @@ class GraphQlCmsXBlock(XBlock):
                 'accordions': entry['accordions']
             })
         frag.add_content(html)
+        frag.add_css(self.resource_string("studio/css/cmsBlock.css"))
         frag.add_javascript(self.resource_string("studio/js/cmsBlock.js"))
         frag.initialize_js('CmsBlock')
         return frag
