@@ -62,6 +62,7 @@ class GraphQlCmsXBlock(XBlock):
                     table2colMatrix{
                         ... on table2colMatrix_matrix2col_BlockType{
                             id,
+                            tableClassNames,
                             hasHeaderRow,
                             table2col{
                                 ... on table2col_BlockType{
@@ -73,6 +74,7 @@ class GraphQlCmsXBlock(XBlock):
                     table3colMatrix{
                         ... on table3colMatrix_matrix3col_BlockType{
                             id,
+                            tableClassNames,
                             hasHeaderRow,
                             table3col{
                                 ... on table3col_BlockType{
@@ -84,6 +86,7 @@ class GraphQlCmsXBlock(XBlock):
                     table4colMatrix{
                         ... on table4colMatrix_matrix4col_BlockType{
                             id,
+                            tableClassNames,
                             hasHeaderRow,
                             table4col{
                                 ... on table4col_BlockType{
@@ -154,6 +157,7 @@ class GraphQlCmsXBlock(XBlock):
                     table2colMatrix{
                         ... on table2colMatrix_matrix2col_BlockType{
                             id,
+                            tableClassNames,
                             hasHeaderRow,
                             table2col{
                                 ... on table2col_BlockType{
@@ -165,6 +169,7 @@ class GraphQlCmsXBlock(XBlock):
                     table3colMatrix{
                         ... on table3colMatrix_matrix3col_BlockType{
                             id,
+                            tableClassNames,
                             hasHeaderRow,
                             table3col{
                                 ... on table3col_BlockType{
@@ -176,6 +181,7 @@ class GraphQlCmsXBlock(XBlock):
                     table4colMatrix{
                         ... on table4colMatrix_matrix4col_BlockType{
                             id,
+                            tableClassNames,
                             hasHeaderRow,
                             table4col{
                                 ... on table4col_BlockType{
@@ -246,6 +252,7 @@ class GraphQlCmsXBlock(XBlock):
                     table2colMatrix{
                         ... on table2colMatrix_matrix2col_BlockType{
                             id,
+                            tableClassNames,
                             hasHeaderRow,
                             table2col{
                                 ... on table2col_BlockType{
@@ -257,6 +264,7 @@ class GraphQlCmsXBlock(XBlock):
                     table3colMatrix{
                         ... on table3colMatrix_matrix3col_BlockType{
                             id,
+                            tableClassNames,
                             hasHeaderRow,
                             table3col{
                                 ... on table3col_BlockType{
@@ -268,6 +276,7 @@ class GraphQlCmsXBlock(XBlock):
                     table4colMatrix{
                         ... on table4colMatrix_matrix4col_BlockType{
                             id,
+                            tableClassNames,
                             hasHeaderRow,
                             table4col{
                                 ... on table4col_BlockType{
@@ -338,6 +347,7 @@ class GraphQlCmsXBlock(XBlock):
                     table2colMatrix{
                         ... on table2colMatrix_matrix2col_BlockType{
                             id,
+                            tableClassNames,
                             hasHeaderRow,
                             table2col{
                                 ... on table2col_BlockType{
@@ -349,6 +359,7 @@ class GraphQlCmsXBlock(XBlock):
                     table3colMatrix{
                         ... on table3colMatrix_matrix3col_BlockType{
                             id,
+                            tableClassNames,
                             hasHeaderRow,
                             table3col{
                                 ... on table3col_BlockType{
@@ -360,6 +371,7 @@ class GraphQlCmsXBlock(XBlock):
                     table4colMatrix{
                         ... on table4colMatrix_matrix4col_BlockType{
                             id,
+                            tableClassNames,
                             hasHeaderRow,
                             table4col{
                                 ... on table4col_BlockType{
