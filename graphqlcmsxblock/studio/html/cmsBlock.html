@@ -164,10 +164,24 @@
         {% endfor %}
 
         {% for accordion in accordions %}
-            <details>
-                <summary>{{ accordion.accordionblocktitle }} </summary>
-                {{ accordion.accordionblockcontent | safe }}
-            </details>
+            <div>
+                <details>
+                    <summary>{{ accordion.accordionblocktitle }} </summary>
+                    {{ accordion.accordionblockcontent | safe }}
+                </details>
+            </div>
+        {% endfor %}
+
+        {% for accordion in accordionneo %}
+            <div>
+                <h5> {{ accordion.accordionTitle }} </h5>
+                {% for elem in accordion.accordionmatrix %}
+                    <details>
+                        <summary>{{ elem.accordionblocktitle }} </summary>
+                        {{ elem.accordionblockcontent | safe }}
+                    </details>
+                {% endfor %}
+            </div>
         {% endfor %}
         
     </div>

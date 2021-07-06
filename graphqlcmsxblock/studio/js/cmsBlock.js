@@ -72,6 +72,7 @@ function CmsBlock(runtime, element) {
                         renderField('table3colMatrix', entry) +
                         renderField('table4colMatrix', entry) +
                         renderField('accordionmatrix', entry) +
+                        renderField('accordionneo', entry) +
                     '</form>'
                 )
                 break;
@@ -87,6 +88,7 @@ function CmsBlock(runtime, element) {
                         renderField('table3colMatrix', entry) +
                         renderField('table4colMatrix', entry) +
                         renderField('accordionmatrix', entry) +
+                        renderField('accordionneo', entry) +
                     '</form>'
                 )
                 break;
@@ -102,6 +104,7 @@ function CmsBlock(runtime, element) {
                         renderField('table3colMatrix', entry) +
                         renderField('table4colMatrix', entry) +
                         renderField('accordionmatrix', entry) +
+                        renderField('accordionneo', entry) +
                     '</form>'
                 )
                 break;
@@ -117,6 +120,7 @@ function CmsBlock(runtime, element) {
                         renderField('table3colMatrix', entry) +
                         renderField('table4colMatrix', entry) +
                         renderField('accordionmatrix', entry) +
+                        renderField('accordionneo', entry) +
                     '</form>'
                 )
                 break;
@@ -302,6 +306,19 @@ function CmsBlock(runtime, element) {
                     
                 })
                 break;
+
+            case 'accordionneo':
+                entry.accordionneo.forEach( function(elem){
+                    base += '<label><input type="checkbox" name="' + type + '[' + elem.id + ']" checked="checked"/> Include Accordion Matrix</label>';
+                    base += '<h5>' + elem.accordionTitle + '</h5>'
+                    elem.accordionmatrix.forEach(function(accordion){
+                        base += 
+                        '<details>' + 
+                            '<summary>' + accordion.accordionblocktitle + '</summary>' + 
+                                accordion.accordionblockcontent  + 
+                        '</details>';
+                    })
+                })
             
         }
         base += '</div>';
