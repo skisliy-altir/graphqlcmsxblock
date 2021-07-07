@@ -71,7 +71,6 @@ function CmsBlock(runtime, element) {
                         renderField('table2colMatrix', entry) +
                         renderField('table3colMatrix', entry) +
                         renderField('table4colMatrix', entry) +
-                        renderField('accordionmatrix', entry) +
                         renderField('accordionneo', entry) +
                     '</form>'
                 )
@@ -87,7 +86,6 @@ function CmsBlock(runtime, element) {
                         renderField('table2colMatrix', entry) +
                         renderField('table3colMatrix', entry) +
                         renderField('table4colMatrix', entry) +
-                        renderField('accordionmatrix', entry) +
                         renderField('accordionneo', entry) +
                     '</form>'
                 )
@@ -103,7 +101,6 @@ function CmsBlock(runtime, element) {
                         renderField('table2colMatrix', entry) +
                         renderField('table3colMatrix', entry) +
                         renderField('table4colMatrix', entry) +
-                        renderField('accordionmatrix', entry) +
                         renderField('accordionneo', entry) +
                     '</form>'
                 )
@@ -119,7 +116,6 @@ function CmsBlock(runtime, element) {
                         renderField('table2colMatrix', entry) +
                         renderField('table3colMatrix', entry) +
                         renderField('table4colMatrix', entry) +
-                        renderField('accordionmatrix', entry) +
                         renderField('accordionneo', entry) +
                     '</form>'
                 )
@@ -163,10 +159,12 @@ function CmsBlock(runtime, element) {
             case 'contentBlock':
                 entry.contentBlock.forEach( function(elem) {
                     base += '<label><input type="checkbox" name="' + type + '[' + elem.id + ']" checked="checked"/> Include Content Block</label>';
-                    base += '<div>' + 
-                        '<h5>' + elem.blockTitle +'</h5>' + 
-                            '<div>' + elem.blockContent + '</div>' + 
-                        '</div>';
+                    base += '<div>' 
+                    if(elem.blockTitle != null) {
+                        base += '<h5>' + elem.blockTitle +'</h5>';
+                    }
+                        base += '<div>' + elem.blockContent + '</div>' + 
+                    '</div>';
                 })
                 break;
 
@@ -231,7 +229,7 @@ function CmsBlock(runtime, element) {
                         '</tr>'
                     })
                     
-                    base += '</table>'
+                    base += '</table>';
                 })
                 break;
 
@@ -260,7 +258,7 @@ function CmsBlock(runtime, element) {
                         '</tr>'
                     })
                     
-                    base += '</table>'
+                    base += '</table>';
                 })
                 break;
 
@@ -291,19 +289,7 @@ function CmsBlock(runtime, element) {
                         '</tr>'
                     })
                     
-                    base += '</table>'
-                })
-                break;
-        
-            case 'accordionmatrix':
-                entry.accordionmatrix.forEach( function(elem){
-                    base += '<label><input type="checkbox" name="' + type + '[' + elem.id + ']" checked="checked"/> Include Accordion</label>';
-                    base += 
-                        '<details>' + 
-                            '<summary>' + elem.accordionblocktitle + '</summary>' + 
-                                elem.accordionblockcontent  + 
-                        '</details>';
-                    
+                    base += '</table>';
                 })
                 break;
 
@@ -319,6 +305,7 @@ function CmsBlock(runtime, element) {
                         '</details>';
                     })
                 })
+                break;
             
         }
         base += '</div>';

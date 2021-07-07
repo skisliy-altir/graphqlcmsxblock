@@ -101,13 +101,6 @@ class GraphQlCmsXBlock(XBlock):
                             }
                         }
                     },
-                    accordionmatrix{
-                        ... on accordionmatrix_accordionblock_BlockType{
-                            id, 
-                            accordionblocktitle, 
-                            accordionblockcontent
-                        }
-                    },
                     accordionneo{
                         ... on accordionneo_accordion_BlockType{
                             id,
@@ -215,13 +208,6 @@ class GraphQlCmsXBlock(XBlock):
                                     col4
                                 }
                             }
-                        }
-                    },
-                    accordionmatrix{
-                        ... on accordionmatrix_accordionblock_BlockType{
-                            id, 
-                            accordionblocktitle, 
-                            accordionblockcontent
                         }
                     },
                     accordionneo{
@@ -333,13 +319,6 @@ class GraphQlCmsXBlock(XBlock):
                             }
                         }
                     },                        
-                    accordionmatrix{
-                        ... on accordionmatrix_accordionblock_BlockType{
-                            id, 
-                            accordionblocktitle, 
-                            accordionblockcontent
-                        }
-                    }, 
                     accordionneo{
                         ... on accordionneo_accordion_BlockType{
                             id,
@@ -449,13 +428,6 @@ class GraphQlCmsXBlock(XBlock):
                             }
                         }
                     },                    
-                    accordionmatrix{
-                        ... on accordionmatrix_accordionblock_BlockType{
-                            id, 
-                            accordionblocktitle, 
-                            accordionblockcontent
-                        }
-                    },
                     accordionneo{
                         ... on accordionneo_accordion_BlockType{
                             id,
@@ -507,7 +479,6 @@ class GraphQlCmsXBlock(XBlock):
             'tables2': [],
             'tables3': [],
             'tables4': [],
-            'accordions': [],
             'accordionneo': []
         }
 
@@ -528,7 +499,6 @@ class GraphQlCmsXBlock(XBlock):
             'tables2': entry['tables2'],
             'tables3': entry['tables3'],
             'tables4': entry['tables4'],
-            'accordions': entry['accordions'],
             'accordionneo': entry['accordionneo']
         })
         frag.add_content(html)
@@ -599,7 +569,6 @@ class GraphQlCmsXBlock(XBlock):
             'tables2': [],
             'tables3': [],
             'tables4': [],
-            'accordions': [],
             'accordionneo': []
         }
         if self.entrySlug is not '':
@@ -623,7 +592,6 @@ class GraphQlCmsXBlock(XBlock):
                 'tables2': entry['tables2'],
                 'tables3': entry['tables3'],
                 'tables4': entry['tables4'],
-                'accordions': entry['accordions'],
                 'accordionneo': entry['accordionneo']
             })
         frag.add_content(html)
@@ -654,7 +622,6 @@ class GraphQlCmsXBlock(XBlock):
         tables2 = []
         tables3 = []
         tables4 = []
-        accordions = []
         accordionneo = []
 
         if self.entryType == 'clause':    
@@ -705,8 +672,6 @@ class GraphQlCmsXBlock(XBlock):
                                     tables3.append(subitem)
                                 elif 'table4colMatrix' in section:
                                     tables4.append(subitem)
-                                elif 'accordionmatrix' in section:
-                                    accordions.append(subitem)
                                 elif 'accordionneo' in section:
                                     accordionneo.append(subitem)
                                 
@@ -735,9 +700,6 @@ class GraphQlCmsXBlock(XBlock):
                 elif 'table4colMatrix' in section :
                     for subitem in entry[section] :
                         tables4.append(subitem)
-                elif 'accordionmatrix' in section :
-                    for subitem in entry[section] :
-                        accordions.append(subitem)
                 elif 'accordionneo' in section :
                     for subitem in entry[section] :
                         accordionneo.append(subitem)
@@ -753,7 +715,6 @@ class GraphQlCmsXBlock(XBlock):
             'tables2': tables2,
             'tables3': tables3,
             'tables4': tables4,
-            'accordions': accordions,
             'accordionneo' : accordionneo
         }
 
