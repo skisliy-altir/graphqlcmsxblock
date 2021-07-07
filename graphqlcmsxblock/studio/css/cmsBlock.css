@@ -3,21 +3,23 @@
 th, td, p, input, h3 {
     font:15px 'Segoe UI';
 }
+
 table, th, td {
     border: solid 1px #ddd;
     border-collapse: collapse;
     padding: 2px 3px;
     text-align: center;
 }
+
 th p {
     font-weight:bold;
 }
 
-details {
-    border: 1px solid #d4d4d4;    
+details {  
     padding: .75em .75em 0;
     margin-top: 10px;
     box-shadow:0 0 20px #d4d4d4;
+    border-radius: 12px;
 }
 
 summary {	
@@ -26,13 +28,17 @@ summary {
     padding: .75em;
     background-color: #4F5054;
     color: #fff;
+    border-radius: 12px;
 }
 
 details[open] {
     padding: .75em;
-    border-bottom: 1px solid #d4d4d4;
+    border-bottom: 1px solid #FAFAFB;
+    border-radius: 12px;
 }
 
 details[open] summary {
-    border-bottom: 1px solid #d4d4d4;
+    padding: .75em;
+    border-bottom: 1px solid #FAFAFB;
+    border-radius: 12px;
 }

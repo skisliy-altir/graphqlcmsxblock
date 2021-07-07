@@ -58,45 +58,62 @@ class GraphQlCmsXBlock(XBlock):
                             },
                             tipCssClass
                         }
-                    }
+                    },
                     table2colMatrix{
                         ... on table2colMatrix_matrix2col_BlockType{
                             id,
+                            tableClassNames,
                             hasHeaderRow,
                             table2col{
                                 ... on table2col_BlockType{
-                                    col1, col2
+                                    col1, 
+                                    col2
                                 }
                             }                        
                         }
-                    }
+                    },
                     table3colMatrix{
                         ... on table3colMatrix_matrix3col_BlockType{
                             id,
+                            tableClassNames,
                             hasHeaderRow,
                             table3col{
                                 ... on table3col_BlockType{
-                                    col1, col2, col3
+                                    col1, 
+                                    col2, 
+                                    col3
                                 }
                             }
                         }
-                    }
+                    },
                     table4colMatrix{
                         ... on table4colMatrix_matrix4col_BlockType{
                             id,
+                            tableClassNames,
                             hasHeaderRow,
                             table4col{
                                 ... on table4col_BlockType{
-                                    col1, col2, col3, col4
+                                    col1, 
+                                    col2, 
+                                    col3, 
+                                    col4
                                 }
                             }
                         }
-                    }
-                    accordionmatrix{
-                        ... on accordionmatrix_accordionblock_BlockType{
-                            id, accordionblocktitle, accordionblockcontent
+                    },
+                    accordionneo{
+                        ... on accordionneo_accordion_BlockType{
+                            id,
+                            accordionTitle,
+                            accordionClasses,
+                            accordionmatrix{
+                                ... on accordionmatrix_accordionblock_BlockType{
+                                    accordionblocktitle,
+                                    accordionblockcontent
+                                }
+                            }
                         }
-                    }  
+			        }  
                 } 
             } """
 
@@ -154,10 +171,12 @@ class GraphQlCmsXBlock(XBlock):
                     table2colMatrix{
                         ... on table2colMatrix_matrix2col_BlockType{
                             id,
+                            tableClassNames,
                             hasHeaderRow,
                             table2col{
                                 ... on table2col_BlockType{
-                                    col1, col2
+                                    col1, 
+                                    col2
                                 }
                             }                        
                         }
@@ -165,10 +184,13 @@ class GraphQlCmsXBlock(XBlock):
                     table3colMatrix{
                         ... on table3colMatrix_matrix3col_BlockType{
                             id,
+                            tableClassNames,
                             hasHeaderRow,
                             table3col{
                                 ... on table3col_BlockType{
-                                    col1, col2, col3
+                                    col1, 
+                                    col2, 
+                                    col3
                                 }
                             }
                         }
@@ -176,19 +198,31 @@ class GraphQlCmsXBlock(XBlock):
                     table4colMatrix{
                         ... on table4colMatrix_matrix4col_BlockType{
                             id,
+                            tableClassNames,
                             hasHeaderRow,
                             table4col{
                                 ... on table4col_BlockType{
-                                    col1, col2, col3, col4
+                                    col1, 
+                                    col2, 
+                                    col3, 
+                                    col4
                                 }
                             }
                         }
                     },
-                    accordionmatrix{
-                        ... on accordionmatrix_accordionblock_BlockType{
-                            id, accordionblocktitle, accordionblockcontent
+                    accordionneo{
+                        ... on accordionneo_accordion_BlockType{
+                            id,
+                            accordionTitle,
+                            accordionClasses,
+                            accordionmatrix{
+                                ... on accordionmatrix_accordionblock_BlockType{
+                                    accordionblocktitle,
+                                    accordionblockcontent
+                                }
+                            }
                         }
-                    }                    
+			        }                                          
                 } 
             } """
 
@@ -246,10 +280,12 @@ class GraphQlCmsXBlock(XBlock):
                     table2colMatrix{
                         ... on table2colMatrix_matrix2col_BlockType{
                             id,
+                            tableClassNames,
                             hasHeaderRow,
                             table2col{
                                 ... on table2col_BlockType{
-                                    col1, col2
+                                    col1, 
+                                    col2
                                 }
                             }                        
                         }
@@ -257,10 +293,13 @@ class GraphQlCmsXBlock(XBlock):
                     table3colMatrix{
                         ... on table3colMatrix_matrix3col_BlockType{
                             id,
+                            tableClassNames,
                             hasHeaderRow,
                             table3col{
                                 ... on table3col_BlockType{
-                                    col1, col2, col3
+                                    col1, 
+                                    col2, 
+                                    col3
                                 }
                             }
                         }
@@ -268,19 +307,31 @@ class GraphQlCmsXBlock(XBlock):
                     table4colMatrix{
                         ... on table4colMatrix_matrix4col_BlockType{
                             id,
+                            tableClassNames,
                             hasHeaderRow,
                             table4col{
                                 ... on table4col_BlockType{
-                                    col1, col2, col3, col4
+                                    col1, 
+                                    col2, 
+                                    col3, 
+                                    col4
                                 }
                             }
                         }
                     },                        
-                    accordionmatrix{
-                        ... on accordionmatrix_accordionblock_BlockType{
-                            id, accordionblocktitle, accordionblockcontent
+                    accordionneo{
+                        ... on accordionneo_accordion_BlockType{
+                            id,
+                            accordionTitle,
+                            accordionClasses,
+                            accordionmatrix{
+                                ... on accordionmatrix_accordionblock_BlockType{
+                                    accordionblocktitle,
+                                    accordionblockcontent
+                                }
+                            }
                         }
-                    }                                
+			        }                                                     
                 } 
             }"""
 
@@ -338,10 +389,12 @@ class GraphQlCmsXBlock(XBlock):
                     table2colMatrix{
                         ... on table2colMatrix_matrix2col_BlockType{
                             id,
+                            tableClassNames,
                             hasHeaderRow,
                             table2col{
                                 ... on table2col_BlockType{
-                                    col1, col2
+                                    col1, 
+                                    col2
                                 }
                             }                        
                         }
@@ -349,10 +402,13 @@ class GraphQlCmsXBlock(XBlock):
                     table3colMatrix{
                         ... on table3colMatrix_matrix3col_BlockType{
                             id,
+                            tableClassNames,
                             hasHeaderRow,
                             table3col{
                                 ... on table3col_BlockType{
-                                    col1, col2, col3
+                                    col1, 
+                                    col2, 
+                                    col3
                                 }
                             }
                         }
@@ -360,19 +416,31 @@ class GraphQlCmsXBlock(XBlock):
                     table4colMatrix{
                         ... on table4colMatrix_matrix4col_BlockType{
                             id,
+                            tableClassNames,
                             hasHeaderRow,
                             table4col{
                                 ... on table4col_BlockType{
-                                    col1, col2, col3, col4
+                                    col1, 
+                                    col2, 
+                                    col3, 
+                                    col4
                                 }
                             }
                         }
                     },                    
-                    accordionmatrix{
-                        ... on accordionmatrix_accordionblock_BlockType{
-                            id, accordionblocktitle, accordionblockcontent
+                    accordionneo{
+                        ... on accordionneo_accordion_BlockType{
+                            id,
+                            accordionTitle,
+                            accordionClasses,
+                            accordionmatrix{
+                                ... on accordionmatrix_accordionblock_BlockType{
+                                    accordionblocktitle,
+                                    accordionblockcontent
+                                }
+                            }
                         }
-                    }                                        
+			        }                                                              
                 } 
             }"""
 
@@ -411,7 +479,7 @@ class GraphQlCmsXBlock(XBlock):
             'tables2': [],
             'tables3': [],
             'tables4': [],
-            'accordions': []
+            'accordionneo': []
         }
 
         if self.entrySlug is not '':
@@ -431,7 +499,7 @@ class GraphQlCmsXBlock(XBlock):
             'tables2': entry['tables2'],
             'tables3': entry['tables3'],
             'tables4': entry['tables4'],
-            'accordions': entry['accordions']
+            'accordionneo': entry['accordionneo']
         })
         frag.add_content(html)
         frag.add_css(self.resource_string("static/css/graphqlcmsxblock.css"))
@@ -501,7 +569,7 @@ class GraphQlCmsXBlock(XBlock):
             'tables2': [],
             'tables3': [],
             'tables4': [],
-            'accordions': []
+            'accordionneo': []
         }
         if self.entrySlug is not '':
             entry = self.load_selected_entry()
@@ -524,7 +592,7 @@ class GraphQlCmsXBlock(XBlock):
                 'tables2': entry['tables2'],
                 'tables3': entry['tables3'],
                 'tables4': entry['tables4'],
-                'accordions': entry['accordions']
+                'accordionneo': entry['accordionneo']
             })
         frag.add_content(html)
         frag.add_css(self.resource_string("studio/css/cmsBlock.css"))
@@ -554,7 +622,7 @@ class GraphQlCmsXBlock(XBlock):
         tables2 = []
         tables3 = []
         tables4 = []
-        accordions = []
+        accordionneo = []
 
         if self.entryType == 'clause':    
             resp = requests.post(self.cmsApi, json={
@@ -604,8 +672,8 @@ class GraphQlCmsXBlock(XBlock):
                                     tables3.append(subitem)
                                 elif 'table4colMatrix' in section:
                                     tables4.append(subitem)
-                                elif 'accordionmatrix' in section:
-                                    accordions.append(subitem)
+                                elif 'accordionneo' in section:
+                                    accordionneo.append(subitem)
                                 
         else: 
             for section in entry :
@@ -623,18 +691,18 @@ class GraphQlCmsXBlock(XBlock):
                 elif 'tip' in section :
                     for subitem in entry[section] :
                         tips.append(subitem)
-                elif 'table2colMatrix' in section:
-                    for subitem in entry[section]:
+                elif 'table2colMatrix' in section :
+                    for subitem in entry[section] :
                         tables2.append(subitem)
-                elif 'table3colMatrix' in section:
-                    for subitem in entry[section]:
+                elif 'table3colMatrix' in section :
+                    for subitem in entry[section] :
                         tables3.append(subitem)
-                elif 'table4colMatrix' in section:
-                    for subitem in entry[section]:
+                elif 'table4colMatrix' in section :
+                    for subitem in entry[section] :
                         tables4.append(subitem)
-                elif 'accordionmatrix' in section:
-                    for subitem in entry[section]:
-                        accordions.append(subitem)
+                elif 'accordionneo' in section :
+                    for subitem in entry[section] :
+                        accordionneo.append(subitem)
 
         return {
             'title': title,
@@ -647,7 +715,7 @@ class GraphQlCmsXBlock(XBlock):
             'tables2': tables2,
             'tables3': tables3,
             'tables4': tables4,
-            'accordions': accordions
+            'accordionneo' : accordionneo
         }
 
     @XBlock.json_handler
