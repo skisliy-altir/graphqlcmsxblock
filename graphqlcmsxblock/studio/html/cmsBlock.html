@@ -56,7 +56,7 @@
         {% for asset in assets %}
             {% for file in asset.assetfile %}
                 <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
-                    <img src="{{ cmsHost }}{{ file.url }}" class="img-fluid"/>
+                    <img src="{{ cmsHost }}{{ file.url }}" class="img-fluid {{ asset.assetType }}"/>
                 </div>
             {% endfor %}
         {% endfor %}
