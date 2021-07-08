@@ -8,7 +8,9 @@
 
         {% for block in contentBlocks %}
             <div>
-                <h5>{{ block.blockTitle }}</h5>
+                {% if block.blockTitle != null %}
+                    <h5>{{ block.blockTitle }}</h5>
+                {% endif %}
                 <div>{{ block.blockContent | safe }}</div>
             </div>
         {% endfor %}
@@ -16,7 +18,7 @@
         {% for asset in assets %}
             {% for file in asset.assetfile %}
                 <div>
-                    <img src="{{ cmsHost }}{{ file.url }}" class="img-fluid"/>
+                    <img src="{{ cmsHost }}{{ file.url }}" class="img-fluid {{ asset.assetType }}"/>
                 </div>
             {% endfor %}
         {% endfor %}
@@ -62,8 +64,6 @@
             </div>
         {% endfor %}
 
-        <br>
-
         {% for table in tables3 %}
             <div style="padding: 0.8em; margin: 0.5em; border-radius: 7px;">
                 <table>
@@ -93,8 +93,6 @@
                 </table>
             </div>
         {% endfor %}
-
-        <br> 
 
         {% for table in tables4 %}
             <div style="padding: 0.8em; margin: 0.5em; border-radius: 7px;">
@@ -129,13 +127,17 @@
             </div>
         {% endfor %}
 
-        {% for accordion in accordions %}
-            <details>
-                <summary>{{ accordion.accordionblocktitle }} </summary>
-                {{ accordion.accordionblockcontent | safe }}
-            </details>
+        {% for accordion in accordionneo %}
+            <div>
+                <h5> {{ accordion.accordionTitle }} </h5>
+                {% for elem in accordion.accordionmatrix %}
+                    <details>
+                        <summary>{{ elem.accordionblocktitle }} </summary>
+                        {{ elem.accordionblockcontent | safe }}
+                    </details>
+                {% endfor %}
+            </div>
         {% endfor %}
-        
 
     </div>
 </div>
