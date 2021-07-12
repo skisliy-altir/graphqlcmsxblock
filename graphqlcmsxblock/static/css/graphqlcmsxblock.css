@@ -1,28 +1,28 @@
 /* CSS for GraphQlCmsXBlock */
 
-th, td, p, input, h3 {
+.myxblock_block th, .myxblock_block td, .myxblock_block p, .myxblock_block input, .myxblock_block h3 {
     font:15px 'Segoe UI';
 }
 
-table, th, td {
+.myxblock_block table, .myxblock_block th, .myxblock_block td {
     border: solid 1px #ddd;
     border-collapse: collapse;
     padding: 2px 3px;
     text-align: center;
 }
 
-th p {
+.myxblock_block th p {
     font-weight:bold;
 }
 
-details {   
+.myxblock_block details {   
     padding: .75em .75em 0;
     margin-top: 10px;
     box-shadow:0 0 20px #d4d4d4;
     border-radius: 12px;
 }
 
-summary {	
+.myxblock_block summary {	
     font-weight: bold;
     margin: -.75em -.75em 0;
     padding: .75em;
@@ -31,19 +31,19 @@ summary {
     border-radius: 12px;
 }
 
-details[open] {
+.myxblock_block details[open] {
     padding: .75em;
     border-bottom: 1px solid #FAFAFB;
     border-radius: 12px;
 }
 
-details[open] summary {
+.myxblock_block details[open] summary {
     padding: .75em;
     border-bottom: 1px solid #FAFAFB;
     border-radius: 12px;
 }
 
-.icon {
+.myxblock_block .icon {
     width: 150px;
     height: 150px;
 }

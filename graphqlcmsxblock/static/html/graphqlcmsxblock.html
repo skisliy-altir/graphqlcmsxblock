@@ -132,7 +132,7 @@
                 <h5> {{ accordion.accordionTitle }} </h5>
                 {% for elem in accordion.accordionmatrix %}
                     <details>
-                        <summary>{{ elem.accordionblocktitle }} </summary>
+                        <summary class= "{{ accordion.accordionClasses }}">{{ elem.accordionblocktitle }} </summary>
                         {{ elem.accordionblockcontent | safe }}
                     </details>
                 {% endfor %}
