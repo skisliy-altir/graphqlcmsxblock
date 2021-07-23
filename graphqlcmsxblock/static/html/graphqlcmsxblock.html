@@ -31,7 +31,7 @@
         {% endfor %}
     
         {% for tip in tips %}
-            <div>
+            <div class = "{{ tip.tipCssClass }}">
                 <h5>{{ tip.tipTitle }}</h5>
                 <div>{{ tip.tipContent | safe }}</div>
             </div>
