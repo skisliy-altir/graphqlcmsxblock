@@ -69,7 +69,7 @@
         {% endfor %}
     
         {% for tip in tips %}
-            <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;"> 
+            <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;" class = "{{ tip.tipCssClass }}"> 
                 <h5>{{ tip.tipTitle }}</h5>
                 <div>{{ tip.tipContent | safe }}</div>
             </div>
