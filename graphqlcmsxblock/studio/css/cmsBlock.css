@@ -47,3 +47,17 @@
     width: 150px;
     height: 150px;
 }
+
+.myxblock_block div.tipAlt
+{
+    background-color: #ebf3c9;
+    background-image: url(https://dev.cms.intellcreative.ca/assets/COMPEN2.png);
+    border-left: solid 4px #A9C92D;
+    background-position: -9px 0px;
+    background-repeat: no-repeat;
+    border-radius: 6px;
+    line-height: 18px;
+    overflow: hidden;
+    padding: 5px 90px;
+    background-size: 100px 100px;
+}
