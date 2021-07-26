@@ -47,3 +47,35 @@
     width: 150px;
     height: 150px;
 }
+
+.myxblock_block div.tipAlt
+{
+    background-color: #ebf3c9;
+    /*background-image: url(https://dev.cms.intellcreative.ca/assets/COMPEN2.png); 
+    background-size: 100px 100px;
+    background-position: -9px 0px;
+    */
+    border-left: solid 4px #A9C92D;
+    background-repeat: no-repeat;
+    border-radius: 6px;
+    line-height: 18px;
+    overflow: hidden;
+    padding: 5px 150px;
+    padding-right: 30px;
+    width: 750px;
+    position: relative;
+}
+
+.myxblock_block div.tipAlt::before{
+    display: inline-block;
+    width: 136px;
+    height: -webkit-fill-available;
+    content: "";
+    background: url(https://dev.cms.intellcreative.ca/assets/tip-icon-01.png) no-repeat 0 0;
+    background-size: 90px 90px;
+    position: absolute;
+    left: 0em;
+    top: 0%;
+    background-color: #A9C92D;
+    background-position: center;
+}
