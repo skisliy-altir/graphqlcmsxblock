@@ -167,7 +167,9 @@
 
         {% for accordion in accordionneo %}
             <div>
-                <h5> {{ accordion.accordionTitle }} </h5>
+                {% if accordion.accordionTitle != null %}
+                    <h5>{{ accordion.accordionTitle }}</h5>
+                {% endif %}
                 {% for elem in accordion.accordionmatrix %}
                     <details>
                         <summary class= "{{ accordion.accordionClasses }}">{{ elem.accordionblocktitle }} </summary>
