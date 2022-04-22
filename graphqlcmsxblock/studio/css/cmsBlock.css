@@ -1,63 +1,68 @@
 /* CSS for cmsBlock */
 
-.myxblock_block th, .myxblock_block td, .myxblock_block p, .myxblock_block input, .myxblock_block h3 {
-    font:15px 'Segoe UI';
+.myxblock_block th,
+.myxblock_block td,
+.myxblock_block p,
+.myxblock_block input,
+.myxblock_block h3 {
+  font: 15px "Segoe UI";
 }
 
-.myxblock_block table, .myxblock_block th, .myxblock_block td {
-    border: solid 1px #ddd;
-    border-collapse: collapse;
-    padding: 2px 3px;
-    text-align: center;
+.myxblock_block table,
+.myxblock_block th,
+.myxblock_block td {
+  border: solid 1px #ddd;
+  border-collapse: collapse;
+  padding: 2px 3px;
+  text-align: center;
 }
 
 .myxblock_block th p {
-    font-weight:bold;
+  font-weight: bold;
 }
 
-.myxblock_block details {   
-    padding: .75em .75em 0;
-    margin-top: 10px;
-    box-shadow:0 0 20px #d4d4d4;
-    border-radius: 12px;
+.myxblock_block details {
+  padding: 0.75em 0.75em 0;
+  margin-top: 10px;
+  box-shadow: 0 0 20px #d4d4d4;
+  border-radius: 12px;
 }
 
-.myxblock_block summary {	
-    font-weight: bold;
-    margin: -.75em -.75em 0;
-    padding: .75em;
-    background-color: #4F5054;
-    color: #fff;
-    border-radius: 12px;
+.myxblock_block summary {
+  font-weight: bold;
+  margin: -0.75em -0.75em 0;
+  padding: 0.75em;
+  background-color: #4f5054;
+  color: #fff;
+  border-radius: 12px;
 }
 
 .myxblock_block details[open] {
-    padding: .75em;
-    border-bottom: 1px solid #FAFAFB;
-    border-radius: 12px;
+  padding: 0.75em;
+  border-bottom: 1px solid #fafafb;
+  border-radius: 12px;
 }
 
 .myxblock_block details[open] summary {
-    padding: .75em;
-    border-bottom: 1px solid #FAFAFB;
-    border-radius: 12px;
+  padding: 0.75em;
+  border-bottom: 1px solid #fafafb;
+  border-radius: 12px;
 }
 
 .myxblock_block .icon {
-    width: 150px;
-    height: 150px;
+  width: 150px;
+  height: 150px;
 }
 
-.myxblock_block div.tipAlt
-{
-    background-color: #ebf3c9;
-    background-image: url(https://dev.cms.intellcreative.ca/assets/COMPEN2.png);
-    border-left: solid 4px #A9C92D;
-    background-position: -9px 0px;
-    background-repeat: no-repeat;
-    border-radius: 6px;
-    line-height: 18px;
-    overflow: hidden;
-    padding: 5px 90px;
-    background-size: 100px 100px;
+.myxblock_block div.tipAlt {
+  background-color: #ebf3c9;
+  background-image: url(https://dev.cms.intellcreative.ca/assets/COMPEN2.png);
+  border-left: solid 4px #a9c92d;
+  background-position: -9px 0px;
+  background-repeat: no-repeat;
+  border-radius: 6px;
+  line-height: 18px;
+  overflow: hidden;
+  padding: 5px 90px;
+  background-size: 100px 100px;
 }
