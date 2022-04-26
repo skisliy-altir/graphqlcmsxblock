@@ -524,6 +524,10 @@ class GraphQlCmsXBlock(XBlock):
         default=[]
     )
 
+    blockOrder = List(
+        default=[]
+    )
+
     cmsApi = 'https://dev.cms.intellcreative.ca/api'
 
     icon_class = 'other'
@@ -664,7 +668,8 @@ class GraphQlCmsXBlock(XBlock):
                     'tables3': entry['tables3'],
                     'tables4': entry['tables4'],
                     'tables5': entry['tables5'],
-                    'accordionneo': entry['accordionneo']
+                    'accordionneo': entry['accordionneo'],
+                    'blockOrder': self.blockOrder
                 #}
             })
         frag.add_content(html)
@@ -684,6 +689,7 @@ class GraphQlCmsXBlock(XBlock):
         """Handy helper for getting resources from our kit."""
         data = pkg_resources.resource_string(__name__, path)
         return data.decode("utf8")
+
 
     def load_selected_entry(self) :
         title = ''
@@ -809,8 +815,11 @@ class GraphQlCmsXBlock(XBlock):
     
 
     @XBlock.json_handler
-    def re_sorted_data(self, data,suffix = ''):
-        return{}
+    def sort_save(self, data, suffix):
+        self.blockOrder = data
+        return {
+            'order': self.blockOrder
+        }
 
 
     @XBlock.json_handler

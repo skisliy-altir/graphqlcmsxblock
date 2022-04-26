@@ -6,35 +6,10 @@ import Sortable from "sortablejs";
 
 window.CmsBlock = function (runtime, element) {
   var handlerUrl = runtime.handlerUrl(element, "select_cms_block");
-  var handlerSubSectionUrl = runtime.handlerUrl( element, "select_cms_block_subsections");
-  var handleReSortedDataUrl = runtime.handlerUrl(element, "re_sorted_data");
+  var handlerSubSectionUrl = runtime.handlerUrl(element, "select_cms_block_subsections");
+  var handleReSortedDataUrl = runtime.handlerUrl(element, "sort_save");
   var cmsHost = "";
-
-  Sortable.create(document.getElementById("generalView"), {
-    animation: 150,
-    group: "generalView",
-    store: {
-      get: function (sortable) {
-        var order = localStorage.getItem(sortable.options.group.name);
-        return order ? order.split("|") : [];
-      },
-      set: function (sortable) {
-        var order = sortable.toArray();
-        var setOrder = localStorage.setItem(
-          sortable.options.group.name,
-          order.join("|")
-        );
-        $.ajax({
-          type: "POST",
-          url: handleReSortedDataUrl,
-          data: JSON.stringify(order),
-          success: function (order) {
-            cmsHost = order.cmsHost;
-          },
-        });
-      },
-    },
-  });
+  var sortable = null;
 
   // 1) Jquery select the course ---- filter
   $("#courseFilter").on("change", function () {
@@ -50,7 +25,6 @@ window.CmsBlock = function (runtime, element) {
     var request = {};
     request[type] = slug;
 
-    // post content to cmsHost : https://dev.cms.intellcreative.ca
     $.ajax({
       type: "POST",
       url: handlerUrl,
@@ -98,28 +72,27 @@ window.CmsBlock = function (runtime, element) {
   };
 
   window.render_entry = function (type, entry) {
+    if( sortable != null )
+      sortable.destroy();
+
     switch (type) {
       case "clause":
         $("#generalView")
           .first()
           .html(
-            '<form id="clause" onChange="updateSelection(this)" onsubmit="javascript:void(0);" entry-type="clause">' +
-              '<ul id="generalView">' + 
-              renderField("clauseText", entry) +
-              renderField("lmsText", entry) +
-              renderField("lmsAdvancedConcepts", entry) +
-              renderField("platformText", entry) +
-              renderField("platformAdvancedConcepts", entry) +
-              renderField("cmsAsset", entry) +
-              renderField("faq", entry) +
-              renderField("tip", entry) +
-              renderField("table2colMatrix", entry) +
-              renderField("table3colMatrix", entry) +
-              renderField("table4colMatrix", entry) +
-              renderField("table5colMatrix", entry) +
-              renderField("accordionneo", entry) +
-              '</ul>' + 
-            "</form>"
+            renderField("clauseText", entry) +
+            renderField("lmsText", entry) +
+            renderField("lmsAdvancedConcepts", entry) +
+            renderField("platformText", entry) +
+            renderField("platformAdvancedConcepts", entry) +
+            renderField("cmsAsset", entry) +
+            renderField("faq", entry) +
+            renderField("tip", entry) +
+            renderField("table2colMatrix", entry) +
+            renderField("table3colMatrix", entry) +
+            renderField("table4colMatrix", entry) +
+            renderField("table5colMatrix", entry) +
+            renderField("accordionneo", entry)
           );
         break;
 
@@ -127,19 +100,15 @@ window.CmsBlock = function (runtime, element) {
         $("#generalView")
           .first()
           .html(
-            '<form id="course" onChange="updateSelection(this)" onsubmit="javascript:void(0);" entry-type="course">' +
-              '<ul id="generalView">' + 
-              renderField("contentBlock", entry) +
-              renderField("cmsAsset", entry) +
-              renderField("faq", entry) +
-              renderField("tip", entry) +
-              renderField("table2colMatrix", entry) +
-              renderField("table3colMatrix", entry) +
-              renderField("table4colMatrix", entry) +
-              renderField("table5colMatrix", entry) +
-              renderField("accordionneo", entry) +
-              '</ul>' + 
-            "</form>"
+            renderField("contentBlock", entry) +
+            renderField("cmsAsset", entry) +
+            renderField("faq", entry) +
+            renderField("tip", entry) +
+            renderField("table2colMatrix", entry) +
+            renderField("table3colMatrix", entry) +
+            renderField("table4colMatrix", entry) +
+            renderField("table5colMatrix", entry) +
+            renderField("accordionneo", entry)
           );
         break;
 
@@ -147,19 +116,15 @@ window.CmsBlock = function (runtime, element) {
         $("#generalView")
           .first()
           .html(
-            '<form onChange="updateSelection(this)" onsubmit="javascript:void(0);" entry-type="section">' +
-              '<ul id="generalView">' + 
-              renderField("contentBlock", entry) +
-              renderField("cmsAsset", entry) +
-              renderField("faq", entry) +
-              renderField("tip", entry) +
-              renderField("table2colMatrix", entry) +
-              renderField("table3colMatrix", entry) +
-              renderField("table4colMatrix", entry) +
-              renderField("table5colMatrix", entry) +
-              renderField("accordionneo", entry) +
-              '</ul>' + 
-            "</form>"
+            renderField("contentBlock", entry) +
+            renderField("cmsAsset", entry) +
+            renderField("faq", entry) +
+            renderField("tip", entry) +
+            renderField("table2colMatrix", entry) +
+            renderField("table3colMatrix", entry) +
+            renderField("table4colMatrix", entry) +
+            renderField("table5colMatrix", entry) +
+            renderField("accordionneo", entry)
           );
         break;
 
@@ -167,23 +132,39 @@ window.CmsBlock = function (runtime, element) {
         $("#generalView")
           .first()
           .html(
-            '<form onChange="updateSelection(this)" onsubmit="javascript:void(0);" entry-type="unit">' +
-              '<ul id="generalView">' + 
-              renderField("contentBlock", entry) +
-              renderField("cmsAsset", entry) +
-              renderField("faq", entry) +
-              renderField("tip", entry) +
-              renderField("table2colMatrix", entry) +
-              renderField("table3colMatrix", entry) +
-              renderField("table4colMatrix", entry) +
-              renderField("table5colMatrix", entry) +
-              renderField("accordionneo", entry) +
-              '</ul>' + 
-            "</form>"
+            renderField("contentBlock", entry) +
+            renderField("cmsAsset", entry) +
+            renderField("faq", entry) +
+            renderField("tip", entry) +
+            renderField("table2colMatrix", entry) +
+            renderField("table3colMatrix", entry) +
+            renderField("table4colMatrix", entry) +
+            renderField("table5colMatrix", entry) +
+            renderField("accordionneo", entry) 
           );
         break;
     }
+    apply_entry_block_oder();
   };
+
+  window.apply_entry_block_oder = function() {  
+    sortable = Sortable.create(document.getElementById("generalView"), {
+      animation: 150,
+      group: "generalView",
+      store: {
+        get: function (sortable) {
+          return window.blockOder;
+        },
+        set: function (sortable) {
+          $.ajax({
+            type: "POST",
+            url: handleReSortedDataUrl,
+            data: JSON.stringify(sortable.toArray())
+          });
+        },
+      },
+    });
+  }
 
   window.renderField = function (type, entry) {
     if (
@@ -613,5 +594,6 @@ window.CmsBlock = function (runtime, element) {
   $(function ($) {
     /* Here's where you'd do things on page load. */
     update_entry_options($("#courseFilter").val());
+    apply_entry_block_oder();
   });
 };
