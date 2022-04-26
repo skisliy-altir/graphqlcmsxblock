@@ -258,11 +258,11 @@ class GraphQlCmsXBlock(XBlock):
                 } 
             } """
 
-    lessonGraphQlQuery = """{
+    sectionsGraphQlQuery = """{
                 slug,
                 title,
                 postDate,
-                ... on lessons_lesson_Entry {
+                ... on sections_sections_Entry {
                     coursetag {
                         slug
                     },
@@ -383,11 +383,11 @@ class GraphQlCmsXBlock(XBlock):
                 } 
             }"""
 
-    pageGraphQlQuery = """ {
+    unitsGraphQlQuery = """ {
                 slug,
                 title,
                 postDate,
-                ... on pages_page_Entry {
+                ... on units_units_Entry {
                     coursetag {
                         slug
                     },
@@ -509,6 +509,7 @@ class GraphQlCmsXBlock(XBlock):
             }"""
 
 
+
     # Fields are defined on the class.  You can access them in your code as
     # self.<fieldname>.
     entryType = String(
@@ -577,8 +578,7 @@ class GraphQlCmsXBlock(XBlock):
         """
         The primary view of the LMS Admin - GraphQL CMS XBlock, shown to Autors
         """
-        print( requests)
-
+        
         # Load Course Top Filter
         resp =  requests.post(self.cmsApi, json={
             "query": "query MyQuery { tags(group: \"coursetag\", limit: 30) {slug, title} }"
@@ -586,15 +586,14 @@ class GraphQlCmsXBlock(XBlock):
         courseTags = resp.json()['data']['tags']
         courseTags.sort(key=lambda x: x['title'], reverse=False)
 
-
         # Load Clauses
         resp = requests.post(self.cmsApi, json={
             "query": "query MyQuery { entries(section: \"clauses\") {slug, title, \
                     ... on clauses_clause_Entry { coursetag { slug } } \
                 } }"
         })
-        clauses = resp.json()['data']['entries']
-        clauses.sort(key=lambda x: x['title'], reverse=False)
+        clausesList = resp.json()['data']['entries']
+        clausesList.sort(key=lambda x: x['title'], reverse=False)
 
         # Load Courses
         resp = requests.post(self.cmsApi, json={
@@ -602,26 +601,27 @@ class GraphQlCmsXBlock(XBlock):
                     ... on courses_courses_Entry { coursetag { slug } } \
                 } }"
         })
-        courses = resp.json()['data']['entries']
-        courses.sort(key=lambda x: x['title'], reverse=False)
+        coursesList = resp.json()['data']['entries']
+        coursesList.sort(key=lambda x: x['title'], reverse=False)
 
-        # Load Lessons
+        # Load Sections
         resp = requests.post(self.cmsApi, json={
-            "query": "query MyQuery { entries(section: \"lessons\") {slug, title \
-                    ... on lessons_lesson_Entry { coursetag { slug } } \
+            "query": "query MyQuery { entries(section: \"sections\") {slug, title \
+                    ... on sections_sections_Entry { coursetag { slug } } \
                 } }"
         })
-        lessons = resp.json()['data']['entries']
-        lessons.sort(key=lambda x: x['title'], reverse=False)
+        sectionsList = resp.json()['data']['entries']
+        sectionsList.sort(key=lambda x: x['title'], reverse=False)
 
-        # Load Pages
+        # Load Units
         resp = requests.post(self.cmsApi, json={
-            "query": "query MyQuery { entries(section: \"pages\") {slug, title \
-                    ... on pages_page_Entry { coursetag { slug } } \
+            "query": "query MyQuery { entries(section: \"units\") {slug, title \
+                    ... on units_units_Entry { coursetag { slug } } \
                 } }"
         })
-        pages = resp.json()['data']['entries']
-        pages.sort(key=lambda x: x['title'], reverse=False)
+        unitsList = resp.json()['data']['entries']
+        unitsList.sort(key=lambda x: x['title'], reverse=False)
+
         # Load Selected Entry
         entry = {
             'coursetag': [],
@@ -643,29 +643,34 @@ class GraphQlCmsXBlock(XBlock):
         frag = Fragment()
         html = self.render_template("studio/html/cmsBlock.html", {
                 'self': self,
+
+                # indexes
                 'courseTags': courseTags,
-                'clauses':  clauses,
-                'lessons': lessons,
-                'courses':  courses,
-                'pages': pages,
-                'selectedCourseTag': entry['coursetag'],
-                'title': entry['title'],
-                'sections': entry['sections'],
-                'contentBlocks': entry['contentBlocks'],
-                'assets': entry['assets'],
-                'faqs': entry['faqs'],
-                'tips': entry['tips'],
-                'tables2': entry['tables2'],
-                'tables3': entry['tables3'],
-                'tables4': entry['tables4'],
-                'tables5': entry['tables5'],
-                'accordionneo': entry['accordionneo']
+                'clausesList':  clausesList,
+                'sectionsList': sectionsList,
+                'coursesList':  coursesList,
+                'unitsList': unitsList,
+                
+                # entry properties
+                #'entry': {
+                    'title': entry['title'],
+                    'selectedCourseTag': entry['coursetag'],
+                    'sections': entry['sections'],
+                    'contentBlocks': entry['contentBlocks'],
+                    'assets': entry['assets'],
+                    'faqs': entry['faqs'],
+                    'tips': entry['tips'],
+                    'tables2': entry['tables2'],
+                    'tables3': entry['tables3'],
+                    'tables4': entry['tables4'],
+                    'tables5': entry['tables5'],
+                    'accordionneo': entry['accordionneo']
+                #}
             })
         frag.add_content(html)
         frag.add_css(self.resource_string("studio/css/cmsBlock.css"))
         frag.add_javascript(self.resource_string("studio/js/bundle.js"))
         frag.initialize_js('CmsBlock')
-        # print("CmsBlock -->", frag.initialize_js('CmsBlock'))
         return frag
 
 
@@ -702,11 +707,20 @@ class GraphQlCmsXBlock(XBlock):
             resp = requests.post(self.cmsApi, json={
                 "query": "query MyQuery {entries(section: \"courses\", slug: \"" + self.entrySlug + "\" limit: 1) " + self.courseGraphQlQuery + " }"
             })
-        
-        elif self.entryType == 'page':    
+
+        elif self.entryType == 'section':    
             resp = requests.post(self.cmsApi, json={
-                "query": "query MyQuery {entries(section: \"pages\", slug: \"" + self.entrySlug + "\" limit: 1) " + self.pageGraphQlQuery + " }"
+                "query": "query MyQuery {entries(section: \"sections\", slug: \"" + self.entrySlug + "\" limit: 1) " + self.sectionsGraphQlQuery + " }"
             })
+
+        elif self.entryType == 'unit':    
+            resp = requests.post(self.cmsApi, json={
+                "query": "query MyQuery {entries(section: \"units\", slug: \"" + self.entrySlug + "\" limit: 1) " + self.unitsGraphQlQuery + " }"
+            })
+        
+        else :
+            # entry type not supported
+            return
         
         entry = resp.json()['data']['entries'][0]
         title = entry['title']
@@ -792,6 +806,8 @@ class GraphQlCmsXBlock(XBlock):
             'tables5': tables5,
             'accordionneo' : accordionneo
         }
+    
+
     @XBlock.json_handler
     def re_sorted_data(self, data,suffix = ''):
         return{}
@@ -834,12 +850,12 @@ class GraphQlCmsXBlock(XBlock):
                 "entry": entry
             }
         
-        if 'lesson' in data:
-            self.entryType = 'lesson'
-            self.entrySlug = data['lesson']
+        if 'section' in data:
+            self.entryType = 'section'
+            self.entrySlug = data['section']
             self.entrySections = []
             resp = requests.post(self.cmsApi, json={
-                "query": "query MyQuery {entries(section: \"lessons\", slug: \"" + self.entrySlug + "\" limit: 1) " + self.lessonGraphQlQuery + " }"
+                "query": "query MyQuery {entries(section: \"sections\", slug: \"" + self.entrySlug + "\" limit: 1) " + self.sectionsGraphQlQuery + " }"
             })
             entry = resp.json()['data']['entries'][0]
             return {
@@ -847,12 +863,12 @@ class GraphQlCmsXBlock(XBlock):
                 "entry": entry
             }
 
-        if 'page' in data:
-            self.entryType = 'page'
-            self.entrySlug = data['page']
+        if 'unit' in data:
+            self.entryType = 'unit'
+            self.entrySlug = data['unit']
             self.entrySections = []
             resp = requests.post(self.cmsApi, json={
-                "query": "query MyQuery {entries(section: \"pages\", slug: \"" + self.entrySlug + "\" limit: 1) " + self.pageGraphQlQuery + " }"
+                "query": "query MyQuery {entries(section: \"units\", slug: \"" + self.entrySlug + "\" limit: 1) " + self.unitsGraphQlQuery + " }"
             })
             entry = resp.json()['data']['entries'][0]
             return {
@@ -862,6 +878,7 @@ class GraphQlCmsXBlock(XBlock):
 
         return {}
     
+
     @XBlock.json_handler
     def select_cms_block_subsections(self, data, suffix=''):
         if 'type' in data:

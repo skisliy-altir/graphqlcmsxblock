@@ -6,16 +6,11 @@ import Sortable from "sortablejs";
 
 window.CmsBlock = function (runtime, element) {
   var handlerUrl = runtime.handlerUrl(element, "select_cms_block");
-  var handlerSubSectionUrl = runtime.handlerUrl(
-    element,
-    "select_cms_block_subsections"
-  );
-
+  var handlerSubSectionUrl = runtime.handlerUrl( element, "select_cms_block_subsections");
   var handleReSortedDataUrl = runtime.handlerUrl(element, "re_sorted_data");
   var cmsHost = "";
 
-  var myList = document.getElementById("generalView");
-  var sortable = Sortable.create(myList, {
+  Sortable.create(document.getElementById("generalView"), {
     animation: 150,
     group: "generalView",
     store: {
@@ -34,7 +29,7 @@ window.CmsBlock = function (runtime, element) {
           url: handleReSortedDataUrl,
           data: JSON.stringify(order),
           success: function (order) {
-            cmsHost = data.cmsHost;
+            cmsHost = order.cmsHost;
           },
         });
       },
@@ -44,7 +39,6 @@ window.CmsBlock = function (runtime, element) {
   // 1) Jquery select the course ---- filter
   $("#courseFilter").on("change", function () {
     var filter = this.value;
-    console.log("filter-->", filter);
     update_entry_options(filter);
   });
 
@@ -69,8 +63,8 @@ window.CmsBlock = function (runtime, element) {
   });
 
   window.update_entry_options = function (filter) {
-    const types = ["clauses", "courses", "lessons", "pages"];
-    const singularTypes = ["clause", "course", "lesson", "page"];
+    const types = ["clauses", "courses", "sections", "units"];
+    const singularTypes = ["clause", "course", "section", "unit"];
 
     // options available, selected -->  select entry on basis of selected course
     for (window.index in types) {
@@ -110,6 +104,7 @@ window.CmsBlock = function (runtime, element) {
           .first()
           .html(
             '<form id="clause" onChange="updateSelection(this)" onsubmit="javascript:void(0);" entry-type="clause">' +
+              '<ul id="generalView">' + 
               renderField("clauseText", entry) +
               renderField("lmsText", entry) +
               renderField("lmsAdvancedConcepts", entry) +
@@ -123,7 +118,8 @@ window.CmsBlock = function (runtime, element) {
               renderField("table4colMatrix", entry) +
               renderField("table5colMatrix", entry) +
               renderField("accordionneo", entry) +
-              "</form>"
+              '</ul>' + 
+            "</form>"
           );
         break;
 
@@ -132,6 +128,7 @@ window.CmsBlock = function (runtime, element) {
           .first()
           .html(
             '<form id="course" onChange="updateSelection(this)" onsubmit="javascript:void(0);" entry-type="course">' +
+              '<ul id="generalView">' + 
               renderField("contentBlock", entry) +
               renderField("cmsAsset", entry) +
               renderField("faq", entry) +
@@ -141,15 +138,17 @@ window.CmsBlock = function (runtime, element) {
               renderField("table4colMatrix", entry) +
               renderField("table5colMatrix", entry) +
               renderField("accordionneo", entry) +
-              "</form>"
+              '</ul>' + 
+            "</form>"
           );
         break;
 
-      case "lesson":
+      case "section":
         $("#generalView")
           .first()
           .html(
-            '<form id="lesson" onChange="updateSelection(this)" onsubmit="javascript:void(0);" entry-type="lesson">' +
+            '<form onChange="updateSelection(this)" onsubmit="javascript:void(0);" entry-type="section">' +
+              '<ul id="generalView">' + 
               renderField("contentBlock", entry) +
               renderField("cmsAsset", entry) +
               renderField("faq", entry) +
@@ -159,15 +158,17 @@ window.CmsBlock = function (runtime, element) {
               renderField("table4colMatrix", entry) +
               renderField("table5colMatrix", entry) +
               renderField("accordionneo", entry) +
-              "</form>"
+              '</ul>' + 
+            "</form>"
           );
         break;
 
-      case "page":
+      case "unit":
         $("#generalView")
           .first()
           .html(
-            '<form id="page" onChange="updateSelection(this)" onsubmit="javascript:void(0);" entry-type="page">' +
+            '<form onChange="updateSelection(this)" onsubmit="javascript:void(0);" entry-type="unit">' +
+              '<ul id="generalView">' + 
               renderField("contentBlock", entry) +
               renderField("cmsAsset", entry) +
               renderField("faq", entry) +
@@ -177,7 +178,8 @@ window.CmsBlock = function (runtime, element) {
               renderField("table4colMatrix", entry) +
               renderField("table5colMatrix", entry) +
               renderField("accordionneo", entry) +
-              "</form>"
+              '</ul>' + 
+            "</form>"
           );
         break;
     }
@@ -191,8 +193,358 @@ window.CmsBlock = function (runtime, element) {
     )
       return "";
 
-    let base =
+    // multiple block sections
+    if( ['contentBlock', 'cmsAsset', 'faq', 'tip', 'accordionneo', 
+      'table2colMatrix', 'table3colMatrix', 'table4colMatrix', 'table5colMatrix'].indexOf(type) != -1 )
+    {
+      let base = '';
+      switch(type){
+        case "contentBlock":
+          entry.contentBlock.forEach(function (elem) {
+            
+            base += '<li data-id="' + type + '">' +
+              '<div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">';
+            
+              base +=
+              '<label><input type="checkbox" name="' +
+                type + "[" + elem.id +']" checked="checked"/> Include Content Block</label>';
+            base += "<div>";
+            if (elem.blockTitle != null) 
+              base += "<h5>" + elem.blockTitle + "</h5>";
+            base += "<div>" + elem.blockContent + "</div>" + "</div>";
+
+            base += '</div></li>';
+          });
+          break;
+
+        case "cmsAsset":
+          entry.cmsAsset.forEach(function (elem) {
+            if (typeof elem.assetfile[0] != "undefined") {
+
+              base += '<li data-id="' + type + '">' +
+                '<div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">';
+
+              base +=
+                '<label><input type="checkbox" name="' +
+                type + "[" + elem.id + ']" checked="checked"/> Include Asset</label>';
+              base +=
+                "<div>" +
+                "<h5>" +
+                elem.assetTitle +
+                "</h5>" +
+                "<div>" +
+                (typeof elem.assetType != "undefined" && elem.assetType == "image"
+                  ? '<img src="' +
+                    cmsHost +
+                    elem.assetfile[0].url +
+                    '" class="img-fluid" />'
+                  : elem.assetfile[0].url) +
+                "</div>" +
+                "</div>";
+
+                base += '</div></li>';
+            }
+          });
+          break;
+
+        case "faq":
+          entry.faq.forEach(function (elem) {
+            base += '<li data-id="' + type + '">' +
+                '<div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">';
+
+            base +=
+              '<label><input type="checkbox" name="' +
+              type + "[" + elem.id + ']" checked="checked"/> Include FAQ</label>';
+            base +=
+              "<div>" +
+              "<h5>" +
+              elem.question +
+              "</h5>" +
+              "<div>" +
+              elem.answer +
+              "</div>" +
+              "</div>";
+
+              base += '</div></li>';
+            });
+          break;
+
+        case "tip":
+          entry.tip.forEach(function (elem) {
+            base += '<li data-id="' + type + '">' +
+                '<div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">';
+
+            base +=
+              '<label><input type="checkbox" name="' +
+              type + "[" + elem.id + ']" checked="checked"/> Include Tip</label>';
+            base +=
+              "<div>" +
+              "<h5>" +
+              elem.tipTitle +
+              "</h5>" +
+              "<div>" +
+              elem.tipContent +
+              "</div>" +
+              "</div>";
+
+              base += '</div></li>';
+          });
+          break;
+
+        case "accordionneo":
+          entry.accordionneo.forEach(function (elem) {
+            base += '<li data-id="' + type + '">' +
+                '<div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">';
+
+            base +=
+              '<label><input type="checkbox" name="' +
+              type + "[" + elem.id + ']" checked="checked"/> Include Accordion Matrix</label>';
+            
+            base += "<h5>" + elem.accordionTitle + "</h5>";
+            
+            elem.accordionmatrix.forEach(function (accordion) {
+              base +=
+                "<details>" +
+                  "<summary>" +
+                    accordion.accordionblocktitle +
+                  "</summary>" +
+                  accordion.accordionblockcontent +
+                "</details>";
+            });
+
+            base += '</div></li>';
+          });
+          break;
+
+        case "table2colMatrix":
+          entry.table2colMatrix.forEach(function (elem) {
+
+            base += '<li data-id="' + type + '">' +
+              '<div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">';
+
+            base +=
+              '<label><input type="checkbox" name="' +
+              type + "[" + elem.id + ']" ' + 
+              'checked="checked"/> Include Table</label>';
+            base += "<table>";
+  
+            var tableData = elem.table2col;
+  
+            if (elem.hasHeaderRow == "yes") {
+              base +=
+                "<tr>" +
+                "<th>" +
+                tableData[0].col1 +
+                "</th>" +
+                "<th>" +
+                tableData[0].col2 +
+                "</th>" +
+                "</tr>";
+              tableData = elem.table2col.slice(1);
+            }
+  
+            tableData.forEach(function (rows) {
+              base +=
+                "<tr>" +
+                "<td>" +
+                rows.col1 +
+                "</td>" +
+                "<td>" +
+                rows.col2 +
+                "</td>" +
+                "</tr>";
+            });
+  
+            base += "</table>";
+
+            base += '</div></li>';
+          });
+          break;
+    
+        case "table3colMatrix":
+          entry.table3colMatrix.forEach(function (elem) {
+
+            base += '<li data-id="' + type + '">' +
+              '<div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">';
+
+            base +=
+              '<label><input type="checkbox" name="' +
+              type +
+              "[" +
+              elem.id +
+              ']" checked="checked"/> Include Table</label>';
+            base += "<table>";
+  
+            var tableData = elem.table3col;
+  
+            if (elem.hasHeaderRow == "yes") {
+              base +=
+                "<tr>" +
+                "<th>" +
+                tableData[0].col1 +
+                "</th>" +
+                "<th>" +
+                tableData[0].col2 +
+                "</th>" +
+                "<th>" +
+                tableData[0].col3 +
+                "</th>" +
+                "</tr>";
+              tableData = elem.table3col.slice(1);
+            }
+  
+            tableData.forEach(function (rows) {
+              base +=
+                "<tr>" +
+                "<td>" +
+                rows.col1 +
+                "</td>" +
+                "<td>" +
+                rows.col2 +
+                "</td>" +
+                "<td>" +
+                rows.col3 +
+                "</td>";
+              ("</tr>");
+            });
+  
+            base += "</table>";
+
+            base += '</div></li>';
+          });
+          break;
+    
+        case "table4colMatrix":
+          entry.table4colMatrix.forEach(function (elem) {
+            base += '<li data-id="' + type + '">' +
+              '<div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">';
+
+            base +=
+              '<label><input type="checkbox" name="' +
+              type +
+              "[" +
+              elem.id +
+              ']" checked="checked"/> Include Table</label>';
+            base += "<table>";
+  
+            var tableData = elem.table4col;
+  
+            if (elem.hasHeaderRow == "yes") {
+              base +=
+                "<tr>" +
+                "<th>" +
+                tableData[0].col1 +
+                "</th>" +
+                "<th>" +
+                tableData[0].col2 +
+                "</th>" +
+                "<th>" +
+                tableData[0].col3 +
+                "</th>" +
+                "<th>" +
+                tableData[0].col4 +
+                "</th>" +
+                "</tr>";
+              tableData = elem.table4col.slice(1);
+            }
+  
+            tableData.forEach(function (rows) {
+              base +=
+                "<tr>" +
+                "<td>" +
+                rows.col1 +
+                "</td>" +
+                "<td>" +
+                rows.col2 +
+                "</td>" +
+                "<td>" +
+                rows.col3 +
+                "</td>" +
+                "<td>" +
+                rows.col4 +
+                "</td>" +
+                "</tr>";
+            });
+  
+            base += "</table>";
+            
+            base += '</div></li>';
+          });
+          break;
+    
+        case "table5colMatrix":
+          entry.table5colMatrix.forEach(function (elem) {
+
+            base += '<li data-id="' + type + '">' +
+              '<div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">';
+
+            base +=
+              '<label><input type="checkbox" name="' +
+              type +
+              "[" +
+              elem.id +
+              ']" checked="checked"/> Include Table</label>';
+            base += "<table>";
+  
+            var tableData = elem.table5col;
+  
+            if (elem.hasHeaderRow == "yes") {
+              base +=
+                "<tr>" +
+                "<th>" +
+                tableData[0].col1 +
+                "</th>" +
+                "<th>" +
+                tableData[0].col2 +
+                "</th>" +
+                "<th>" +
+                tableData[0].col3 +
+                "</th>" +
+                "<th>" +
+                tableData[0].col4 +
+                "</th>" +
+                "<th>" +
+                tableData[0].col5 +
+                "</th>" +
+                "</tr>";
+              tableData = elem.table5col.slice(1);
+            }
+  
+            tableData.forEach(function (rows) {
+              base +=
+                "<tr>" +
+                "<td>" +
+                rows.col1 +
+                "</td>" +
+                "<td>" +
+                rows.col2 +
+                "</td>" +
+                "<td>" +
+                rows.col3 +
+                "</td>" +
+                "<td>" +
+                rows.col4 +
+                "</td>" +
+                "<td>" +
+                rows.col5 +
+                "</td>" +
+                "</tr>";
+            });
+  
+            base += "</table>";
+
+            base += '</div></li>';
+          });
+          break;
+    
+      }
+      return base;
+    }
+    
+    // single block types
+    let base = '<li data-id="' + type + '">' +
       '<div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">';
+    
     switch (type) {
       case "clauseText":
         base +=
@@ -232,318 +584,20 @@ window.CmsBlock = function (runtime, element) {
           type +
           '" checked="checked"/> Include Platform Advanced Concepts</label>';
         base += entry.platformAdvancedConcepts;
-        break;
+        break; 
 
-      case "contentBlock":
-        entry.contentBlock.forEach(function (elem) {
-          base +=
-            '<label><input type="checkbox" name="' +
-            type +
-            "[" +
-            elem.id +
-            ']" checked="checked"/> Include Content Block</label>';
-          base += "<div>";
-          if (elem.blockTitle != null) {
-            base += "<h5>" + elem.blockTitle + "</h5>";
-          }
-          base += "<div>" + elem.blockContent + "</div>" + "</div>";
-        });
-        break;
-
-      case "cmsAsset":
-        entry.cmsAsset.forEach(function (elem) {
-          if (typeof elem.assetfile[0] != "undefined") {
-            base +=
-              '<label><input type="checkbox" name="' +
-              type +
-              "[" +
-              elem.id +
-              ']" checked="checked"/> Include Asset</label>';
-            base +=
-              "<div>" +
-              "<h5>" +
-              elem.assetTitle +
-              "</h5>" +
-              "<div>" +
-              (typeof elem.assetType != "undefined" && elem.assetType == "image"
-                ? '<img src="' +
-                  cmsHost +
-                  elem.assetfile[0].url +
-                  '" class="img-fluid" />'
-                : elem.assetfile[0].url) +
-              "</div>" +
-              "</div>";
-          }
-        });
-        break;
-
-      case "faq":
-        entry.faq.forEach(function (elem) {
-          base +=
-            '<label><input type="checkbox" name="' +
-            type +
-            "[" +
-            elem.id +
-            ']" checked="checked"/> Include FAQ</label>';
-          base +=
-            "<div>" +
-            "<h5>" +
-            elem.question +
-            "</h5>" +
-            "<div>" +
-            elem.answer +
-            "</div>" +
-            "</div>";
-        });
-        break;
-
-      case "tip":
-        entry.tip.forEach(function (elem) {
-          base +=
-            '<label><input type="checkbox" name="' +
-            type +
-            "[" +
-            elem.id +
-            ']" checked="checked"/> Include Tip</label>';
-          base +=
-            "<div>" +
-            "<h5>" +
-            elem.tipTitle +
-            "</h5>" +
-            "<div>" +
-            elem.tipContent +
-            "</div>" +
-            "</div>";
-        });
-        break;
-
-      case "table2colMatrix":
-        entry.table2colMatrix.forEach(function (elem) {
-          base +=
-            '<label><input type="checkbox" name="' +
-            type +
-            "[" +
-            elem.id +
-            ']" checked="checked"/> Include Table</label>';
-          base += "<table>";
-
-          tableData = elem.table2col;
-
-          if (elem.hasHeaderRow == "yes") {
-            base +=
-              "<tr>" +
-              "<th>" +
-              tableData[0].col1 +
-              "</th>" +
-              "<th>" +
-              tableData[0].col2 +
-              "</th>" +
-              "</tr>";
-            tableData = elem.table2col.slice(1);
-          }
-
-          tableData.forEach(function (rows) {
-            base +=
-              "<tr>" +
-              "<td>" +
-              rows.col1 +
-              "</td>" +
-              "<td>" +
-              rows.col2 +
-              "</td>" +
-              "</tr>";
-          });
-
-          base += "</table>";
-        });
-        break;
-
-      case "table3colMatrix":
-        entry.table3colMatrix.forEach(function (elem) {
-          base +=
-            '<label><input type="checkbox" name="' +
-            type +
-            "[" +
-            elem.id +
-            ']" checked="checked"/> Include Table</label>';
-          base += "<table>";
-
-          tableData = elem.table3col;
-
-          if (elem.hasHeaderRow == "yes") {
-            base +=
-              "<tr>" +
-              "<th>" +
-              tableData[0].col1 +
-              "</th>" +
-              "<th>" +
-              tableData[0].col2 +
-              "</th>" +
-              "<th>" +
-              tableData[0].col3 +
-              "</th>" +
-              "</tr>";
-            tableData = elem.table3col.slice(1);
-          }
-
-          tableData.forEach(function (rows) {
-            base +=
-              "<tr>" +
-              "<td>" +
-              rows.col1 +
-              "</td>" +
-              "<td>" +
-              rows.col2 +
-              "</td>" +
-              "<td>" +
-              rows.col3 +
-              "</td>";
-            ("</tr>");
-          });
-
-          base += "</table>";
-        });
-        break;
-
-      case "table4colMatrix":
-        entry.table4colMatrix.forEach(function (elem) {
-          base +=
-            '<label><input type="checkbox" name="' +
-            type +
-            "[" +
-            elem.id +
-            ']" checked="checked"/> Include Table</label>';
-          base += "<table>";
-
-          tableData = elem.table4col;
-
-          if (elem.hasHeaderRow == "yes") {
-            base +=
-              "<tr>" +
-              "<th>" +
-              tableData[0].col1 +
-              "</th>" +
-              "<th>" +
-              tableData[0].col2 +
-              "</th>" +
-              "<th>" +
-              tableData[0].col3 +
-              "</th>" +
-              "<th>" +
-              tableData[0].col4 +
-              "</th>" +
-              "</tr>";
-            tableData = elem.table4col.slice(1);
-          }
-
-          tableData.forEach(function (rows) {
-            base +=
-              "<tr>" +
-              "<td>" +
-              rows.col1 +
-              "</td>" +
-              "<td>" +
-              rows.col2 +
-              "</td>" +
-              "<td>" +
-              rows.col3 +
-              "</td>" +
-              "<td>" +
-              rows.col4 +
-              "</td>" +
-              "</tr>";
-          });
-
-          base += "</table>";
-        });
-        break;
-      case "table5colMatrix":
-        entry.table5colMatrix.forEach(function (elem) {
-          base +=
-            '<label><input type="checkbox" name="' +
-            type +
-            "[" +
-            elem.id +
-            ']" checked="checked"/> Include Table</label>';
-          base += "<table>";
-
-          tableData = elem.table5col;
-
-          if (elem.hasHeaderRow == "yes") {
-            base +=
-              "<tr>" +
-              "<th>" +
-              tableData[0].col1 +
-              "</th>" +
-              "<th>" +
-              tableData[0].col2 +
-              "</th>" +
-              "<th>" +
-              tableData[0].col3 +
-              "</th>" +
-              "<th>" +
-              tableData[0].col4 +
-              "</th>" +
-              "<th>" +
-              tableData[0].col5 +
-              "</th>" +
-              "</tr>";
-            tableData = elem.table5col.slice(1);
-          }
-
-          tableData.forEach(function (rows) {
-            base +=
-              "<tr>" +
-              "<td>" +
-              rows.col1 +
-              "</td>" +
-              "<td>" +
-              rows.col2 +
-              "</td>" +
-              "<td>" +
-              rows.col3 +
-              "</td>" +
-              "<td>" +
-              rows.col4 +
-              "</td>" +
-              "<td>" +
-              rows.col5 +
-              "</td>" +
-              "</tr>";
-          });
-
-          base += "</table>";
-        });
-        break;
-
-      case "accordionneo":
-        entry.accordionneo.forEach(function (elem) {
-          base +=
-            '<label><input type="checkbox" name="' +
-            type +
-            "[" +
-            elem.id +
-            ']" checked="checked"/> Include Accordion Matrix</label>';
-          base += "<h5>" + elem.accordionTitle + "</h5>";
-          elem.accordionmatrix.forEach(function (accordion) {
-            base +=
-              "<details>" +
-              "<summary>" +
-              accordion.accordionblocktitle +
-              "</summary>" +
-              accordion.accordionblockcontent +
-              "</details>";
-          });
-        });
-        break;
+      default:
+        base += '@todo: ' + type;
     }
+
+    base += '</li>' ;
     base += "</div>";
     return base;
   };
 
   window.updateSelection = function (form) {
     var selection = $(form).serializeArray();
-    data = {
+    var data = {
       type: $(form).attr("entry-type"),
       selected: selection,
     };

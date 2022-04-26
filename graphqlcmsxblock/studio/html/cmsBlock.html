@@ -21,229 +21,230 @@
             </optgroup>
             <optgroup label="course" id="coursesOptions">
             </optgroup>
-            <optgroup label="lesson" id="lessonsOptions">
+            <optgroup label="section" id="sectionsOptions">
             </optgroup>
-            <optgroup label="page" id="pagesOptions">
+            <optgroup label="unit" id="unitsOptions">
             </optgroup>
         </select>
     </div>
 
     <script>
+        // Current entry
         var entrySlug = '{{ self.entrySlug }}';
         var entryType = '{{ self.entryType }}';
-        var clauses = {{ clauses | safe }};
-        var courses = {{ courses | safe }};
-        var lessons = {{ lessons | safe }};
-        var pages = {{ pages | safe }};
+        // CMS Lists
+        var clauses = {{ clausesList | safe }};
+        var sections = {{ sectionsList | safe }};
+        var courses = {{ coursesList | safe }};
+        var units = {{ unitsList | safe }};
     </script>    
 </div>
 
+<form entry-type="{{ self.entryType }}" onChange="updateSelection(this)" onsubmit="javascript:void(0);">
 
-<ul id ="generalView">
+<ul id="generalView">
 {% for section in sections %}
-    <li id ="sections">
+    <li data-id="sections" >
         <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
+            <label><input type="checkbox" name="Section"> Include Section</label>
             <p>{{ section | safe }}</p>
         </div>
     </li>
 {% endfor %}
-{% for block in contentBlocks %}
 
-<li id ="contentBlocks">
-    <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
-        {% if block.blockTitle != null %}
-            <h5>{{ block.blockTitle }}</h5>
-        {% endif %}
-        <div>{{ block.blockContent | safe }}</div>
-    </div>
-</li>
+{% for block in contentBlocks %}
+    <li data-id="contentBlocks">
+        <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
+            <label><input type="checkbox" name="contentBlock[{{block.id}}]"> Include Content Block</label>
+            {% if block.blockTitle != null %}
+                <h5>{{ block.blockTitle }}</h5>
+            {% endif %}
+            <div>{{ block.blockContent | safe }}</div>
+        </div>
+    </li>
 {% endfor %}
 
 {% for asset in assets %}
     {% for file in asset.assetfile %}
-    <li id ="asset">
-        <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
-            <img src="{{ cmsHost }}{{ file.url }}" class="img-fluid {{ asset.assetType }}"/>
-        </div>
-
-    </li>
+        <li data-id="cmsAsset">
+            <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
+                <label><input type ="checkbox" name="cmsAsset"> Include Cms Asset</label>
+                <img src="{{ cmsHost }}{{ file.url }}" class="img-fluid {{ asset.assetType }}"/>
+            </div>
+        </li>
     {% endfor %}
 {% endfor %}
 
 {% for faq in faqs %}
-<li id ="faqs">
-    <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
-        <h5>{{ faq.question }}</h5>
-        <div>{{ faq.answer | safe }}</div>
-    </div>
-
-</li>
+    <li data-id="faq">
+        <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
+            <label><input type="checkbox" name="faq"> Include FAQ</label>
+            <h5>{{ faq.question }}</h5>
+            <div>{{ faq.answer | safe }}</div>
+        </div>
+    </li>
 {% endfor %}
 
 {% for tip in tips %}
-<li id ="tips">
-    <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;" class = "{{ tip.tipCssClass }}"> 
-        <h5>{{ tip.tipTitle }}</h5>
-        <div>{{ tip.tipContent | safe }}</div>
-    </div>
-
-</li>
+    <li data-id="tip">
+        <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;" class = "{{ tip.tipCssClass }}">
+            <label><input type="checkbox" name="tip"> Include Tip</label>
+            <h5>{{ tip.tipTitle }}</h5>
+            <div>{{ tip.tipContent | safe }}</div>
+        </div>
+    </li>
 {% endfor %}
 
 {% for table in tables2 %}
-<li id = "tables2">
-    <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
-        <table>
-            {% if table.hasHeaderRow.0 == 'yes' %}
-                <tr>
-                    <th> {{ table.table2col.0.col1 | safe }} </th>
-                    <th> {{ table.table2col.0.col2 | safe }} </th>
-                </tr>
-
-                {% for row in table.table2col|slice:"1:" %}
+    <li data-id="table2colMatrix">
+        <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
+            <label><input type="checkbox" name="table2colMatrix"> Include Table</label>
+            <table>
+                {% if table.hasHeaderRow.0 == 'yes' %}
                     <tr>
-                        <td> {{ row.col1 | safe }} </td>
-                        <td> {{ row.col2 | safe }} </td>
+                        <th> {{ table.table2col.0.col1 | safe }} </th>
+                        <th> {{ table.table2col.0.col2 | safe }} </th>
                     </tr>
-                {% endfor %}
-            {% else %}
-                {% for row in table.table2col %}
-                    <tr>
-                        <td> {{ row.col1 | safe }} </td>
-                        <td> {{ row.col2 | safe }} </td>
-                    </tr>
-                {% endfor %}
-            {% endif %}
-        </table>
-    </div>
-
-</li>
+                    {% for row in table.table2col|slice:"1:" %}
+                        <tr>
+                            <td> {{ row.col1 | safe }} </td>
+                            <td> {{ row.col2 | safe }} </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    {% for row in table.table2col %}
+                        <tr>
+                            <td> {{ row.col1 | safe }} </td>
+                            <td> {{ row.col2 | safe }} </td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+            </table>
+        </div>
+    </li>
 {% endfor %}
 
 {% for table in tables3 %}
-<li id ="tables3">
-    <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
-        <table>
-            {% if table.hasHeaderRow.0 == 'yes' %}
-                <tr>
-                    <th> {{ table.table3col.0.col1 | safe }} </th>
-                    <th> {{ table.table3col.0.col2 | safe }} </th>
-                    <th> {{ table.table3col.0.col3 | safe }} </th>
-                </tr>
-
-                {% for row in table.table3col|slice:"1:" %}
+    <li data-id="table3colMatrix">
+        <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
+            <label><input type ="checkbox" name="table3colMatrix"> Include Table</label>
+            <table>
+                {% if table.hasHeaderRow.0 == 'yes' %}
                     <tr>
-                        <td> {{ row.col1 | safe }} </td>
-                        <td> {{ row.col2 | safe }} </td>
-                        <td> {{ row.col3 | safe }} </td>
+                        <th> {{ table.table3col.0.col1 | safe }} </th>
+                        <th> {{ table.table3col.0.col2 | safe }} </th>
+                        <th> {{ table.table3col.0.col3 | safe }} </th>
                     </tr>
-                {% endfor %}
-            {% else %}
-                {% for row in table.table3col %}
-                    <tr>
-                        <td> {{ row.col1 | safe }} </td>
-                        <td> {{ row.col2 | safe }} </td>
-                        <td> {{ row.col3 | safe }} </td>
-                    </tr>
-                {% endfor %}
-            {% endif %}
-        </table>
-    </div>
-
-</li>
+                    {% for row in table.table3col|slice:"1:" %}
+                        <tr>
+                            <td> {{ row.col1 | safe }} </td>
+                            <td> {{ row.col2 | safe }} </td>
+                            <td> {{ row.col3 | safe }} </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    {% for row in table.table3col %}
+                        <tr>
+                            <td> {{ row.col1 | safe }} </td>
+                            <td> {{ row.col2 | safe }} </td>
+                            <td> {{ row.col3 | safe }} </td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+            </table>
+        </div>
+    </li>
 {% endfor %}
 
 {% for table in tables4 %}
-<li id ="tables4">
-    <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
-        <table>
-            {% if table.hasHeaderRow.0 == 'yes' %}
-                <tr>
-                    <th> {{ table.table4col.0.col1 | safe }} </th>
-                    <th> {{ table.table4col.0.col2 | safe }} </th>
-                    <th> {{ table.table4col.0.col3 | safe }} </th>
-                    <th> {{ table.table4col.0.col4 | safe }} </th>
-                </tr>
-
-                {% for row in table.table4col|slice:"1:" %}
+    <li data-id="table4colMatrix">
+        <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
+            <label><input type="checkbox" name="table4colMatrix"> Include Table</label>
+            <table>
+                {% if table.hasHeaderRow.0 == 'yes' %}
                     <tr>
-                        <td> {{ row.col1 | safe }} </td>
-                        <td> {{ row.col2 | safe }} </td>
-                        <td> {{ row.col3 | safe }} </td>
-                        <td> {{ row.col4 | safe }} </td>
+                        <th> {{ table.table4col.0.col1 | safe }} </th>
+                        <th> {{ table.table4col.0.col2 | safe }} </th>
+                        <th> {{ table.table4col.0.col3 | safe }} </th>
+                        <th> {{ table.table4col.0.col4 | safe }} </th>
                     </tr>
-                {% endfor %}
-            {% else %}
-                {% for row in table.table4col %}
-                    <tr>
-                        <td> {{ row.col1 | safe }} </td>
-                        <td> {{ row.col2 | safe }} </td>
-                        <td> {{ row.col3 | safe }} </td>
-                        <td> {{ row.col4 | safe }} </td>
-                    </tr>
-                {% endfor %}
-            {% endif %}
-        </table>
-    </div>
-
-</li>
+                    {% for row in table.table4col|slice:"1:" %}
+                        <tr>
+                            <td> {{ row.col1 | safe }} </td>
+                            <td> {{ row.col2 | safe }} </td>
+                            <td> {{ row.col3 | safe }} </td>
+                            <td> {{ row.col4 | safe }} </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    {% for row in table.table4col %}
+                        <tr>
+                            <td> {{ row.col1 | safe }} </td>
+                            <td> {{ row.col2 | safe }} </td>
+                            <td> {{ row.col3 | safe }} </td>
+                            <td> {{ row.col4 | safe }} </td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+            </table>
+        </div>
+    </li>
 {% endfor %}
 
 {% for table in tables5 %}
-<li id = "tables5">
-
-    <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
-        <table>
-            {% if table.hasHeaderRow.0 == 'yes' %}
-                <tr>
-                    <th> {{ table.table4col.0.col1 | safe }} </th>
-                    <th> {{ table.table4col.0.col2 | safe }} </th>
-                    <th> {{ table.table4col.0.col3 | safe }} </th>
-                    <th> {{ table.table4col.0.col4 | safe }} </th>
-                    <th> {{ table.table4col.0.col5 | safe }} </th>
-                </tr>
-
-                {% for row in table.table5col|slice:"1:" %}
+    <li data-id="table5colMatrix">
+        <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
+            <label><input type ="checkbox" name = "table5colMatrix"> Include Table</label>
+            <table>
+                {% if table.hasHeaderRow.0 == 'yes' %}
                     <tr>
-                        <td> {{ row.col1 | safe }} </td>
-                        <td> {{ row.col2 | safe }} </td>
-                        <td> {{ row.col3 | safe }} </td>
-                        <td> {{ row.col4 | safe }} </td>
-                        <td> {{ row.col5 | safe }} </td>
+                        <th> {{ table.table4col.0.col1 | safe }} </th>
+                        <th> {{ table.table4col.0.col2 | safe }} </th>
+                        <th> {{ table.table4col.0.col3 | safe }} </th>
+                        <th> {{ table.table4col.0.col4 | safe }} </th>
+                        <th> {{ table.table4col.0.col5 | safe }} </th>
                     </tr>
-                {% endfor %}
-            {% else %}
-                {% for row in table.table5col %}
-                    <tr>
-                        <td> {{ row.col1 | safe }} </td>
-                        <td> {{ row.col2 | safe }} </td>
-                        <td> {{ row.col3 | safe }} </td>
-                        <td> {{ row.col4 | safe }} </td>
-                        <td> {{ row.col5 | safe }} </td>
-                    </tr>
-                {% endfor %}
-            {% endif %}
-        </table>
-    </div>
-</li>
-
+                    {% for row in table.table5col|slice:"1:" %}
+                        <tr>
+                            <td> {{ row.col1 | safe }} </td>
+                            <td> {{ row.col2 | safe }} </td>
+                            <td> {{ row.col3 | safe }} </td>
+                            <td> {{ row.col4 | safe }} </td>
+                            <td> {{ row.col5 | safe }} </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    {% for row in table.table5col %}
+                        <tr>
+                            <td> {{ row.col1 | safe }} </td>
+                            <td> {{ row.col2 | safe }} </td>
+                            <td> {{ row.col3 | safe }} </td>
+                            <td> {{ row.col4 | safe }} </td>
+                            <td> {{ row.col5 | safe }} </td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+            </table>
+        </div>
+    </li>
 {% endfor %}
 
 {% for accordion in accordionneo %}
-<li id = "accordionneo">
-    <div>
-        {% if accordion.accordionTitle != null %}
-            <h5>{{ accordion.accordionTitle }}</h5>
-        {% endif %}
-        {% for elem in accordion.accordionmatrix %}
-            <details>
-                <summary class= "{{ accordion.accordionClasses }}">{{ elem.accordionblocktitle }} </summary>
-                {{ elem.accordionblockcontent | safe }}
-            </details>
-        {% endfor %}
-    </div>
-
-</li>
+    <li data-id = "accordionneo">
+        <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
+            <label><input type ="checkbox" name="accordionneo"> Include Accordionneo</label>
+            {% if accordion.accordionTitle != null %}
+                <h5>{{ accordion.accordionTitle }}</h5>
+            {% endif %}
+            {% for elem in accordion.accordionmatrix %}
+                <details>
+                    <summary class= "{{ accordion.accordionClasses }}">{{ elem.accordionblocktitle }} </summary>
+                    {{ elem.accordionblockcontent | safe }}
+                </details>
+            {% endfor %}
+        </div>
+    </li>
 {% endfor %}
 
 </ul>
+</form>
