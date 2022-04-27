@@ -67,9 +67,6 @@ window.CmsBlock = function (runtime, element) {
     };
   
     window.render_entry = function (type, entry) {
-      if( sortable != null )
-        sortable.destroy();
-  
       switch (type) {
         case "clause":
           $("#generalView")
