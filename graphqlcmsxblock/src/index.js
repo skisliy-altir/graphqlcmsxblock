@@ -147,12 +147,14 @@ window.CmsBlock = function (runtime, element) {
     apply_entry_block_oder();
   };
 
-  window.apply_entry_block_oder = function() {  
+  window.apply_entry_block_oder = function() {
+    console.log('init sort');
     sortable = Sortable.create(document.getElementById("generalView"), {
       animation: 150,
       group: "generalView",
       store: {
         get: function (sortable) {
+          console.log('load sort order');
           return window.blockOder;
         },
         set: function (sortable) {
