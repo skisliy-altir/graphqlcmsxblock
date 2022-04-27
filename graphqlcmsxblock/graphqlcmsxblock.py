@@ -655,6 +655,7 @@ class GraphQlCmsXBlock(XBlock):
             'tables5': [],
             'accordionneo': []
         }
+        entrySections = []
         if self.entrySlug is not '':
             entrySections = self.entrySections
             self.entrySections = []
