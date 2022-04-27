@@ -140,9 +140,8 @@ window.CmsBlock = function (runtime, element) {
     };
   
     window.apply_entry_block_oder = function() {
-      sortable = $('#generalView').sortable({
-        animation: 150,
-        group: "generalView",
+      $('#generalView').sortable({
+        animation: 200,
         store: {
           get: function (sortable) {
             return window.blockOder;
