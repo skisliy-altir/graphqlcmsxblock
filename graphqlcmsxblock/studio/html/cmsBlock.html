@@ -41,19 +41,17 @@
 <form entry-type="{{ self.entryType }}" onChange="updateSelection(this)" onsubmit="javascript:void(0);">
 <ul id="generalView">
         
-    {% for section in sections %}
-        {% with identifier="section["|add:section.id|add:"]" %}
+    {% for identifier, section in sections.items %}
         <li data-id="{{ identifier }}" >
             <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
                 <label><input 
                     type="checkbox" 
                     name="{{ identifier  }}"
                     {% if identifier in entrySections %}checked="checked"{% endif %}
-                    > Include Section</label>
+                    > Include {{ identifier }}</label>
                 <p>{{ section | safe }}</p>
             </div>
         </li>
-        {% endwith %}
     {% endfor %}
 
     {% for block in contentBlocks %}

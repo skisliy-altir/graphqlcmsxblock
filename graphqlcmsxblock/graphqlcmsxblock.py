@@ -555,7 +555,7 @@ class GraphQlCmsXBlock(XBlock):
 
         entry = {
             'title': '',
-            'sections': [],
+            'sections': {},
             'contentBlocks': [],
             'assets': [],
             'faqs': [],
@@ -566,7 +566,6 @@ class GraphQlCmsXBlock(XBlock):
             'tables5': [],
             'accordionneo': []
         }
-
         if self.entrySlug is not '':
             entry = self.load_selected_entry()
             
@@ -645,7 +644,7 @@ class GraphQlCmsXBlock(XBlock):
         entry = {
             'coursetag': [],
             'title': '',
-            'sections': [],
+            'sections': {},
             'contentBlocks': [],
             'assets': [],
             'faqs': [],
@@ -715,7 +714,7 @@ class GraphQlCmsXBlock(XBlock):
 
     def load_selected_entry(self) :
         title = ''
-        sections = []
+        sections = {}
         contentBlocks = []
         assets = []
         faqs = []
@@ -791,7 +790,8 @@ class GraphQlCmsXBlock(XBlock):
         else: 
             for section in entry :
                 if (type(entry[section])) == str and section not in ['slug', 'title', 'postDate', 'contentBlock', 'cmsAsset', 'faq', 'tip'] :
-                    sections.append(entry[section])
+                    #sections.append(entry[section])
+                    sections[section] = entry[section]
                 elif 'contentBlock' in section:
                     for subitem in entry[section] :
                         contentBlocks.append(subitem)
