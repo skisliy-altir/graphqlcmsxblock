@@ -17,14 +17,10 @@
         <label>Select Entry:</label><br />
         <select id="entry"  style="width:400px;">
             <option value="">Please select...</option>
-            <optgroup label="clause" id="clausesOptions">      
-            </optgroup>
-            <optgroup label="course" id="coursesOptions">
-            </optgroup>
-            <optgroup label="section" id="sectionsOptions">
-            </optgroup>
-            <optgroup label="unit" id="unitsOptions">
-            </optgroup>
+            <optgroup label="Clauses" id="clausesOptions">      </optgroup>
+            <optgroup label="Courses" id="coursesOptions"></optgroup>
+            <optgroup label="Sections" id="sectionsOptions"></optgroup>
+            <optgroup label="Units" id="unitsOptions"></optgroup>
         </select>
     </div>
 
@@ -46,61 +42,131 @@
 <ul id="generalView">
         
     {% for section in sections %}
-        <li data-id="section[{{section.id}}]" >
+        {% with identifier="section["|add:section.id|add:"]" %}
+        <li data-id="{{ identifier }}" >
             <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
-                <label><input type="checkbox" name="section[{{section.id}}]"> Include Section</label>
+                <label><input 
+                    type="checkbox" 
+                    name="{{ identifier  }}"
+                    {% if identifier in entrySections %}checked="checked"{% endif %}
+                    > Include Section</label>
                 <p>{{ section | safe }}</p>
             </div>
         </li>
+        {% endwith %}
     {% endfor %}
 
     {% for block in contentBlocks %}
-        <li data-id="contentBlock[{{block.id}}]">
+        {% with identifier="contentBlock["|add:block.id|add:"]" %}
+        <li data-id="{{ identifier }}">
             <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
-                <label><input type="checkbox" name="contentBlock[{{block.id}}]"> Include Content Block</label>
-                {% if block.blockTitle != null %}
-                    <h5>{{ block.blockTitle }}</h5>
+                <label><input 
+                    type="checkbox" 
+                    name="{{ identifier }}"
+                    {% if identifier in entrySections %}checked="checked"{% endif %}
+                    > Include Content Block</label> 
+                {% if block.cssClass == None %}
+                    {% if block.blockTitle != null %}
+                        <h5>{{ block.blockTitle }}</h5>
+                    {% endif %}
+                    <div>{{ block.blockContent | safe }}</div>
+                {% elif block.cssClass == 'edx-academy-tip' %}
+                    <div class="edx-academy-tip">
+                        {% for image in block.componentIcon %}
+                            <div class="edx-icon">
+                                <img src="{{ cmsHost }}{{ image.url }}" class="img-fluid"/>
+                            </div>
+                        {% endfor %}
+                        <div class="edx-content">
+                            {{ block.blockContent | safe }}
+                        </div>
+                    </div>
+                {% elif block.cssClass == 'edx-featured-content' %}
+                    <div class="edx-featured-content">
+                        {% for image in block.componentIcon %}
+                            <div class="edx-icon">
+                                <img src="{{ cmsHost }}{{ image.url }}" class="img-fluid"/>
+                            </div>
+                        {% endfor %}
+                        <div class="edx-content">
+                            {{ block.blockContent | safe }}
+                        </div>
+                    </div>
+                {% elif block.cssClass == 'edx-advanced-concept' %}
+                    <div class="edx-advanced-concept">
+                        <button class="edx-opener">
+                            <span>Close</span>
+                            <em>Open</em>
+                        </button>
+                        <strong class="edx-heading">Advanced Concept</strong>
+                        <div class="edx-content">
+                            {{ block.blockContent | safe }}
+                        </div>
+                    </div>
                 {% endif %}
-                <div>{{ block.blockContent | safe }}</div>
             </div>
         </li>
+        {% endwith %}
     {% endfor %}
 
     {% for asset in assets %}
         {% for file in asset.assetfile %}
-            <li data-id="cmsAsset[{{file.id}}]">
+            {% with identifier="cmsAsset["|add:file.id|add:"]" %}
+            <li data-id="{{ identifier }}">
                 <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
-                    <label><input type ="checkbox" name="cmsAsset[{{file.id}}]"> Include Cms Asset</label>
+                    <label><input 
+                        type ="checkbox" 
+                        name="{{ identifier }}"
+                        {% if identifier in entrySections %}checked="checked"{% endif %}
+                        > Include Cms Asset</label>
                     <img src="{{ cmsHost }}{{ file.url }}" class="img-fluid {{ asset.assetType }}"/>
                 </div>
             </li>
+            {% endwith %}
         {% endfor %}
     {% endfor %}
 
     {% for faq in faqs %}
-        <li data-id="faq[{{faq.id}}]">
+        {% with identifier="faq["|add:faq.id|add:"]" %}
+        <li data-id="{{ identifier }}">
             <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
-                <label><input type="checkbox" name="faq[{{faq.id}}]"> Include FAQ</label>
+                <label><input 
+                    type="checkbox" 
+                    name="{{ identifier }}"
+                    {% if identifier in entrySections %}checked="checked"{% endif %}
+                    > Include FAQ</label>
                 <h5>{{ faq.question }}</h5>
                 <div>{{ faq.answer | safe }}</div>
             </div>
         </li>
+        {% endwith %}
     {% endfor %}
 
     {% for tip in tips %}
-        <li data-id="tip[{{tip.id}}]">
+        {% with identifier="tip["|add:tip.id|add:"]" %}
+        <li data-id="{{ identifier }}">
             <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;" class = "{{ tip.tipCssClass }}">
-                <label><input type="checkbox" name="tip[{{tip.id}}]"> Include Tip</label>
+                <label><input 
+                    type="checkbox" 
+                    name="{{ identifier }}"
+                    {% if identifier in entrySections %}checked="checked"{% endif %}
+                    > Include Tip</label>
                 <h5>{{ tip.tipTitle }}</h5>
                 <div>{{ tip.tipContent | safe }}</div>
             </div>
         </li>
+        {% endwith %}
     {% endfor %}
 
     {% for table in tables2 %}
-        <li data-id="table2colMatrix[{{table.id}}]">
+        {% with identifier="table2colMatrix["|add:table.id|add:"]" %}
+        <li data-id="{{ identifier }}">
             <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
-                <label><input type="checkbox" name="table2colMatrix[{{table.id}}]"> Include Table</label>
+                <label><input 
+                    type="checkbox" 
+                    name="{{ identifier }}"
+                    {% if identifier in entrySections %}checked="checked"{% endif %}
+                    > Include Table</label>
                 <table>
                     {% if table.hasHeaderRow.0 == 'yes' %}
                         <tr>
@@ -124,12 +190,18 @@
                 </table>
             </div>
         </li>
+        {% endwith %}
     {% endfor %}
 
     {% for table in tables3 %}
-        <li data-id="table3colMatrix[{{table.id}}]">
+        {% with identifier="table3colMatrix["|add:table.id|add:"]" %}
+        <li data-id="{{ identifier }}">
             <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
-                <label><input type ="checkbox" name="table3colMatrix[{{table.id}}]"> Include Table</label>
+                <label><input 
+                    type ="checkbox" 
+                    name="{{ identifier }}"
+                    {% if identifier in entrySections %}checked="checked"{% endif %}
+                    > Include Table</label>
                 <table>
                     {% if table.hasHeaderRow.0 == 'yes' %}
                         <tr>
@@ -156,12 +228,18 @@
                 </table>
             </div>
         </li>
+        {% endwith %}
     {% endfor %}
 
     {% for table in tables4 %}
-        <li data-id="table4colMatrix[{{table.id}}]">
+        {% with identifier="table4colMatrix["|add:table.id|add:"]" %}
+        <li data-id="{{ identifier }}">
             <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
-                <label><input type="checkbox" name="table4colMatrix[{{table.id}}]"> Include Table</label>
+                <label><input 
+                    type="checkbox" 
+                    name="{{ identifier }}"
+                    {% if identifier in entrySections %}checked="checked"{% endif %}
+                    > Include Table</label>
                 <table>
                     {% if table.hasHeaderRow.0 == 'yes' %}
                         <tr>
@@ -191,12 +269,18 @@
                 </table>
             </div>
         </li>
+        {% endwith %}
     {% endfor %}
 
     {% for table in tables5 %}
-        <li data-id="table5colMatrix[{{table.id}}]">
+        {% with identifier="table5colMatrix["|add:table.id|add:"]" %}
+        <li data-id="{{ identifier }}">
             <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
-                <label><input type ="checkbox" name = "table5colMatrix[{{table.id}}]"> Include Table</label>
+                <label><input 
+                    type ="checkbox" 
+                    name = "{{ identifier }}"
+                    {% if identifier in entrySections %}checked="checked"{% endif %}
+                    > Include Table</label>
                 <table>
                     {% if table.hasHeaderRow.0 == 'yes' %}
                         <tr>
@@ -229,12 +313,18 @@
                 </table>
             </div>
         </li>
+        {% endwith %}
     {% endfor %}
 
     {% for accordion in accordionneo %}
-        <li data-id="accordionneo[{{accordion.id}}]">
+        {% with identifier="accordionneo["|add:accordion.id|add:"]" %}
+        <li data-id="{{ identifier }}">
             <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
-                <label><input type ="checkbox" name="accordionneo[{{accordion.id}}]"> Include Accordionneo</label>
+                <label><input 
+                    ype ="checkbox" 
+                    name="{{ identifier }}"
+                    {% if identifier in entrySections %}checked="checked"{% endif %}
+                    > Include Accordion</label>
                 {% if accordion.accordionTitle != null %}
                     <h5>{{ accordion.accordionTitle }}</h5>
                 {% endif %}
@@ -246,6 +336,7 @@
                 {% endfor %}
             </div>
         </li>
+        {% endwith %}
     {% endfor %}
 
 </ul>

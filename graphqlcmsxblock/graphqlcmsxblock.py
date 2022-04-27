@@ -8,8 +8,11 @@ from xblock.fields import Integer, String, List, Scope
 from django.template import Context, Template
 import requests
 import re
+from xblockutils.resources import ResourceLoader
 
 class GraphQlCmsXBlock(XBlock):
+
+    loader = ResourceLoader(__name__)
 
     clauseGraphQlQuery = """ {
                 title,
@@ -149,7 +152,11 @@ class GraphQlCmsXBlock(XBlock):
                             id,
                             blockTitle,
                             blockContent,
-                            contentUsedFor
+                            contentUsedFor,
+                            cssClass,
+                            componentIcon {
+                                url
+                            }
                         }
                     },
                     cmsAsset {
@@ -274,7 +281,11 @@ class GraphQlCmsXBlock(XBlock):
                             id,
                             blockTitle,
                             blockContent,
-                            contentUsedFor
+                            contentUsedFor,
+                            cssClass,
+                            componentIcon {
+                                url
+                            }
                         }
                     },
                     cmsAsset {
@@ -399,7 +410,11 @@ class GraphQlCmsXBlock(XBlock):
                             id,
                             blockTitle,
                             blockContent,
-                            contentUsedFor
+                            contentUsedFor,
+                            cssClass,
+                            componentIcon {
+                                url
+                            }
                         }
                     },
                     cmsAsset {
@@ -559,7 +574,7 @@ class GraphQlCmsXBlock(XBlock):
         frag = Fragment()
         html = self.render_template("static/html/graphqlcmsxblock.html", {
             'self':  self, 
-            'cmsHost': self.cmsApi.replace('/api', ''),
+            'cmsHost': 'http://google.com/', # self.cmsApi.replace('/api', ''),
             'title': entry['title'],
             'sections': entry['sections'],
             'contentBlocks': entry['contentBlocks'],
@@ -642,11 +657,16 @@ class GraphQlCmsXBlock(XBlock):
             'accordionneo': []
         }
         if self.entrySlug is not '':
+            entrySections = self.entrySections
+            self.entrySections = []
             entry = self.load_selected_entry()
-        
-        frag = Fragment()
-        html = self.render_template("studio/html/cmsBlock.html", {
+            self.entrySections = entrySections
+
+
+        viewContext = {
                 'self': self,
+                'cmsHost': self.cmsApi.replace('/api', ''),
+                'entrySections': entrySections,
 
                 # indexes
                 'courseTags': courseTags,
@@ -671,12 +691,14 @@ class GraphQlCmsXBlock(XBlock):
                     'accordionneo': entry['accordionneo'],
                     'blockOrder': self.blockOrder
                 #}
-            })
-        frag.add_content(html)
-        frag.add_css(self.resource_string("studio/css/cmsBlock.css"))
-        frag.add_javascript(self.resource_string("studio/js/bundle.js"))
-        frag.initialize_js('CmsBlock')
-        return frag
+            }
+
+        fragment = Fragment()
+        fragment.add_content(self.loader.render_django_template('/studio/html/cmsBlock.html', viewContext))
+        fragment.add_css(self.resource_string("studio/css/cmsBlock.css"))
+        fragment.add_javascript(self.resource_string("studio/js/bundle.js"))
+        fragment.initialize_js('CmsBlock')
+        return fragment
 
 
     def render_template(self, template_path, context={}):

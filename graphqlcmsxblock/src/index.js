@@ -186,14 +186,50 @@ window.CmsBlock = function (runtime, element) {
             base += '<li data-id="' + type + '">' +
               '<div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">';
             
-              base +=
-              '<label><input type="checkbox" name="' +
-                type + "[" + elem.id +']" checked="checked"/> Include Content Block</label>';
-            base += "<div>";
-            if (elem.blockTitle != null) 
-              base += "<h5>" + elem.blockTitle + "</h5>";
-            base += "<div>" + elem.blockContent + "</div>" + "</div>";
-
+            base +=
+            '<label><input type="checkbox" name="' +
+              type + "[" + elem.id +']" checked="checked"/> Include Content Block</label>';
+            
+            if( elem.cssClass == null )
+            {
+              base += "<div>";
+              if (elem.blockTitle != null) 
+                base += "<h5>" + elem.blockTitle + "</h5>";
+              base += "<div>" + elem.blockContent + "</div>" + "</div>";
+            }
+            else if( elem.cssClass == 'edx-academy-tip' )
+            {
+                base += "<div class=\"edx-academy-tip\">";
+                elem.componentIcon.forEach(function(icon){
+                  base += "<div class=\"edx-icon\">\
+                    <img src=\"" + cmsHost + icon.url + "\" class=\"img-fluid\"/>\
+                  </div>";
+                })
+                base += "<div class=\"edx-content\">" + elem.blockContent + "</div>\
+                  </div>";
+            }
+            else if( elem.cssClass == 'edx-featured-content' )
+            {
+                base += "<div class=\"edx-featured-content\">";
+                elem.componentIcon.forEach(function(icon){
+                  base += "<div class=\"edx-icon\">\
+                    <img src=\"" + cmsHost + icon.url + "\" class=\"img-fluid\"/>\
+                  </div>";
+                })
+                base += "<div class=\"edx-content\">" + elem.blockContent + "</div>\
+                  </div>";
+            }
+            else if( elem.cssClass == 'edx-advanced-concept' )
+            {
+              base += "<div class=\"edx-advanced-concept\">\
+                  <button class=\"edx-opener\">\
+                      <span>Close</span>\
+                      <em>Open</em>\
+                  </button>\
+                  <strong class=\"edx-heading\">Advanced Concept</strong>\
+                  <div class=\"edx-content\">" + elem.blockContent  + "</div>\
+              </div>";
+            }
             base += '</div></li>';
           });
           break;
