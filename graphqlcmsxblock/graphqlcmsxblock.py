@@ -696,10 +696,7 @@ class GraphQlCmsXBlock(XBlock):
         fragment = Fragment()
         fragment.add_content(self.loader.render_django_template('/studio/html/cmsBlock.html', viewContext))
         fragment.add_css(self.resource_string("studio/css/cmsBlock.css"))
-        #fragment.add_javascript(self.resource_string("studio/js/Sortable.min.js"))
-        #fragment.add_javascript(self.resource_string("studio/js/jquery-sortable.js"))
-        #fragment.add_javascript(self.resource_string("studio/js/cmsBlock.js"))
-        fragment.add_javascript(self.resource_string("studio/js/bundle.js"))
+        fragment.add_javascript(self.loader.load_unicode('studio/js/bundle.js'))
         fragment.initialize_js('CmsBlock')
         return fragment
 

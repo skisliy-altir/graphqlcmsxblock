@@ -2,7 +2,7 @@
 window.jQuery = $;
 window.$ = $;
 import $ from "jquery";
-import Sortable from "sortablejs";
+import {Sortable as MySortable} from "sortablejs";
 
 window.CmsBlock = function (runtime, element) {
   var handlerUrl = runtime.handlerUrl(element, "select_cms_block");
@@ -149,7 +149,7 @@ window.CmsBlock = function (runtime, element) {
 
   window.apply_entry_block_oder = function() {
     console.log('init sort');
-    sortable = Sortable.create(document.getElementById("generalView"), {
+    sortable = MySortable.create(document.getElementById("generalView"), {
       animation: 150,
       group: "generalView",
       store: {
