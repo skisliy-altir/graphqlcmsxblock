@@ -41,20 +41,26 @@
 <form entry-type="{{ self.entryType }}" onChange="updateSelection(this)" onsubmit="javascript:void(0);">
 <ul id="generalView">
         
-    {% for identifier, section in sections.items %}
-        <li data-id="{{ identifier }}" >
-            <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
-                <label><input 
-                    type="checkbox" 
-                    name="{{ identifier  }}"
-                    {% if identifier in entrySections %}checked="checked"{% endif %}
-                    > Include {{ identifier }}</label>
-                <p>{{ section | safe }}</p>
-            </div>
-        </li>
+    {# for identifier, section in sections.items #}
+    
+    {% for identifier, section in entry.items %}
+        {% if identifier not in 'slug,title,postDate,coursetag,agreementType,contentBlock,cmsAsset,faq,tip,table2colMatrix,table3colMatrix,table4colMatrix,table5colMatrix,accordionneo' %}
+            {%if section is not None %}
+                <li data-id="{{ identifier }}" >
+                    <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
+                        <label><input 
+                            type="checkbox" 
+                            name="{{ identifier  }}"
+                            {% if identifier in entrySections %}checked="checked"{% endif %}
+                            > Include {{ identifier }}</label>
+                        <p>{{ section | safe }}</p>
+                    </div>
+                </li>
+            {% endif %}
+        {% endif %}
     {% endfor %}
 
-    {% for block in contentBlocks %}
+    {% for block in entry.contentBlock %}
         {% with identifier="contentBlock["|add:block.id|add:"]" %}
         <li data-id="{{ identifier }}">
             <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
@@ -107,7 +113,7 @@
         {% endwith %}
     {% endfor %}
 
-    {% for asset in assets %}
+    {% for asset in entry.cmsAsset %}
         {% for file in asset.assetfile %}
             {% with identifier="cmsAsset["|add:file.id|add:"]" %}
             <li data-id="{{ identifier }}">
@@ -124,7 +130,7 @@
         {% endfor %}
     {% endfor %}
 
-    {% for faq in faqs %}
+    {% for faq in entry.faq %}
         {% with identifier="faq["|add:faq.id|add:"]" %}
         <li data-id="{{ identifier }}">
             <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
@@ -140,7 +146,7 @@
         {% endwith %}
     {% endfor %}
 
-    {% for tip in tips %}
+    {% for tip in entry.tip %}
         {% with identifier="tip["|add:tip.id|add:"]" %}
         <li data-id="{{ identifier }}">
             <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;" class = "{{ tip.tipCssClass }}">
@@ -156,7 +162,7 @@
         {% endwith %}
     {% endfor %}
 
-    {% for table in tables2 %}
+    {% for table in entry.table2colMatrix %}
         {% with identifier="table2colMatrix["|add:table.id|add:"]" %}
         <li data-id="{{ identifier }}">
             <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
@@ -191,7 +197,7 @@
         {% endwith %}
     {% endfor %}
 
-    {% for table in tables3 %}
+    {% for table in entry.table3colMatrix %}
         {% with identifier="table3colMatrix["|add:table.id|add:"]" %}
         <li data-id="{{ identifier }}">
             <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
@@ -229,7 +235,7 @@
         {% endwith %}
     {% endfor %}
 
-    {% for table in tables4 %}
+    {% for table in entry.table4colMatrix %}
         {% with identifier="table4colMatrix["|add:table.id|add:"]" %}
         <li data-id="{{ identifier }}">
             <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
@@ -270,7 +276,7 @@
         {% endwith %}
     {% endfor %}
 
-    {% for table in tables5 %}
+    {% for table in entry.table5colMatrix %}
         {% with identifier="table5colMatrix["|add:table.id|add:"]" %}
         <li data-id="{{ identifier }}">
             <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
@@ -314,7 +320,7 @@
         {% endwith %}
     {% endfor %}
 
-    {% for accordion in accordionneo %}
+    {% for accordion in entry.accordionneo %}
         {% with identifier="accordionneo["|add:accordion.id|add:"]" %}
         <li data-id="{{ identifier }}">
             <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">

@@ -553,38 +553,33 @@ class GraphQlCmsXBlock(XBlock):
         when viewing courses.
         """
 
-        entry = {
-            'title': '',
-            'sections': {},
-            'contentBlocks': [],
-            'assets': [],
-            'faqs': [],
-            'tips': [],
-            'tables2': [],
-            'tables3': [],
-            'tables4': [],
-            'tables5': [],
-            'accordionneo': []
-        }
-        if self.entrySlug is not '':
-            entry = self.load_selected_entry()
-            
+        entry = self.load_selected_entry()
+
+        orderedBlocks = []
+        if len(self.blockOrder) > 0 :
+            for element in self.blockOrder :
+                if '[' not in element and ']' not in element :
+                    if element in entry :
+                        orderedBlocks.append({
+                            'type': element,
+                            'block': entry[element]
+                        })
+                else :
+                    elemName = element.split('[')[0]
+                    elemId = re.findall(r'\[.*?\]', element)[0].replace('[', '').replace(']', '')
+                    if elemName in entry :
+                        for subitem in entry[elemName] :
+                            if subitem['id'] == elemId : 
+                                orderedBlocks.append({
+                                    'type': elemName,
+                                    'block': subitem
+                                })
 
         frag = Fragment()
         html = self.render_template("static/html/graphqlcmsxblock.html", {
             'self':  self, 
-            'cmsHost': 'http://google.com/', # self.cmsApi.replace('/api', ''),
-            'title': entry['title'],
-            'sections': entry['sections'],
-            'contentBlocks': entry['contentBlocks'],
-            'assets': entry['assets'],
-            'faqs': entry['faqs'],
-            'tips': entry['tips'],
-            'tables2': entry['tables2'],
-            'tables3': entry['tables3'],
-            'tables4': entry['tables4'],
-            'tables5': entry['tables5'],
-            'accordionneo': entry['accordionneo']
+            'cmsHost': self.cmsApi.replace('/api', ''),
+            'blocks': orderedBlocks
         })
         frag.add_content(html)
         frag.add_css(self.resource_string("static/css/graphqlcmsxblock.css"))
@@ -640,58 +635,29 @@ class GraphQlCmsXBlock(XBlock):
         unitsList = resp.json()['data']['entries']
         unitsList.sort(key=lambda x: x['title'], reverse=False)
 
-        # Load Selected Entry
-        entry = {
-            'coursetag': [],
-            'title': '',
-            'sections': {},
-            'contentBlocks': [],
-            'assets': [],
-            'faqs': [],
-            'tips': [],
-            'tables2': [],
-            'tables3': [],
-            'tables4': [],
-            'tables5': [],
-            'accordionneo': []
-        }
-        entrySections = []
-        if self.entrySlug is not '':
-            entrySections = self.entrySections
-            self.entrySections = []
-            entry = self.load_selected_entry()
-            self.entrySections = entrySections
+        # Load Selected Entry [force load all, not only selected]
+        entrySections = self.entrySections
+        self.entrySections = []
+        entry = self.load_selected_entry()
+        self.entrySections = entrySections
 
 
         viewContext = {
-                'self': self,
-                'cmsHost': self.cmsApi.replace('/api', ''),
-                'entrySections': entrySections,
+            'self': self,
+            'cmsHost': self.cmsApi.replace('/api', ''),
 
-                # indexes
-                'courseTags': courseTags,
-                'clausesList':  clausesList,
-                'sectionsList': sectionsList,
-                'coursesList':  coursesList,
-                'unitsList': unitsList,
-                
-                # entry properties
-                #'entry': {
-                    'title': entry['title'],
-                    'selectedCourseTag': entry['coursetag'],
-                    'sections': entry['sections'],
-                    'contentBlocks': entry['contentBlocks'],
-                    'assets': entry['assets'],
-                    'faqs': entry['faqs'],
-                    'tips': entry['tips'],
-                    'tables2': entry['tables2'],
-                    'tables3': entry['tables3'],
-                    'tables4': entry['tables4'],
-                    'tables5': entry['tables5'],
-                    'accordionneo': entry['accordionneo'],
-                    'blockOrder': self.blockOrder
-                #}
-            }
+            # indexes
+            'courseTags': courseTags,
+            'clausesList':  clausesList,
+            'sectionsList': sectionsList,
+            'coursesList':  coursesList,
+            'unitsList': unitsList,
+
+            # entry variables
+            'entry': entry,
+            'entrySections': self.entrySections,
+            'blockOrder': self.blockOrder
+        }
 
         fragment = Fragment()
         fragment.add_content(self.loader.render_django_template('/studio/html/cmsBlock.html', viewContext))
@@ -716,17 +682,10 @@ class GraphQlCmsXBlock(XBlock):
 
 
     def load_selected_entry(self) :
-        title = ''
-        sections = {}
-        contentBlocks = []
-        assets = []
-        faqs = []
-        tips = []
-        tables2 = []
-        tables3 = []
-        tables4 = []
-        tables5 = []
-        accordionneo = []
+
+        entryObj = {}
+        if self.entrySlug is '' :
+            return  entryObj
 
         if self.entryType == 'clause':    
             resp = requests.post(self.cmsApi, json={
@@ -753,91 +712,36 @@ class GraphQlCmsXBlock(XBlock):
             return
         
         entry = resp.json()['data']['entries'][0]
-        title = entry['title']
         
         coursetag = '' 
         if 'coursetag' in entry and len(entry['coursetag']) > 0 :
             coursetag = entry['coursetag'][0]['slug']
+        
+        if len(self.entrySections) == 0 :
+            return entry
 
-        if len(self.entrySections) > 0 :
-            for section in self.entrySections : 
-                if section in entry :
-                    sections.append(entry[section])
-                
-                elif '[' in section :
-                    # Handle Array Items (Assets)
-                    elemName = section.split('[')[0]
-                    elemId = re.findall(r'\[.*?\]', section)[0].replace('[', '').replace(']', '')
-                    if elemName in entry :
-                        for subitem in entry[elemName] :
-                            if subitem['id'] == elemId : 
-                                if 'contentBlock' in section:
-                                    contentBlocks.append(subitem)
-                                elif 'cmsAsset' in section :
-                                    assets.append(subitem)
-                                elif 'faq' in section :
-                                    faqs.append(subitem)
-                                elif 'tip' in section :
-                                    tips.append(subitem)
-                                elif 'table2colMatrix' in section:
-                                    tables2.append(subitem)
-                                elif 'table3colMatrix' in section:
-                                    tables3.append(subitem)
-                                elif 'table4colMatrix' in section:
-                                    tables4.append(subitem)
-                                elif 'table5colMatrix' in section:
-                                    tables5.append(subitem)
-                                elif 'accordionneo' in section:
-                                    accordionneo.append(subitem)
-                                
-        else: 
-            for section in entry :
-                if (type(entry[section])) == str and section not in ['slug', 'title', 'postDate', 'contentBlock', 'cmsAsset', 'faq', 'tip'] :
-                    #sections.append(entry[section])
-                    sections[section] = entry[section]
-                elif 'contentBlock' in section:
-                    for subitem in entry[section] :
-                        contentBlocks.append(subitem)
-                elif 'cmsAsset' in section :
-                    for subitem in entry[section] :
-                        assets.append(subitem)
-                elif 'faq' in section :
-                    for subitem in entry[section] :
-                        faqs.append(subitem)
-                elif 'tip' in section :
-                    for subitem in entry[section] :
-                        tips.append(subitem)
-                elif 'table2colMatrix' in section :
-                    for subitem in entry[section] :
-                        tables2.append(subitem)
-                elif 'table3colMatrix' in section :
-                    for subitem in entry[section] :
-                        tables3.append(subitem)
-                elif 'table4colMatrix' in section :
-                    for subitem in entry[section] :
-                        tables4.append(subitem)
-                elif 'table5colMatrix' in section :
-                    for subitem in entry[section] :
-                        tables5.append(subitem)
-                elif 'accordionneo' in section :
-                    for subitem in entry[section] :
-                        accordionneo.append(subitem)
+        # build object from selected items    
+        entryObj['title'] = entry['title']
+        entryObj['coursetag'] = coursetag
 
-        return {
-            'title': title,
-            'coursetag': coursetag,
-            'sections': sections,
-            'contentBlocks': contentBlocks,
-            'assets': assets,
-            'faqs': faqs,
-            'tips': tips,
-            'tables2': tables2,
-            'tables3': tables3,
-            'tables4': tables4,
-            'tables5': tables5,
-            'accordionneo' : accordionneo
-        }
-    
+        for section in self.entrySections : 
+            if section in entry :
+                entryObj[section] = entry[section]
+                #sections.append(entry[section])
+            
+            if '[' in section and ']' in section:
+                # Handle Array Items
+                elemName = section.split('[')[0]
+                elemId = re.findall(r'\[.*?\]', section)[0].replace('[', '').replace(']', '')
+                print( elemName, elemId )
+                if elemName in entry :
+                    for subitem in entry[elemName] :
+                        if subitem['id'] == elemId : 
+                            if elemName not in entryObj: 
+                                entryObj[elemName] = []    
+                            entryObj[elemName].append(subitem)
+        return entryObj
+        
 
     @XBlock.json_handler
     def sort_save(self, data, suffix):
@@ -923,6 +827,7 @@ class GraphQlCmsXBlock(XBlock):
             return {'result': 'success', 'selected': self.entrySections}
         
         return {}
+
 
     # TO-DO: change this to create the scenarios you'd like to see in the
     # workbench while developing your XBlock.
