@@ -140,6 +140,7 @@ window.CmsBlock = function (runtime, element) {
     };
   
     window.apply_entry_block_oder = function() {
+      // jquery-ui-sortable
       /*$('#generalView').sortable({
         revert: true,
         stop: function(event, ui) {
@@ -147,7 +148,8 @@ window.CmsBlock = function (runtime, element) {
         }
       });*/
 
-      /*$('#generalView').sortable({
+      // sortablejs
+      $('#generalView').sortable({
         animation: 200,
         store: {
           get: function (sortable) {
@@ -161,7 +163,7 @@ window.CmsBlock = function (runtime, element) {
             });
           },
         },
-      });*/
+      });
     }
   
     window.renderField = function (type, entry) {
