@@ -11,10 +11,45 @@
 
       {% elif block.type in 'contentBlock' %}
         {% with contentBlock=block.block %}
+          {% if contentBlock.cssClass == None %}
             {% if contentBlock.blockTitle != null %}
-              <h5>{{ contentBlock.blockTitle }}</h5>
+                <h5>{{ contentBlock.blockTitle }}</h5>
             {% endif %}
             <div>{{ contentBlock.blockContent | safe }}</div>
+          {% elif contentBlock.cssClass == 'edx-academy-tip' %}
+              <div class="edx-academy-tip">
+                  {% for image in contentBlock.componentIcon %}
+                      <div class="edx-icon">
+                          <img src="{{ cmsHost }}{{ image.url }}" class="img-fluid"/>
+                      </div>
+                  {% endfor %}
+                  <div class="edx-content">
+                      {{ contentBlock.blockContent | safe }}
+                  </div>
+              </div>
+          {% elif contentBlock.cssClass == 'edx-featured-content' %}
+              <div class="edx-featured-content">
+                  {% for image in contentBlock.componentIcon %}
+                      <div class="edx-icon">
+                          <img src="{{ cmsHost }}{{ image.url }}" class="img-fluid"/>
+                      </div>
+                  {% endfor %}
+                  <div class="edx-content">
+                      {{ contentBlock.blockContent | safe }}
+                  </div>
+              </div>
+          {% elif contentBlock.cssClass == 'edx-advanced-concept' %}
+              <div class="edx-advanced-concept">
+                  <button class="edx-opener">
+                      <span>Close</span>
+                      <em>Open</em>
+                  </button>
+                  <strong class="edx-heading">Advanced Concept</strong>
+                  <div class="edx-content">
+                      {{ contentBlock.blockContent | safe }}
+                  </div>
+              </div>
+          {% endif %}
         {% endwith %}
 
 
