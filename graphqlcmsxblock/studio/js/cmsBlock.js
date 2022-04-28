@@ -140,12 +140,12 @@ window.CmsBlock = function (runtime, element) {
     };
   
     window.apply_entry_block_oder = function() {
-      $('#generalView').sortable({
+      /*$('#generalView').sortable({
         revert: true,
         stop: function(event, ui) {
           console.log('sort stop');
         }
-      });
+      });*/
 
       /*$('#generalView').sortable({
         animation: 200,
