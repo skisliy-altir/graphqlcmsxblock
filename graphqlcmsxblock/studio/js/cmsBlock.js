@@ -141,6 +141,13 @@ window.CmsBlock = function (runtime, element) {
   
     window.apply_entry_block_oder = function() {
       $('#generalView').sortable({
+        revert: true,
+        stop: function(event, ui) {
+          console.log('sort stop');
+        }
+      });
+
+      /*$('#generalView').sortable({
         animation: 200,
         store: {
           get: function (sortable) {
@@ -154,7 +161,7 @@ window.CmsBlock = function (runtime, element) {
             });
           },
         },
-      });
+      });*/
     }
   
     window.renderField = function (type, entry) {
