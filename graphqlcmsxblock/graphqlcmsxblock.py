@@ -574,7 +574,20 @@ class GraphQlCmsXBlock(XBlock):
                                     'type': elemName,
                                     'block': subitem
                                 })
-
+        else:
+            for element in entry:
+                if type(entry[element]) is str and entry[element] is not None and element not in 'title,slug,postDate,coursetag':
+                     orderedBlocks.append({
+                        'type': element,
+                        'block': entry[element]
+                    })
+                if type(entry[element]) is list and len(entry[element]) > 0 and element not in 'coursetag,agreementType':
+                    for subItem in entry[element]:
+                        orderedBlocks.append({
+                            'type': element,
+                            'block': subItem
+                        })
+        
         frag = Fragment()
         html = self.render_template("static/html/graphqlcmsxblock.html", {
             'self':  self, 
@@ -733,7 +746,6 @@ class GraphQlCmsXBlock(XBlock):
                 # Handle Array Items
                 elemName = section.split('[')[0]
                 elemId = re.findall(r'\[.*?\]', section)[0].replace('[', '').replace(']', '')
-                print( elemName, elemId )
                 if elemName in entry :
                     for subitem in entry[elemName] :
                         if subitem['id'] == elemId : 
