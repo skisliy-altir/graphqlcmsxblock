@@ -773,6 +773,7 @@ class GraphQlCmsXBlock(XBlock):
         self.entryType = ''
         self.entrySlug = ''
         self.entrySections = []
+        self.blockOrder = []
 
         if 'clause' in data:
             self.entryType = 'clause'
