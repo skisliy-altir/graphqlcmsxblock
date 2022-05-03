@@ -749,7 +749,9 @@ class GraphQlCmsXBlock(XBlock):
         self.entrySlug      = data['slug']
         self.entrySections  = data['enabledSections']
         self.blockOrder     = data['blockOder']
-        return {}
+        return {
+            'success': True
+        }
 
 
     @XBlock.json_handler

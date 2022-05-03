@@ -1,6 +1,10 @@
 
 window.CmsBlock = function (runtime, element) {
     var loadCmsBlockHandlerUrl = runtime.handlerUrl(element, "load_cms_block");
+
+    var notify;
+    // The workbench doesn't support notifications.
+    notify = typeof(runtime.notify) != 'undefined';
     
     var cmsHost = "";
   
@@ -598,11 +602,24 @@ window.CmsBlock = function (runtime, element) {
       for( i in selection )
         entry.enabledSections.push(selection[i]['name']);
 
+      if (notify) {
+        runtime.notify('save', {state: 'start', message: "Saving"});
+      }
+
       $.ajax({
         type: "POST",
         url: runtime.handlerUrl(element, "save_entry"),
         data: JSON.stringify(entry),
-        success: function (result) {}
+        success: function (result) {
+          if (result['success'] && notify) {
+            runtime.notify('save', {state: 'end'})
+          }else{
+            runtime.notify('error', {
+              'title': 'Error saving CMS Block',
+              'message': '@todo'
+            });
+          }
+        }
       });
 
     });
@@ -661,6 +678,13 @@ window.CmsBlock = function (runtime, element) {
 
       // [do not use .sortable callback, there is conflict with internal OpenEdx .sortable global fucntion]
       $('#generalView').sortable();
+
+
+      $('#graphQlCmsXblock-cancel').on('click', function() {
+        if (notify) 
+          runtime.notify('cancel', {});
+      });
+
     });
 };
   
