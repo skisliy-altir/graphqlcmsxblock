@@ -67,7 +67,7 @@ window.CmsBlock = function (runtime, element) {
         window[typeKey].forEach(function (elem) {
           if (
             filter == "" ||
-            (elem.coursetag.length > 0 && elem.coursetag[0].slug == filter)
+            (elem.courseName.length > 0 && elem.courseName.includes(filter) != false )
           ) {
             var option = document.createElement("option");
   

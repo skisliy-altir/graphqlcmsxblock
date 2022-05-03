@@ -19,9 +19,7 @@ class GraphQlCmsXBlock(XBlock):
                 slug,
                 postDate,
                 ... on clauses_clause_Entry {
-                    coursetag {
-                        slug
-                    },
+                    courseName,
                     agreementType {
                         title
                     },
@@ -141,9 +139,7 @@ class GraphQlCmsXBlock(XBlock):
                 title,
                 postDate,
                 ... on courses_courses_Entry {
-                    coursetag {
-                        slug
-                    },
+                    courseName,
                     agreementType {
                         title
                     },
@@ -270,9 +266,7 @@ class GraphQlCmsXBlock(XBlock):
                 title,
                 postDate,
                 ... on sections_sections_Entry {
-                    coursetag {
-                        slug
-                    },
+                    courseName,
                     agreementType {
                         title
                     },
@@ -399,9 +393,7 @@ class GraphQlCmsXBlock(XBlock):
                 title,
                 postDate,
                 ... on units_units_Entry {
-                    coursetag {
-                        slug
-                    },
+                    courseName,
                     agreementType {
                         title
                     },
@@ -593,18 +585,28 @@ class GraphQlCmsXBlock(XBlock):
         """
         The primary view of the LMS Admin - GraphQL CMS XBlock, shown to Autors
         """
-        
-        # Load Course Top Filter
-        resp =  requests.post(self.cmsApi, json={
-            "query": "query MyQuery { tags(group: \"coursetag\", limit: 30) {slug, title} }"
-        })
-        courseTags = resp.json()['data']['tags']
-        courseTags.sort(key=lambda x: x['title'], reverse=False)
 
+        courseNames = {
+            'basicsOfAgreements': 'Basics of Agreements',
+            'beatLicenseAgreement': 'Beat License Agreement',
+            'beatPurchaseAgreement': 'Beat Purchase Agreement',
+            'confidentialityAgreement': 'Confidentiality Agreement',
+            'engineerAgreement': 'Engineer Agreement',
+            'ipOverviewForTheMusicBusiness': 'IP Overview for the Music Business',
+            'lawyerEngagementAgreement': 'Lawyer Engagement Agreement',
+            'mixerAgreement': 'Mixer Agreement',
+            'musicIndustryOverview': 'Music Industry Overview',
+            'producerAgreement': 'Producer Agreement',
+            'producerDeclaration': 'Producer Declaration',
+            'sideArtistAgreement': 'Side Artist Agreement',
+            'songSplitAgreement': 'Song Split Agreement',
+            'workForHireAgreementMusic': 'Work For Hire Agreement (Music)'
+        }
+        
         # Load Clauses
         resp = requests.post(self.cmsApi, json={
             "query": "query MyQuery { entries(section: \"clauses\") {slug, title, \
-                    ... on clauses_clause_Entry { coursetag { slug } } \
+                    ... on clauses_clause_Entry { courseName } \
                 } }"
         })
         clausesList = resp.json()['data']['entries']
@@ -613,7 +615,7 @@ class GraphQlCmsXBlock(XBlock):
         # Load Courses
         resp = requests.post(self.cmsApi, json={
             "query": "query MyQuery { entries(section: \"courses\") {slug, title \
-                    ... on courses_courses_Entry { coursetag { slug } } \
+                    ... on courses_courses_Entry { courseName } \
                 } }"
         })
         coursesList = resp.json()['data']['entries']
@@ -622,7 +624,7 @@ class GraphQlCmsXBlock(XBlock):
         # Load Sections
         resp = requests.post(self.cmsApi, json={
             "query": "query MyQuery { entries(section: \"sections\") {slug, title \
-                    ... on sections_sections_Entry { coursetag { slug } } \
+                    ... on sections_sections_Entry { courseName } \
                 } }"
         })
         sectionsList = resp.json()['data']['entries']
@@ -631,7 +633,7 @@ class GraphQlCmsXBlock(XBlock):
         # Load Units
         resp = requests.post(self.cmsApi, json={
             "query": "query MyQuery { entries(section: \"units\") {slug, title \
-                    ... on units_units_Entry { coursetag { slug } } \
+                    ... on units_units_Entry { courseName } \
                 } }"
         })
         unitsList = resp.json()['data']['entries']
@@ -648,7 +650,7 @@ class GraphQlCmsXBlock(XBlock):
             'cmsHost': self.cmsApi.replace('/api', ''),
 
             # indexes
-            'courseTags': courseTags,
+            'courseNames': courseNames,
             'clausesList':  clausesList,
             'sectionsList': sectionsList,
             'coursesList':  coursesList,

@@ -20,9 +20,9 @@
 <div>
     <label>Select Course:</label><br />
     <select id="courseFilter" style="width: 400px;">
-        <option value="">All CourseTags</option>
-        {% for tag in courseTags %}
-            <option value="{{ tag.slug }}" {% if selectedCourseTag == tag.slug %} selected="selected" {% endif %}>{{tag.title}}</option>
+        <option value="">All Courses</option>
+        {% for courseKey, courseName in courseNames.items %}
+            <option value="{{ courseKey }}" {% if courseKey in entry.courseName %} selected="selected" {% endif %}>{{ courseName }}</option>
         {% endfor %}        
     </select>
 </div>
@@ -31,7 +31,7 @@
     <label>Select Entry:</label><br />
     <select id="entry"  style="width:400px;">
         <option value="">Please select...</option>
-        <optgroup label="Clauses" id="clausesOptions">      </optgroup>
+        <optgroup label="Clauses" id="clausesOptions"></optgroup>
         <optgroup label="Courses" id="coursesOptions"></optgroup>
         <optgroup label="Sections" id="sectionsOptions"></optgroup>
         <optgroup label="Units" id="unitsOptions"></optgroup>
@@ -44,7 +44,7 @@
     {# for identifier, section in sections.items #}
     
     {% for identifier, section in entry.items %}
-        {% if identifier not in 'slug,title,postDate,coursetag,agreementType,contentBlock,cmsAsset,faq,tip,table2colMatrix,table3colMatrix,table4colMatrix,table5colMatrix,accordionneo' %}
+        {% if identifier not in 'slug,title,postDate,coursetag,courseName,agreementType,contentBlock,cmsAsset,faq,tip,table2colMatrix,table3colMatrix,table4colMatrix,table5colMatrix,accordionneo' %}
             {%if section is not None %}
                 <li data-id="{{ identifier }}" >
                     <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
@@ -346,7 +346,7 @@
 </ul>
 </form>
 
-<span style="color: lightgrey; font-size: 9px; float: right;">GraphQL CMS XBlock v1.3</span>
+<span style="color: lightgrey; font-size: 9px; float: right;">GraphQL CMS XBlock v1.4</span>
 
 <div class="xblock-actions">
     <ul>
