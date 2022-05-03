@@ -1,11 +1,18 @@
 
 window.CmsBlock = function (runtime, element) {
-    var handlerUrl = runtime.handlerUrl(element, "select_cms_block");
-    var handlerSubSectionUrl = runtime.handlerUrl(element, "select_cms_block_subsections");
-    var handleReSortedDataUrl = runtime.handlerUrl(element, "sort_save");
+    var loadCmsBlockHandlerUrl = runtime.handlerUrl(element, "load_cms_block");
+    
     var cmsHost = "";
-    var sortable = null;
   
+    // Entry Variables
+    var entry = {
+      title: null,
+      type: null,
+      slug: null,
+      blockOder: [],
+      enabledSections: []
+    }
+
     // 1) Jquery select the course ---- filter
     $("#courseFilter").on("change", function () {
       var filter = this.value;
@@ -14,24 +21,35 @@ window.CmsBlock = function (runtime, element) {
   
     //select entry --> type , slug(requested value)
     $("#entry").on("change", function () {
+      console.log('change entry:', this.value);
       var parts = this.value.split("::");
       var type = parts[0];
       var slug = parts[1];
-      var request = {};
-      request[type] = slug;
+      var request = {
+        type: type,
+        slug: slug
+      };
   
       $.ajax({
         type: "POST",
-        url: handlerUrl,
+        url: loadCmsBlockHandlerUrl,
         data: JSON.stringify(request),
         success: function (result) {
           cmsHost = result.cmsHost;
+
+          // save local memory
+          entry.title           = result.entry.title;
+          entry.type            = type;
+          entry.slug            = slug;
+          entry.blockOder       = [];
+          entry.enabledSections = [];
+
           render_entry(type, result.entry);
         },
       });
     });
   
-    window.update_entry_options = function (filter) {
+    update_entry_options = function (filter) {
       const types = ["clauses", "courses", "sections", "units"];
       const singularTypes = ["clause", "course", "section", "unit"];
   
@@ -53,10 +71,10 @@ window.CmsBlock = function (runtime, element) {
             option.value = singularType + "::" + elem.slug;
   
             if (
-              window.entrySlug != "" &&
-              window.entrySlug == elem.slug &&
-              window.entryType != "" &&
-              window.entryType == singularType
+              window.selectedEntry.slug != "" &&
+              window.selectedEntry.slug == elem.slug &&
+              window.selectedEntry.type != "" &&
+              window.selectedEntry.type == singularType
             )
               option.selected = "selected";
   
@@ -66,7 +84,7 @@ window.CmsBlock = function (runtime, element) {
       }
     };
   
-    window.render_entry = function (type, entry) {
+    render_entry = function (type, entry) {
       switch (type) {
         case "clause":
           $("#generalView")
@@ -121,6 +139,7 @@ window.CmsBlock = function (runtime, element) {
           break;
   
         case "unit":
+          console.log('render unit:', entry);
           $("#generalView")
             .first()
             .html(
@@ -136,29 +155,11 @@ window.CmsBlock = function (runtime, element) {
             );
           break;
       }
-      apply_entry_block_oder();
+      // [do not use .sortable callback, there is conflict with internal OpenEdx .sortable global fucntion]
+      $('#generalView').sortable();
     };
   
-    window.apply_entry_block_oder = function() {
-      // sortablejs
-      $('#generalView').sortable({
-        animation: 200,
-        store: {
-          get: function (sortable) {
-            return window.blockOder;
-          },
-          set: function (sortable) {
-            $.ajax({
-              type: "POST",
-              url: handleReSortedDataUrl,
-              data: JSON.stringify(sortable.toArray())
-            });
-          },
-        },
-      });
-    }
-  
-    window.renderField = function (type, entry) {
+    renderField = function (type, entry) {
       if (
         typeof entry[type] == "undefined" ||
         entry[type] == "" ||
@@ -583,26 +584,83 @@ window.CmsBlock = function (runtime, element) {
       base += "</div>";
       return base;
     };
-  
-    window.updateSelection = function (form) {
-      var selection = $(form).serializeArray();
-      var data = {
-        type: $(form).attr("entry-type"),
-        selected: selection,
-      };
-  
+
+    $('#graphQlCmsXblock-save').on('click', function(event){
+      
+      // build block order 
+      entry.blockOder = [];
+      $("#generalView").find('li').each(function(index, node){
+        entry.blockOder.push($(node).attr('data-id'));
+      });
+
+      var selection = $('#graphQlCmsXblock-form').serializeArray();
+      entry.enabledSections = [];
+      for( i in selection )
+        entry.enabledSections.push(selection[i]['name']);
+
       $.ajax({
         type: "POST",
-        url: handlerSubSectionUrl,
-        data: JSON.stringify(data),
-        success: function (result) {},
+        url: runtime.handlerUrl(element, "save_entry"),
+        data: JSON.stringify(entry),
+        success: function (result) {}
       });
-    };
+
+    });
   
     $(function ($) {
       /* Here's where you'd do things on page load. */
-      update_entry_options($("#courseFilter").val());
-      apply_entry_block_oder();
+      update_entry_options($("#courseFilter").val()); 
+
+      if ( window.selectedEntry.slug != "" && window.selectedEntry.type != "" )
+      {
+        entry.type            = window.selectedEntry.type;
+        entry.slug            = window.selectedEntry.slug;
+        entry.blockOder       = window.selectedEntry.blockOder;
+        entry.enabledSections = window.selectedEntry.enabledSections;
+        entry.title           = window.selectedEntry.title;
+      }
+
+      if( entry.blockOder.length > 0 )
+      {
+        for( order in entry.blockOder )
+        {
+          var id = entry.blockOder[order];
+
+          var listElement = $("#generalView").find('li');
+          for( let pos = 0; pos < listElement.length; pos++ )
+          {
+            var node = listElement[pos];
+            if( $(node).attr('data-id') == id )
+            {
+              // move down
+              if( order > pos )
+              {
+                var shift = order - pos;
+                while(shift > 0)
+                {
+                  var next = $(node).next();
+                  $(node).insertAfter(next);
+                  shift--;
+                }
+              }
+              // move up
+              else if( order < pos )
+              {
+                var shift = pos - order;
+                while(shift > 0)
+                {
+                  var prev = $(node).prev();
+                  $(node).insertBefore(prev);
+                  shift--;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      // [do not use .sortable callback, there is conflict with internal OpenEdx .sortable global fucntion]
+      $('#generalView').sortable();
     });
 };
   

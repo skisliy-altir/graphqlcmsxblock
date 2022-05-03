@@ -1,44 +1,44 @@
-<div class="myxblock_block">
-    <h2>CMS Content Block</h2>
+<div class="wrapper-comp-settings is-active editor-with-buttons" id="graphqlcms-settings-tab"></div>
+<script>
+    // Current entry
+    var selectedEntry = {
+        title           : '{{ entry.title }}',
+        slug            : '{{ self.entrySlug }}',
+        type            : '{{ self.entryType }}',
+        blockOder       : {{ blockOrder | safe }},
+        enabledSections : {{ entrySections | safe }}
+    };
 
-    <div>
-        <label>Select Course:</label><br />
-        <select id="courseFilter" style="width: 400px;">
-            <option value="">All CourseTags</option>
-            {% for tag in courseTags %}
-                <option value="{{ tag.slug }}" {% if selectedCourseTag == tag.slug %} selected="selected" {% endif %}>{{tag.title}}</option>
-            {% endfor %}        
-        </select>
-    </div>
+    // CMS Lists
+    var clauses = {{ clausesList | safe }};
+    var sections = {{ sectionsList | safe }};
+    var courses = {{ coursesList | safe }};
+    var units = {{ unitsList | safe }};
 
-    <br /><br />
+</script> 
 
-    <div>
-        <label>Select Entry:</label><br />
-        <select id="entry"  style="width:400px;">
-            <option value="">Please select...</option>
-            <optgroup label="Clauses" id="clausesOptions">      </optgroup>
-            <optgroup label="Courses" id="coursesOptions"></optgroup>
-            <optgroup label="Sections" id="sectionsOptions"></optgroup>
-            <optgroup label="Units" id="unitsOptions"></optgroup>
-        </select>
-    </div>
-
-    <script>
-        // Current entry
-        var entrySlug = '{{ self.entrySlug }}';
-        var entryType = '{{ self.entryType }}';
-        var blockOder = {{ blockOrder | safe }}
-
-        // CMS Lists
-        var clauses = {{ clausesList | safe }};
-        var sections = {{ sectionsList | safe }};
-        var courses = {{ coursesList | safe }};
-        var units = {{ unitsList | safe }};
-    </script>    
+<div>
+    <label>Select Course:</label><br />
+    <select id="courseFilter" style="width: 400px;">
+        <option value="">All CourseTags</option>
+        {% for tag in courseTags %}
+            <option value="{{ tag.slug }}" {% if selectedCourseTag == tag.slug %} selected="selected" {% endif %}>{{tag.title}}</option>
+        {% endfor %}        
+    </select>
+</div>
+<br />
+<div>
+    <label>Select Entry:</label><br />
+    <select id="entry"  style="width:400px;">
+        <option value="">Please select...</option>
+        <optgroup label="Clauses" id="clausesOptions">      </optgroup>
+        <optgroup label="Courses" id="coursesOptions"></optgroup>
+        <optgroup label="Sections" id="sectionsOptions"></optgroup>
+        <optgroup label="Units" id="unitsOptions"></optgroup>
+    </select>
 </div>
 
-<form entry-type="{{ self.entryType }}" onChange="updateSelection(this)" onsubmit="javascript:void(0);">
+<form id="graphQlCmsXblock-form" entry-type="{{ self.entryType }}" onsubmit="javascript:void(0);">
 <ul id="generalView">
         
     {# for identifier, section in sections.items #}
@@ -345,4 +345,18 @@
 
 </ul>
 </form>
+
 <span style="color: lightgrey; font-size: 9px; float: right;">GraphQL CMS XBlock v1.3</span>
+
+<div class="xblock-actions">
+    <ul>
+        <li class="action-item">
+            <input id="graphQlCmsXblock-save" type="submit" class="button action-primary save-button" value="Save" onclick="return false;" />
+        </li>
+        <li class="action-item">
+            <a href="#" class="button cancel-button">Cancel</a>
+        </li>
+    </ul>
+</div>
+<!-- close wrapper -->
+</div>

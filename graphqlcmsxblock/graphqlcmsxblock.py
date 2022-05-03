@@ -523,29 +523,18 @@ class GraphQlCmsXBlock(XBlock):
                 } 
             }"""
 
+    # OpenEdx xblock variabels
+    icon_class = 'other'
+    display_name = String(default='CI - CMS')
 
-
-    # Fields are defined on the class.  You can access them in your code as
-    # self.<fieldname>.
-    entryType = String(
-        default=''
-    )
-
-    entrySlug = String(
-        default=''
-    )
-
-    entrySections = List(
-        default=[]
-    )
-
-    blockOrder = List(
-        default=[]
-    )
+    # CMS Entry Variables
+    entryType = String(default='')
+    entrySlug = String(default='')
+    entrySections = List(default=[])
+    blockOrder = List(default=[])
 
     cmsApi = 'https://dev.cms.intellcreative.ca/api'
 
-    icon_class = 'other'
 
     def student_view(self, context=None):
         """
@@ -654,7 +643,6 @@ class GraphQlCmsXBlock(XBlock):
         entry = self.load_selected_entry()
         self.entrySections = entrySections
 
-
         viewContext = {
             'self': self,
             'cmsHost': self.cmsApi.replace('/api', ''),
@@ -740,7 +728,6 @@ class GraphQlCmsXBlock(XBlock):
         for section in self.entrySections : 
             if section in entry :
                 entryObj[section] = entry[section]
-                #sections.append(entry[section])
             
             if '[' in section and ']' in section:
                 # Handle Array Items
@@ -756,31 +743,21 @@ class GraphQlCmsXBlock(XBlock):
         
 
     @XBlock.json_handler
-    def sort_save(self, data, suffix):
-        self.blockOrder = data
-        return {
-            'order': self.blockOrder
-        }
+    def save_entry(self, data, suffix):
+        self.display_name   = data['title']
+        self.entryType      = data['type']
+        self.entrySlug      = data['slug']
+        self.entrySections  = data['enabledSections']
+        self.blockOrder     = data['blockOder']
+        return {}
 
 
     @XBlock.json_handler
-    def select_cms_block(self, data, suffix=''):
-        """
-        An example handler, which increments the data.
-        """
+    def load_cms_block(self, data, suffix=''):
 
-        # Reset
-        self.entryType = ''
-        self.entrySlug = ''
-        self.entrySections = []
-        self.blockOrder = []
-
-        if 'clause' in data:
-            self.entryType = 'clause'
-            self.entrySlug = data['clause']
-            self.entrySections = []
+        if 'clause' in data['type']:
             resp = requests.post(self.cmsApi, json={
-                "query": "query MyQuery {entries(section: \"clauses\", slug: \"" + self.entrySlug + "\" limit: 1) " + self.clauseGraphQlQuery + " }"
+                "query": "query MyQuery {entries(section: \"clauses\", slug: \"" + data['slug'] + "\" limit: 1) " + self.clauseGraphQlQuery + " }"
             })
             entry = resp.json()['data']['entries'][0]
             return {
@@ -788,12 +765,9 @@ class GraphQlCmsXBlock(XBlock):
                 "entry": entry
             }
 
-        if 'course' in data:
-            self.entryType = 'course'
-            self.entrySlug = data['course']
-            self.entrySections = []
+        if 'course' in data['type']:
             resp = requests.post(self.cmsApi, json={
-                "query": "query MyQuery {entries(section: \"courses\", slug: \"" + self.entrySlug + "\" limit: 1) " + self.courseGraphQlQuery + " }"
+                "query": "query MyQuery {entries(section: \"courses\", slug: \"" + data['slug'] + "\" limit: 1) " + self.courseGraphQlQuery + " }"
             })
             entry = resp.json()['data']['entries'][0]
             return {
@@ -801,12 +775,9 @@ class GraphQlCmsXBlock(XBlock):
                 "entry": entry
             }
         
-        if 'section' in data:
-            self.entryType = 'section'
-            self.entrySlug = data['section']
-            self.entrySections = []
+        if 'section' in data['type']:
             resp = requests.post(self.cmsApi, json={
-                "query": "query MyQuery {entries(section: \"sections\", slug: \"" + self.entrySlug + "\" limit: 1) " + self.sectionsGraphQlQuery + " }"
+                "query": "query MyQuery {entries(section: \"sections\", slug: \"" + data['slug'] + "\" limit: 1) " + self.sectionsGraphQlQuery + " }"
             })
             entry = resp.json()['data']['entries'][0]
             return {
@@ -814,12 +785,9 @@ class GraphQlCmsXBlock(XBlock):
                 "entry": entry
             }
 
-        if 'unit' in data:
-            self.entryType = 'unit'
-            self.entrySlug = data['unit']
-            self.entrySections = []
+        if 'unit' in data['type']:
             resp = requests.post(self.cmsApi, json={
-                "query": "query MyQuery {entries(section: \"units\", slug: \"" + self.entrySlug + "\" limit: 1) " + self.unitsGraphQlQuery + " }"
+                "query": "query MyQuery {entries(section: \"units\", slug: \"" + data['slug'] + "\" limit: 1) " + self.unitsGraphQlQuery + " }"
             })
             entry = resp.json()['data']['entries'][0]
             return {
@@ -829,18 +797,6 @@ class GraphQlCmsXBlock(XBlock):
 
         return {}
     
-
-    @XBlock.json_handler
-    def select_cms_block_subsections(self, data, suffix=''):
-        if 'type' in data:
-            entrySections = []
-            for section in data['selected']: 
-                entrySections.append(section['name'])
-            self.entrySections = entrySections
-            return {'result': 'success', 'selected': self.entrySections}
-        
-        return {}
-
 
     # TO-DO: change this to create the scenarios you'd like to see in the
     # workbench while developing your XBlock.
