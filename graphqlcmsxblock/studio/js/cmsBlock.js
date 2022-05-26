@@ -240,16 +240,14 @@ window.CmsBlock = function (runtime, element) {
                   
                 base +=
                   "<div>" +
-                  "<h5>" +
-                  elem.assetTitle +
-                  "</h5>" +
+                  "<h5>" + elem.assetTitle + "</h5>" +
                   "<div>" +
-                  (typeof elem.assetType != "undefined" && elem.assetType == "image"
+                  (typeof elem.assetType != "undefined" && (elem.assetType == "image" || elem.assetType == "icon")
                     ? '<img src="' +
                       cmsHost +
                       elem.assetfile[0].url +
                       '" class="img-fluid" />'
-                    : elem.assetfile[0].url) +
+                    : elem.assetfile[0].url ) +
                   "</div>" +
                   "</div>";
   

@@ -5,7 +5,7 @@
     {% for block in blocks %}
       <div class="blockType{{  block.type }}" style="padding: 0.8em; margin: 0.5em; border-bottom: 1px solid lightgray;">
 
-      {% if block.type in 'clauseText' %}
+      {% if block.type in 'clauseText,lmsAdvancedConcepts,lmsText' %}
         {{ block.block | safe }}
         
 

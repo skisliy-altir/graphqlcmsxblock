@@ -115,7 +115,7 @@
 
     {% for asset in entry.cmsAsset %}
         {% for file in asset.assetfile %}
-            {% with identifier="cmsAsset["|add:file.id|add:"]" %}
+            {% with identifier="cmsAsset["|add:asset.id|add:"]" %}
             <li data-id="{{ identifier }}">
                 <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
                     <label><input 
