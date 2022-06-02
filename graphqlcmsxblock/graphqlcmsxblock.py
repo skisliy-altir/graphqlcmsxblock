@@ -712,6 +712,8 @@ class GraphQlCmsXBlock(XBlock):
         
         else :
             # entry type not supported
+            entryObj['title'] = 'N/A'
+            entryObj['coursetag'] = 'N/A'
             return
         
         entry = resp.json()['data']['entries'][0]
