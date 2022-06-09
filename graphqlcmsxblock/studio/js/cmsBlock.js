@@ -185,14 +185,7 @@ window.CmsBlock = function (runtime, element) {
               <div style=\"padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;\">\
               <label><input type=\"checkbox\" name=\"" + identifier + "\" checked=\"checked\"/> Include Content Block</label>";
               
-              if( elem.cssClass == null )
-              {
-                base += "<div>";
-                if (elem.blockTitle != null) 
-                  base += "<h5>" + elem.blockTitle + "</h5>";
-                base += "<div>" + elem.blockContent + "</div>" + "</div>";
-              }
-              else if( elem.cssClass == 'edx-academy-tip' )
+              if( elem.cssClass == 'edx-academy-tip' )
               {
                   base += "<div class=\"edx-academy-tip\">";
                   elem.componentIcon.forEach(function(icon){
@@ -225,6 +218,14 @@ window.CmsBlock = function (runtime, element) {
                     <div class=\"edx-content\">" + elem.blockContent  + "</div>\
                 </div>";
               }
+              else
+              {
+                base += "<div>";
+                if (elem.blockTitle != null) 
+                  base += "<h5>" + elem.blockTitle + "</h5>";
+                base += "<div>" + elem.blockContent + "</div>" + "</div>";
+              }
+              
               base += '</div></li>';
             });
             break;
