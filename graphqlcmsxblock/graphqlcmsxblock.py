@@ -24,10 +24,18 @@ class GraphQlCmsXBlock(XBlock):
                         title
                     },
                     clauseText,
-                    lmsText,
-                    lmsAdvancedConcepts,
-                    platformText,
-                    platformAdvancedConcepts,
+                    contentBlock {
+                        ... on contentBlock_contentBlock_BlockType {
+                            id,
+                            blockTitle,
+                            blockContent,
+                            contentUsedFor,
+                            cssClass,
+                            componentIcon {
+                                url
+                            }
+                        }
+                    },
                     cmsAsset {
                         ... on cmsAsset_cmsAsset_BlockType {
                             id,
