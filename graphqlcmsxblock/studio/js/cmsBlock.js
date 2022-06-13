@@ -94,11 +94,8 @@ window.CmsBlock = function (runtime, element) {
           $("#generalView")
             .first()
             .html(
+              renderField("contentBlock", entry) +
               renderField("clauseText", entry) +
-              renderField("lmsText", entry) +
-              renderField("lmsAdvancedConcepts", entry) +
-              renderField("platformText", entry) +
-              renderField("platformAdvancedConcepts", entry) +
               renderField("cmsAsset", entry) +
               renderField("faq", entry) +
               renderField("tip", entry) +
