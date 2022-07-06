@@ -107,6 +107,28 @@
                             {{ block.blockContent | safe }}
                         </div>
                     </div>
+                {% elif block.cssClass == 'edx-clause-tip' %}
+                    <div class="edx-clause-tip">
+                        {% for image in block.componentIcon %}
+                            <div class="edx-icon">
+                                <img src="{{ cmsHost }}{{ image.url }}" class="img-fluid"/>
+                            </div>
+                        {% endfor %}
+                        <div class="edx-content">
+                            {{ block.blockContent | safe }}
+                        </div>
+                    </div>
+                {% elif block.cssClass == 'edx-two-columns' %}
+                    <div class="edx-two-columns">
+                        {% for image in block.componentIcon %}
+                            <div class="edx-icon">
+                                <img src="{{ cmsHost }}{{ image.url }}" class="img-fluid"/>
+                            </div>
+                        {% endfor %}
+                        <div class="edx-content">
+                            {{ block.blockContent | safe }}
+                        </div>
+                    </div>
                 {% endif %}
             </div>
         </li>

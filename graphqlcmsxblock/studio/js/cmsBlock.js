@@ -215,6 +215,28 @@ window.CmsBlock = function (runtime, element) {
                     <div class=\"edx-content\">" + elem.blockContent  + "</div>\
                 </div>";
               }
+              else if( elem.cssClass == 'edx-clause-tip')
+              {
+                base += "<div class=\"edx-clause-tip\">"
+                elem.componentIcon.forEach(function(icon){
+                  base += "<div class=\"edx-icon\">\
+                    <img src=\"" + cmsHost + icon.url + "\" class=\"img-fluid\"/>\
+                  </div>";
+                })
+                base += "<div class=\"edx-content\">" + elem.blockContent + "</div>\
+                  </div>"
+              }
+              else if( elem.cssClass == 'edx-two-columns' )
+              {
+                base += "<div class=\"edx-two-columns\">"
+                elem.componentIcon.forEach(function(icon){
+                  base += "<div class=\"edx-icon\">\
+                    <img src=\"" + cmsHost + icon.url + "\" class=\"img-fluid\"/>\
+                  </div>";
+                })
+                base += "<div class=\"edx-content\">" + elem.blockContent + "</div>\
+                  </div>"
+              }
               else
               {
                 base += "<div>";

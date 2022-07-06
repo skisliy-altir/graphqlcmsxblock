@@ -44,6 +44,28 @@
                       {{ contentBlock.blockContent | safe }}
                   </div>
               </div>
+          {% elif contentBlock.cssClass == 'edx-clause-tip' %}
+              <div class="edx-clause-tip">
+                {% for image in contentBlock.componentIcon %}
+                    <div class="edx-icon">
+                        <img src="{{ cmsHost }}{{ image.url }}" class="img-fluid"/>
+                    </div>
+                {% endfor %}
+                <div class="edx-content">
+                    {{ contentBlock.blockContent | safe }}
+                </div>
+              </div>
+          {% elif contentBlock.cssClass == 'edx-two-columns' %}
+              <div class="edx-two-columns">
+                {% for image in contentBlock.componentIcon %}
+                    <div class="edx-icon">
+                        <img src="{{ cmsHost }}{{ image.url }}" class="img-fluid"/>
+                    </div>
+                {% endfor %}
+                <div class="edx-content">
+                    {{ contentBlock.blockContent | safe }}
+                </div>
+              </div>
           {% else %}
             <div>
               {% if contentBlock.blockTitle != null %}
