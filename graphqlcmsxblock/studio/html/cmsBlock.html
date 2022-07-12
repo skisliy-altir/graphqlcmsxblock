@@ -2,8 +2,9 @@
 <script>
     // Current entry
     var selectedEntry = {
-        title           : '{{ entry.title }}',
+        uid             : '{{ self.entryUID }}',
         slug            : '{{ self.entrySlug }}',
+        title           : '{{ entry.title }}',
         type            : '{{ self.entryType }}',
         blockOder       : {{ blockOrder | safe }},
         enabledSections : {{ entrySections | safe }}
@@ -40,11 +41,12 @@
 
 <form id="graphQlCmsXblock-form" entry-type="{{ self.entryType }}" onsubmit="javascript:void(0);">
 <ul id="generalView">
+    <h5>{{ entry.uid }}</h5>
         
     {# for identifier, section in sections.items #}
     
     {% for identifier, section in entry.items %}
-        {% if identifier not in 'slug,title,postDate,coursetag,courseName,agreementType,contentBlock,cmsAsset,faq,tip,table2colMatrix,table3colMatrix,table4colMatrix,table5colMatrix,accordionneo' %}
+        {% if identifier not in 'uid,slug,title,postDate,coursetag,courseName,agreementType,contentBlock,cmsAsset,faq,tip,table2colMatrix,table3colMatrix,table4colMatrix,table5colMatrix,accordionneo' %}
             {%if section is not None %}
                 <li data-id="{{ identifier }}" >
                     <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
@@ -368,7 +370,7 @@
 </ul>
 </form>
 
-<span style="color: lightgrey; font-size: 9px; float: right;">GraphQL CMS XBlock [2022-07-06]</span>
+<span style="color: lightgrey; font-size: 9px; float: right;">GraphQL CMS XBlock [2022-07-11]</span>
 
 <div class="xblock-actions">
     <ul>

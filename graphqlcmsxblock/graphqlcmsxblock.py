@@ -15,8 +15,9 @@ class GraphQlCmsXBlock(XBlock):
     loader = ResourceLoader(__name__)
 
     clauseGraphQlQuery = """ {
-                title,
+                uid,
                 slug,
+                title,
                 postDate,
                 ... on clauses_clause_Entry {
                     courseName,
@@ -143,6 +144,7 @@ class GraphQlCmsXBlock(XBlock):
             } """
 
     courseGraphQlQuery = """ {
+                uid,
                 slug,
                 title,
                 postDate,
@@ -270,6 +272,7 @@ class GraphQlCmsXBlock(XBlock):
             } """
 
     sectionsGraphQlQuery = """{
+                uid,
                 slug,
                 title,
                 postDate,
@@ -397,6 +400,7 @@ class GraphQlCmsXBlock(XBlock):
             }"""
 
     unitsGraphQlQuery = """ {
+                uid
                 slug,
                 title,
                 postDate,
@@ -529,6 +533,7 @@ class GraphQlCmsXBlock(XBlock):
 
     # CMS Entry Variables
     entryType = String(default='')
+    entryUID  = String(default='')
     entrySlug = String(default='')
     entrySections = List(default=[])
     blockOrder = List(default=[])
@@ -613,7 +618,7 @@ class GraphQlCmsXBlock(XBlock):
         
         # Load Clauses
         resp = requests.post(self.cmsApi, json={
-            "query": "query MyQuery { entries(section: \"clauses\") {slug, title, \
+            "query": "query MyQuery { entries(section: \"clauses\") {uid, slug, title, \
                     ... on clauses_clause_Entry { courseName } \
                 } }"
         })
@@ -622,7 +627,7 @@ class GraphQlCmsXBlock(XBlock):
 
         # Load Courses
         resp = requests.post(self.cmsApi, json={
-            "query": "query MyQuery { entries(section: \"courses\") {slug, title \
+            "query": "query MyQuery { entries(section: \"courses\") {uid, slug, title \
                     ... on courses_courses_Entry { courseName } \
                 } }"
         })
@@ -631,7 +636,7 @@ class GraphQlCmsXBlock(XBlock):
 
         # Load Sections
         resp = requests.post(self.cmsApi, json={
-            "query": "query MyQuery { entries(section: \"sections\") {slug, title \
+            "query": "query MyQuery { entries(section: \"sections\") {uid, slug, title \
                     ... on sections_sections_Entry { courseName } \
                 } }"
         })
@@ -640,7 +645,7 @@ class GraphQlCmsXBlock(XBlock):
 
         # Load Units
         resp = requests.post(self.cmsApi, json={
-            "query": "query MyQuery { entries(section: \"units\") {slug, title \
+            "query": "query MyQuery { entries(section: \"units\") {uid, slug, title \
                     ... on units_units_Entry { courseName } \
                 } }"
         })
@@ -652,6 +657,10 @@ class GraphQlCmsXBlock(XBlock):
         self.entrySections = []
         entry = self.load_selected_entry()
         self.entrySections = entrySections
+
+        # Save UID to memory if previous save had only slug
+        if self.entryUID is '' and entry['uid'] is not '':
+            self.entryUID = entry['uid']
 
         viewContext = {
             'self': self,
@@ -695,27 +704,31 @@ class GraphQlCmsXBlock(XBlock):
     def load_selected_entry(self) :
 
         entryObj = {}
-        if self.entrySlug is '' :
-            return  entryObj
+        if self.entryUID is not '':
+            query = " uid: \"" + self.entryUID +  "\" "
+        elif self.entrySlug is not '':
+            query = " slug: \"" + self.entrySlug +  "\" "
+        else:
+            return entryObj
 
         if self.entryType == 'clause':    
             resp = requests.post(self.cmsApi, json={
-                "query": "query MyQuery {entries(section: \"clauses\", slug: \"" + self.entrySlug + "\" limit: 1) " + self.clauseGraphQlQuery + " }"
+                "query": "query MyQuery {entries(section: \"clauses\", " + query + " limit: 1) " + self.clauseGraphQlQuery + " }"
             })
 
         elif self.entryType == 'course':    
             resp = requests.post(self.cmsApi, json={
-                "query": "query MyQuery {entries(section: \"courses\", slug: \"" + self.entrySlug + "\" limit: 1) " + self.courseGraphQlQuery + " }"
+                "query": "query MyQuery {entries(section: \"courses\", " + query + " limit: 1) " + self.courseGraphQlQuery + " }"
             })
 
         elif self.entryType == 'section':    
             resp = requests.post(self.cmsApi, json={
-                "query": "query MyQuery {entries(section: \"sections\", slug: \"" + self.entrySlug + "\" limit: 1) " + self.sectionsGraphQlQuery + " }"
+                "query": "query MyQuery {entries(section: \"sections\", " + query + " limit: 1) " + self.sectionsGraphQlQuery + " }"
             })
 
         elif self.entryType == 'unit':    
             resp = requests.post(self.cmsApi, json={
-                "query": "query MyQuery {entries(section: \"units\", slug: \"" + self.entrySlug + "\" limit: 1) " + self.unitsGraphQlQuery + " }"
+                "query": "query MyQuery {entries(section: \"units\", " + query + " limit: 1) " + self.unitsGraphQlQuery + " }"
             })
         
         else :
@@ -756,9 +769,10 @@ class GraphQlCmsXBlock(XBlock):
 
     @XBlock.json_handler
     def save_entry(self, data, suffix):
+        self.entryUID      = data['uid']
+        self.entrySlug      = data['slug']
         self.display_name   = data['title']
         self.entryType      = data['type']
-        self.entrySlug      = data['slug']
         self.entrySections  = data['enabledSections']
         self.blockOrder     = data['blockOder']
         return {
@@ -771,7 +785,7 @@ class GraphQlCmsXBlock(XBlock):
 
         if 'clause' in data['type']:
             resp = requests.post(self.cmsApi, json={
-                "query": "query MyQuery {entries(section: \"clauses\", slug: \"" + data['slug'] + "\" limit: 1) " + self.clauseGraphQlQuery + " }"
+                "query": "query MyQuery {entries(section: \"clauses\", uid: \"" + data['uid'] + "\" limit: 1) " + self.clauseGraphQlQuery + " }"
             })
             entry = resp.json()['data']['entries'][0]
             return {
@@ -781,7 +795,7 @@ class GraphQlCmsXBlock(XBlock):
 
         if 'course' in data['type']:
             resp = requests.post(self.cmsApi, json={
-                "query": "query MyQuery {entries(section: \"courses\", slug: \"" + data['slug'] + "\" limit: 1) " + self.courseGraphQlQuery + " }"
+                "query": "query MyQuery {entries(section: \"courses\", uid: \"" + data['uid'] + "\" limit: 1) " + self.courseGraphQlQuery + " }"
             })
             entry = resp.json()['data']['entries'][0]
             return {
@@ -791,7 +805,7 @@ class GraphQlCmsXBlock(XBlock):
         
         if 'section' in data['type']:
             resp = requests.post(self.cmsApi, json={
-                "query": "query MyQuery {entries(section: \"sections\", slug: \"" + data['slug'] + "\" limit: 1) " + self.sectionsGraphQlQuery + " }"
+                "query": "query MyQuery {entries(section: \"sections\", uid: \"" + data['uid'] + "\" limit: 1) " + self.sectionsGraphQlQuery + " }"
             })
             entry = resp.json()['data']['entries'][0]
             return {
@@ -801,7 +815,7 @@ class GraphQlCmsXBlock(XBlock):
 
         if 'unit' in data['type']:
             resp = requests.post(self.cmsApi, json={
-                "query": "query MyQuery {entries(section: \"units\", slug: \"" + data['slug'] + "\" limit: 1) " + self.unitsGraphQlQuery + " }"
+                "query": "query MyQuery {entries(section: \"units\", uid: \"" + data['uid'] + "\" limit: 1) " + self.unitsGraphQlQuery + " }"
             })
             entry = resp.json()['data']['entries'][0]
             return {

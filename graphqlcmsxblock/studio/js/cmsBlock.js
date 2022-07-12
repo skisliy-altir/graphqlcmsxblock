@@ -10,9 +10,10 @@ window.CmsBlock = function (runtime, element) {
   
     // Entry Variables
     var entry = {
+      uid: null,
+      slug: null,
       title: null,
       type: null,
-      slug: null,
       blockOder: [],
       enabledSections: []
     }
@@ -28,10 +29,10 @@ window.CmsBlock = function (runtime, element) {
       console.log('change entry:', this.value);
       var parts = this.value.split("::");
       var type = parts[0];
-      var slug = parts[1];
+      var uid = parts[1];
       var request = {
         type: type,
-        slug: slug
+        uid: uid
       };
   
       $.ajax({
@@ -42,9 +43,10 @@ window.CmsBlock = function (runtime, element) {
           cmsHost = result.cmsHost;
 
           // save local memory
-          entry.title           = result.entry.title;
+          entry.uid             = uid;
           entry.type            = type;
-          entry.slug            = slug;
+          entry.slug            = result.entry.slug;
+          entry.title           = result.entry.title;
           entry.blockOder       = [];
           entry.enabledSections = [];
 
@@ -72,11 +74,11 @@ window.CmsBlock = function (runtime, element) {
             var option = document.createElement("option");
   
             option.appendChild(document.createTextNode(elem.title));
-            option.value = singularType + "::" + elem.slug;
+            option.value = singularType + "::" + elem.uid;
   
             if (
-              window.selectedEntry.slug != "" &&
-              window.selectedEntry.slug == elem.slug &&
+              window.selectedEntry.uid != "" &&
+              window.selectedEntry.uid == elem.uid &&
               window.selectedEntry.type != "" &&
               window.selectedEntry.type == singularType
             )
@@ -646,10 +648,11 @@ window.CmsBlock = function (runtime, element) {
       /* Here's where you'd do things on page load. */
       update_entry_options($("#courseFilter").val()); 
 
-      if ( window.selectedEntry.slug != "" && window.selectedEntry.type != "" )
+      if ( window.selectedEntry.uid != "" && window.selectedEntry.type != "" )
       {
-        entry.type            = window.selectedEntry.type;
+        entry.uid             = window.selectedEntry.uid;
         entry.slug            = window.selectedEntry.slug;
+        entry.type            = window.selectedEntry.type;
         entry.blockOder       = window.selectedEntry.blockOder;
         entry.enabledSections = window.selectedEntry.enabledSections;
         entry.title           = window.selectedEntry.title;
