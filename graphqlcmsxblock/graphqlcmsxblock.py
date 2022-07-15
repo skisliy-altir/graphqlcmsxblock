@@ -659,7 +659,7 @@ class GraphQlCmsXBlock(XBlock):
         self.entrySections = entrySections
 
         # Save UID to memory if previous save had only slug
-        if self.entryUID is '' and entry['uid'] is not '':
+        if self.entryUID is '' and hasattr(entry, 'uid') and entry['uid'] is not '':
             self.entryUID = entry['uid']
 
         viewContext = {
