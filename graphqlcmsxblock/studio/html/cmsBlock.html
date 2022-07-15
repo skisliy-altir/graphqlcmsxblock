@@ -41,10 +41,7 @@
 
 <form id="graphQlCmsXblock-form" entry-type="{{ self.entryType }}" onsubmit="javascript:void(0);">
 <ul id="generalView">
-    <h5>{{ entry.uid }}</h5>
-        
-    {# for identifier, section in sections.items #}
-    
+
     {% for identifier, section in entry.items %}
         {% if identifier not in 'uid,slug,title,postDate,coursetag,courseName,agreementType,contentBlock,cmsAsset,faq,tip,table2colMatrix,table3colMatrix,table4colMatrix,table5colMatrix,accordionneo' %}
             {%if section is not None %}
@@ -71,12 +68,7 @@
                     name="{{ identifier }}"
                     {% if identifier in entrySections %}checked="checked"{% endif %}
                     > Include Content Block</label> 
-                {% if block.cssClass == None %}
-                    {% if block.blockTitle != null %}
-                        <h5>{{ block.blockTitle }}</h5>
-                    {% endif %}
-                    <div>{{ block.blockContent | safe }}</div>
-                {% elif block.cssClass == 'edx-academy-tip' %}
+                {% if block.cssClass == 'edx-academy-tip' %}
                     <div class="edx-academy-tip">
                         {% for image in block.componentIcon %}
                             <div class="edx-icon">
@@ -130,6 +122,13 @@
                         <div class="edx-content">
                             {{ block.blockContent | safe }}
                         </div>
+                    </div>
+                {% else %}
+                    <div class="edx-no-class">
+                        {% if block.blockTitle != null %}
+                            <h5>{{ block.blockTitle }}</h5>
+                        {% endif %}
+                        <div>{{ block.blockContent | safe }}</div>
                     </div>
                 {% endif %}
             </div>
@@ -370,7 +369,7 @@
 </ul>
 </form>
 
-<span style="color: lightgrey; font-size: 9px; float: right;">GraphQL CMS XBlock [2022-07-11]</span>
+<span style="color: lightgrey; font-size: 9px; float: right;">GraphQL CMS XBlock [2022-07-15]</span>
 
 <div class="xblock-actions">
     <ul>

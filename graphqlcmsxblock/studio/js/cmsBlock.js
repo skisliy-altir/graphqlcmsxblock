@@ -241,7 +241,7 @@ window.CmsBlock = function (runtime, element) {
               }
               else
               {
-                base += "<div>";
+                base += "<div class=\"edx-no-class\">";
                 if (elem.blockTitle != null) 
                   base += "<h5>" + elem.blockTitle + "</h5>";
                 base += "<div>" + elem.blockContent + "</div>" + "</div>";
