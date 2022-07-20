@@ -704,9 +704,9 @@ class GraphQlCmsXBlock(XBlock):
     def load_selected_entry(self) :
 
         entryObj = {}
-        if self.entryUID is not '':
+        if self.entryUID is not None and self.entryUID is not '':
             query = " uid: \"" + self.entryUID +  "\" "
-        elif self.entrySlug is not '':
+        elif self.entrySlug is not None and self.entrySlug is not '':
             query = " slug: \"" + self.entrySlug +  "\" "
         else:
             return entryObj
@@ -769,7 +769,7 @@ class GraphQlCmsXBlock(XBlock):
 
     @XBlock.json_handler
     def save_entry(self, data, suffix):
-        self.entryUID      = data['uid']
+        self.entryUID       = data['uid']
         self.entrySlug      = data['slug']
         self.display_name   = data['title']
         self.entryType      = data['type']

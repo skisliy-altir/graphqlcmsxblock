@@ -180,7 +180,7 @@ window.CmsBlock = function (runtime, element) {
             entry.contentBlock.forEach(function (elem) {
 
             let identifier = type + '[' + elem.id + ']';
-            base +=  "<li data-id=\"" + identifier + "\"> \
+            base +=  "<li class=\"sortable_list_element\" data-id=\"" + identifier + "\"> \
               <div style=\"padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;\">\
               <label><input type=\"checkbox\" name=\"" + identifier + "\" checked=\"checked\"/> Include Content Block</label>";
               
@@ -256,7 +256,7 @@ window.CmsBlock = function (runtime, element) {
               if (typeof elem.assetfile[0] != "undefined") {
   
                 let identifier = type + '[' + elem.id + ']';
-                base +=  "<li data-id=\"" + identifier + "\"> \
+                base +=  "<li class=\"sortable_list_element\" data-id=\"" + identifier + "\"> \
                   <div style=\"padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;\">\
                   <label><input type=\"checkbox\" name=\"" + identifier + "\" checked=\"checked\"/> Include Asset</label>";
                   
@@ -282,7 +282,7 @@ window.CmsBlock = function (runtime, element) {
             entry.faq.forEach(function (elem) {
 
               let identifier = type + '[' + elem.id + ']';
-              base +=  "<li data-id=\"" + identifier + "\"> \
+              base +=  "<li class=\"sortable_list_element\" data-id=\"" + identifier + "\"> \
                 <div style=\"padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;\">\
                 <label><input type=\"checkbox\" name=\"" + identifier + "\" checked=\"checked\"/> Include FAQ</label>";
 
@@ -303,7 +303,7 @@ window.CmsBlock = function (runtime, element) {
           case "tip":
             entry.tip.forEach(function (elem) {
               let identifier = type + '[' + elem.id + ']';
-              base +=  "<li data-id=\"" + identifier + "\"> \
+              base +=  "<li class=\"sortable_list_element\" data-id=\"" + identifier + "\"> \
                 <div style=\"padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;\">\
                 <label><input type=\"checkbox\" name=\"" + identifier + "\" checked=\"checked\"/> Include Tip</label>";
 
@@ -324,7 +324,7 @@ window.CmsBlock = function (runtime, element) {
           case "accordionneo":
             entry.accordionneo.forEach(function (elem) {
               let identifier = type + '[' + elem.id + ']';
-              base +=  "<li data-id=\"" + identifier + "\"> \
+              base +=  "<li class=\"sortable_list_element\" data-id=\"" + identifier + "\"> \
                 <div style=\"padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;\">\
                 <label><input type=\"checkbox\" name=\"" + identifier + "\" checked=\"checked\"/> Include Accordion</label>";
               
@@ -348,7 +348,7 @@ window.CmsBlock = function (runtime, element) {
             entry.table2colMatrix.forEach(function (elem) {
   
               let identifier = type + '[' + elem.id + ']';
-              base +=  "<li data-id=\"" + identifier + "\"> \
+              base +=  "<li class=\"sortable_list_element\" data-id=\"" + identifier + "\"> \
                 <div style=\"padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;\">\
                 <label><input type=\"checkbox\" name=\"" + identifier + "\" checked=\"checked\"/> Include Table</label>";
 
@@ -391,7 +391,7 @@ window.CmsBlock = function (runtime, element) {
             entry.table3colMatrix.forEach(function (elem) {
   
               let identifier = type + '[' + elem.id + ']';
-              base +=  "<li data-id=\"" + identifier + "\"> \
+              base +=  "<li class=\"sortable_list_element\" data-id=\"" + identifier + "\"> \
                 <div style=\"padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;\">\
                 <label><input type=\"checkbox\" name=\"" + identifier + "\" checked=\"checked\"/> Include Table</label>";
 
@@ -439,7 +439,7 @@ window.CmsBlock = function (runtime, element) {
           case "table4colMatrix":
             entry.table4colMatrix.forEach(function (elem) {
               let identifier = type + '[' + elem.id + ']';
-              base +=  "<li data-id=\"" + identifier + "\"> \
+              base +=  "<li class=\"sortable_list_element\" data-id=\"" + identifier + "\"> \
                 <div style=\"padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;\">\
                 <label><input type=\"checkbox\" name=\"" + identifier + "\" checked=\"checked\"/> Include Table</label>";
 
@@ -494,7 +494,7 @@ window.CmsBlock = function (runtime, element) {
             entry.table5colMatrix.forEach(function (elem) {
   
               let identifier = type + '[' + elem.id + ']';
-              base +=  "<li data-id=\"" + identifier + "\"> \
+              base +=  "<li class=\"sortable_list_element\" data-id=\"" + identifier + "\"> \
                 <div style=\"padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;\">\
                 <label><input type=\"checkbox\" name=\"" + identifier + "\" checked=\"checked\"/> Include Table</label>";
                 
@@ -556,7 +556,7 @@ window.CmsBlock = function (runtime, element) {
       }
       
       // single block types
-      let base = '<li data-id="' + type + '">' +
+      let base = '<li class=\"sortable_list_element\" data-id="' + type + '">' +
         '<div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">';
       
       switch (type) {
@@ -613,7 +613,7 @@ window.CmsBlock = function (runtime, element) {
       
       // build block order 
       entry.blockOder = [];
-      $("#generalView").find('li').each(function(index, node){
+      $("#generalView").find('li.sortable_list_element').each(function(index, node){
         entry.blockOder.push($(node).attr('data-id'));
       });
 
