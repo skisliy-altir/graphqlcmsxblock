@@ -590,7 +590,7 @@ class GraphQlCmsXBlock(XBlock):
         })
         frag.add_content(html)
         frag.add_css(self.resource_string("static/css/graphqlcmsxblock.css"))
-        frag.initialize_js('GraphQlCmsXBlock')
+        #frag.initialize_js('GraphQlCmsXBlock')
         return frag
 
 
@@ -684,7 +684,7 @@ class GraphQlCmsXBlock(XBlock):
         fragment = Fragment()
         fragment.add_content(self.loader.render_django_template('/studio/html/cmsBlock.html', viewContext))
         fragment.add_css(self.resource_string("studio/css/cmsBlock.css"))
-        fragment.initialize_js('CmsBlock')
+        #fragment.initialize_js('CmsBlock')
         return fragment
 
 

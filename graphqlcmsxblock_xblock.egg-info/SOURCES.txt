@@ -6,9 +6,6 @@ graphqlcmsxblock/static/css/graphqlcmsxblock.css
 graphqlcmsxblock/static/html/graphqlcmsxblock.html
 graphqlcmsxblock/studio/css/cmsBlock.css
 graphqlcmsxblock/studio/html/cmsBlock.html
-graphqlcmsxblock/public/js/studio/vendor/Sortable.min.js
-graphqlcmsxblock/public/js/studio/vendor/jquery-sortable.js
-graphqlcmsxblock/public/js/studio/cmsBlock.js
 graphqlcmsxblock/translations/README.txt
 graphqlcmsxblock_xblock.egg-info/PKG-INFO
 graphqlcmsxblock_xblock.egg-info/SOURCES.txt
