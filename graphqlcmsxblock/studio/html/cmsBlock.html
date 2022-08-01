@@ -17,7 +17,11 @@
             var courses = {{ coursesList | safe }};
             var units = {{ unitsList | safe }};
         </script> 
-
+        
+        <script src="{{ assetsBaseUrl }}/vendor/Sortable.min.js"></script>
+        <script src="{{ assetsBaseUrl }}/vendor/jquery-sortable.js"></script>
+        <script src="{{ assetsBaseUrl }}/CmsBlock.js"></script>
+        
         <div>
             <label>Select Course:</label><br />
             <select id="courseFilter" style="width: 400px;">
