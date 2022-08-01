@@ -1,388 +1,390 @@
-<div class="wrapper-comp-settings is-active editor-with-buttons" id="graphqlcms-settings-tab"></div>
-<script>
-    // Current entry
-    var selectedEntry = {
-        uid             : '{{ self.entryUID }}',
-        slug            : '{{ self.entrySlug }}',
-        title           : '{{ entry.title }}',
-        type            : '{{ self.entryType }}',
-        blockOder       : {{ blockOrder | safe }},
-        enabledSections : {{ entrySections | safe }}
-    };
+<div class="editor-with-buttons">
+    <div class="wrapper-comp-settings is-active editor-with-buttons" id="graphqlcms-settings-tab">
+        <script>
+            // Current entry
+            var selectedEntry = {
+                uid             : '{{ self.entryUID }}',
+                slug            : '{{ self.entrySlug }}',
+                title           : '{{ entry.title }}',
+                type            : '{{ self.entryType }}',
+                blockOder       : {{ blockOrder | safe }},
+                enabledSections : {{ entrySections | safe }}
+            };
 
-    // CMS Lists
-    var clauses = {{ clausesList | safe }};
-    var sections = {{ sectionsList | safe }};
-    var courses = {{ coursesList | safe }};
-    var units = {{ unitsList | safe }};
+            // CMS Lists
+            var clauses = {{ clausesList | safe }};
+            var sections = {{ sectionsList | safe }};
+            var courses = {{ coursesList | safe }};
+            var units = {{ unitsList | safe }};
 
-</script> 
-<script src="{{ assetsBaseUrl }}/vendor/Sortable.min.js"></script>
-<script src="{{ assetsBaseUrl }}/vendor/jquery-sortable.js"></script>
-<script src="{{ assetsBaseUrl }}/cmsBlock.js"></script>
+        </script> 
+        <script src="{{ assetsBaseUrl }}/vendor/Sortable.min.js"></script>
+        <script src="{{ assetsBaseUrl }}/vendor/jquery-sortable.js"></script>
+        <script src="{{ assetsBaseUrl }}/cmsBlock.js"></script>
 
-<div>
-    <label>Select Course:</label><br />
-    <select id="courseFilter" style="width: 400px;">
-        <option value="">All Courses</option>
-        {% for courseKey, courseName in courseNames.items %}
-            <option value="{{ courseKey }}" {% if courseKey in entry.courseName %} selected="selected" {% endif %}>{{ courseName }}</option>
-        {% endfor %}        
-    </select>
-</div>
-<br />
-<div>
-    <label>Select Entry:</label><br />
-    <select id="entry"  style="width:400px;">
-        <option value="">Please select...</option>
-        <optgroup label="Clauses" id="clausesOptions"></optgroup>
-        <optgroup label="Courses" id="coursesOptions"></optgroup>
-        <optgroup label="Sections" id="sectionsOptions"></optgroup>
-        <optgroup label="Units" id="unitsOptions"></optgroup>
-    </select>
-</div>
+        <div>
+            <label>Select Course:</label><br />
+            <select id="courseFilter" style="width: 400px;">
+                <option value="">All Courses</option>
+                {% for courseKey, courseName in courseNames.items %}
+                    <option value="{{ courseKey }}" {% if courseKey in entry.courseName %} selected="selected" {% endif %}>{{ courseName }}</option>
+                {% endfor %}        
+            </select>
+        </div>
+        <br />
+        <div>
+            <label>Select Entry:</label><br />
+            <select id="entry"  style="width:400px;">
+                <option value="">Please select...</option>
+                <optgroup label="Clauses" id="clausesOptions"></optgroup>
+                <optgroup label="Courses" id="coursesOptions"></optgroup>
+                <optgroup label="Sections" id="sectionsOptions"></optgroup>
+                <optgroup label="Units" id="unitsOptions"></optgroup>
+            </select>
+        </div>
 
-<form id="graphQlCmsXblock-form" entry-type="{{ self.entryType }}" onsubmit="javascript:void(0);">
-<ul id="generalView">
+        <form id="graphQlCmsXblock-form" entry-type="{{ self.entryType }}" onsubmit="javascript:void(0);">
+        <ul id="generalView">
 
-    {% for identifier, section in entry.items %}
-        {% if identifier not in 'uid,slug,title,postDate,coursetag,courseName,agreementType,contentBlock,cmsAsset,faq,tip,table2colMatrix,table3colMatrix,table4colMatrix,table5colMatrix,accordionneo' %}
-            {%if section is not None %}
-                <li class="sortable_list_element" data-id="{{ identifier }}" >
+            {% for identifier, section in entry.items %}
+                {% if identifier not in 'uid,slug,title,postDate,coursetag,courseName,agreementType,contentBlock,cmsAsset,faq,tip,table2colMatrix,table3colMatrix,table4colMatrix,table5colMatrix,accordionneo' %}
+                    {%if section is not None %}
+                        <li class="sortable_list_element" data-id="{{ identifier }}" >
+                            <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
+                                <label><input 
+                                    type="checkbox" 
+                                    name="{{ identifier  }}"
+                                    {% if identifier in entrySections %}checked="checked"{% endif %}
+                                    > Include {{ identifier }}</label>
+                                <p>{{ section | safe }}</p>
+                            </div>
+                        </li>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+
+            {% for block in entry.contentBlock %}
+                {% with identifier="contentBlock["|add:block.id|add:"]" %}
+                <li class="sortable_list_element" data-id="{{ identifier }}">
                     <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
                         <label><input 
                             type="checkbox" 
-                            name="{{ identifier  }}"
+                            name="{{ identifier }}"
                             {% if identifier in entrySections %}checked="checked"{% endif %}
-                            > Include {{ identifier }}</label>
-                        <p>{{ section | safe }}</p>
+                            > Include Content Block</label> 
+                        {% if block.cssClass == 'edx-academy-tip' %}
+                            <div class="edx-academy-tip">
+                                {% for image in block.componentIcon %}
+                                    <div class="edx-icon">
+                                        <img src="{{ cmsHost }}{{ image.url }}" class="img-fluid"/>
+                                    </div>
+                                {% endfor %}
+                                <div class="edx-content">
+                                    {{ block.blockContent | safe }}
+                                </div>
+                            </div>
+                        {% elif block.cssClass == 'edx-featured-content' %}
+                            <div class="edx-featured-content">
+                                {% for image in block.componentIcon %}
+                                    <div class="edx-icon">
+                                        <img src="{{ cmsHost }}{{ image.url }}" class="img-fluid"/>
+                                    </div>
+                                {% endfor %}
+                                <div class="edx-content">
+                                    {{ block.blockContent | safe }}
+                                </div>
+                            </div>
+                        {% elif block.cssClass == 'edx-advanced-concept' %}
+                            <div class="edx-advanced-concept">
+                                <button class="edx-opener">
+                                    <span>Close</span>
+                                    <em>Open</em>
+                                </button>
+                                <strong class="edx-heading">Advanced Concept</strong>
+                                <div class="edx-content">
+                                    {{ block.blockContent | safe }}
+                                </div>
+                            </div>
+                        {% elif block.cssClass == 'edx-clause-tip' %}
+                            <div class="edx-clause-tip">
+                                {% for image in block.componentIcon %}
+                                    <div class="edx-icon">
+                                        <img src="{{ cmsHost }}{{ image.url }}" class="img-fluid"/>
+                                    </div>
+                                {% endfor %}
+                                <div class="edx-content">
+                                    {{ block.blockContent | safe }}
+                                </div>
+                            </div>
+                        {% elif block.cssClass == 'edx-two-columns' %}
+                            <div class="edx-two-columns">
+                                {% for image in block.componentIcon %}
+                                    <div class="edx-icon">
+                                        <img src="{{ cmsHost }}{{ image.url }}" class="img-fluid"/>
+                                    </div>
+                                {% endfor %}
+                                <div class="edx-content">
+                                    {{ block.blockContent | safe }}
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="edx-no-class">
+                                {% if block.blockTitle != null %}
+                                    <h5>{{ block.blockTitle }}</h5>
+                                {% endif %}
+                                <div>{{ block.blockContent | safe }}</div>
+                            </div>
+                        {% endif %}
                     </div>
                 </li>
-            {% endif %}
-        {% endif %}
-    {% endfor %}
+                {% endwith %}
+            {% endfor %}
 
-    {% for block in entry.contentBlock %}
-        {% with identifier="contentBlock["|add:block.id|add:"]" %}
-        <li class="sortable_list_element" data-id="{{ identifier }}">
-            <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
-                <label><input 
-                    type="checkbox" 
-                    name="{{ identifier }}"
-                    {% if identifier in entrySections %}checked="checked"{% endif %}
-                    > Include Content Block</label> 
-                {% if block.cssClass == 'edx-academy-tip' %}
-                    <div class="edx-academy-tip">
-                        {% for image in block.componentIcon %}
-                            <div class="edx-icon">
-                                <img src="{{ cmsHost }}{{ image.url }}" class="img-fluid"/>
-                            </div>
-                        {% endfor %}
-                        <div class="edx-content">
-                            {{ block.blockContent | safe }}
+            {% for asset in entry.cmsAsset %}
+                {% for file in asset.assetfile %}
+                    {% with identifier="cmsAsset["|add:asset.id|add:"]" %}
+                    <li class="sortable_list_element" data-id="{{ identifier }}">
+                        <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
+                            <label><input 
+                                type ="checkbox" 
+                                name="{{ identifier }}"
+                                {% if identifier in entrySections %}checked="checked"{% endif %}
+                                > Include Cms Asset</label>
+                            <img src="{{ cmsHost }}{{ file.url }}" class="img-fluid {{ asset.assetType }}"/>
                         </div>
-                    </div>
-                {% elif block.cssClass == 'edx-featured-content' %}
-                    <div class="edx-featured-content">
-                        {% for image in block.componentIcon %}
-                            <div class="edx-icon">
-                                <img src="{{ cmsHost }}{{ image.url }}" class="img-fluid"/>
-                            </div>
-                        {% endfor %}
-                        <div class="edx-content">
-                            {{ block.blockContent | safe }}
-                        </div>
-                    </div>
-                {% elif block.cssClass == 'edx-advanced-concept' %}
-                    <div class="edx-advanced-concept">
-                        <button class="edx-opener">
-                            <span>Close</span>
-                            <em>Open</em>
-                        </button>
-                        <strong class="edx-heading">Advanced Concept</strong>
-                        <div class="edx-content">
-                            {{ block.blockContent | safe }}
-                        </div>
-                    </div>
-                {% elif block.cssClass == 'edx-clause-tip' %}
-                    <div class="edx-clause-tip">
-                        {% for image in block.componentIcon %}
-                            <div class="edx-icon">
-                                <img src="{{ cmsHost }}{{ image.url }}" class="img-fluid"/>
-                            </div>
-                        {% endfor %}
-                        <div class="edx-content">
-                            {{ block.blockContent | safe }}
-                        </div>
-                    </div>
-                {% elif block.cssClass == 'edx-two-columns' %}
-                    <div class="edx-two-columns">
-                        {% for image in block.componentIcon %}
-                            <div class="edx-icon">
-                                <img src="{{ cmsHost }}{{ image.url }}" class="img-fluid"/>
-                            </div>
-                        {% endfor %}
-                        <div class="edx-content">
-                            {{ block.blockContent | safe }}
-                        </div>
-                    </div>
-                {% else %}
-                    <div class="edx-no-class">
-                        {% if block.blockTitle != null %}
-                            <h5>{{ block.blockTitle }}</h5>
-                        {% endif %}
-                        <div>{{ block.blockContent | safe }}</div>
-                    </div>
-                {% endif %}
-            </div>
-        </li>
-        {% endwith %}
-    {% endfor %}
-
-    {% for asset in entry.cmsAsset %}
-        {% for file in asset.assetfile %}
-            {% with identifier="cmsAsset["|add:asset.id|add:"]" %}
-            <li class="sortable_list_element" data-id="{{ identifier }}">
-                <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
-                    <label><input 
-                        type ="checkbox" 
-                        name="{{ identifier }}"
-                        {% if identifier in entrySections %}checked="checked"{% endif %}
-                        > Include Cms Asset</label>
-                    <img src="{{ cmsHost }}{{ file.url }}" class="img-fluid {{ asset.assetType }}"/>
-                </div>
-            </li>
-            {% endwith %}
-        {% endfor %}
-    {% endfor %}
-
-    {% for faq in entry.faq %}
-        {% with identifier="faq["|add:faq.id|add:"]" %}
-        <li class="sortable_list_element" data-id="{{ identifier }}">
-            <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
-                <label><input 
-                    type="checkbox" 
-                    name="{{ identifier }}"
-                    {% if identifier in entrySections %}checked="checked"{% endif %}
-                    > Include FAQ</label>
-                <h5>{{ faq.question }}</h5>
-                <div>{{ faq.answer | safe }}</div>
-            </div>
-        </li>
-        {% endwith %}
-    {% endfor %}
-
-    {% for tip in entry.tip %}
-        {% with identifier="tip["|add:tip.id|add:"]" %}
-        <li class="sortable_list_element" data-id="{{ identifier }}">
-            <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;" class = "{{ tip.tipCssClass }}">
-                <label><input 
-                    type="checkbox" 
-                    name="{{ identifier }}"
-                    {% if identifier in entrySections %}checked="checked"{% endif %}
-                    > Include Tip</label>
-                <h5>{{ tip.tipTitle }}</h5>
-                <div>{{ tip.tipContent | safe }}</div>
-            </div>
-        </li>
-        {% endwith %}
-    {% endfor %}
-
-    {% for table in entry.table2colMatrix %}
-        {% with identifier="table2colMatrix["|add:table.id|add:"]" %}
-        <li class="sortable_list_element" data-id="{{ identifier }}">
-            <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
-                <label><input 
-                    type="checkbox" 
-                    name="{{ identifier }}"
-                    {% if identifier in entrySections %}checked="checked"{% endif %}
-                    > Include Table</label>
-                <table>
-                    {% if table.hasHeaderRow.0 == 'yes' %}
-                        <tr>
-                            <th> {{ table.table2col.0.col1 | safe }} </th>
-                            <th> {{ table.table2col.0.col2 | safe }} </th>
-                        </tr>
-                        {% for row in table.table2col|slice:"1:" %}
-                            <tr>
-                                <td> {{ row.col1 | safe }} </td>
-                                <td> {{ row.col2 | safe }} </td>
-                            </tr>
-                        {% endfor %}
-                    {% else %}
-                        {% for row in table.table2col %}
-                            <tr>
-                                <td> {{ row.col1 | safe }} </td>
-                                <td> {{ row.col2 | safe }} </td>
-                            </tr>
-                        {% endfor %}
-                    {% endif %}
-                </table>
-            </div>
-        </li>
-        {% endwith %}
-    {% endfor %}
-
-    {% for table in entry.table3colMatrix %}
-        {% with identifier="table3colMatrix["|add:table.id|add:"]" %}
-        <li class="sortable_list_element" data-id="{{ identifier }}">
-            <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
-                <label><input 
-                    type ="checkbox" 
-                    name="{{ identifier }}"
-                    {% if identifier in entrySections %}checked="checked"{% endif %}
-                    > Include Table</label>
-                <table>
-                    {% if table.hasHeaderRow.0 == 'yes' %}
-                        <tr>
-                            <th> {{ table.table3col.0.col1 | safe }} </th>
-                            <th> {{ table.table3col.0.col2 | safe }} </th>
-                            <th> {{ table.table3col.0.col3 | safe }} </th>
-                        </tr>
-                        {% for row in table.table3col|slice:"1:" %}
-                            <tr>
-                                <td> {{ row.col1 | safe }} </td>
-                                <td> {{ row.col2 | safe }} </td>
-                                <td> {{ row.col3 | safe }} </td>
-                            </tr>
-                        {% endfor %}
-                    {% else %}
-                        {% for row in table.table3col %}
-                            <tr>
-                                <td> {{ row.col1 | safe }} </td>
-                                <td> {{ row.col2 | safe }} </td>
-                                <td> {{ row.col3 | safe }} </td>
-                            </tr>
-                        {% endfor %}
-                    {% endif %}
-                </table>
-            </div>
-        </li>
-        {% endwith %}
-    {% endfor %}
-
-    {% for table in entry.table4colMatrix %}
-        {% with identifier="table4colMatrix["|add:table.id|add:"]" %}
-        <li class="sortable_list_element" data-id="{{ identifier }}">
-            <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
-                <label><input 
-                    type="checkbox" 
-                    name="{{ identifier }}"
-                    {% if identifier in entrySections %}checked="checked"{% endif %}
-                    > Include Table</label>
-                <table>
-                    {% if table.hasHeaderRow.0 == 'yes' %}
-                        <tr>
-                            <th> {{ table.table4col.0.col1 | safe }} </th>
-                            <th> {{ table.table4col.0.col2 | safe }} </th>
-                            <th> {{ table.table4col.0.col3 | safe }} </th>
-                            <th> {{ table.table4col.0.col4 | safe }} </th>
-                        </tr>
-                        {% for row in table.table4col|slice:"1:" %}
-                            <tr>
-                                <td> {{ row.col1 | safe }} </td>
-                                <td> {{ row.col2 | safe }} </td>
-                                <td> {{ row.col3 | safe }} </td>
-                                <td> {{ row.col4 | safe }} </td>
-                            </tr>
-                        {% endfor %}
-                    {% else %}
-                        {% for row in table.table4col %}
-                            <tr>
-                                <td> {{ row.col1 | safe }} </td>
-                                <td> {{ row.col2 | safe }} </td>
-                                <td> {{ row.col3 | safe }} </td>
-                                <td> {{ row.col4 | safe }} </td>
-                            </tr>
-                        {% endfor %}
-                    {% endif %}
-                </table>
-            </div>
-        </li>
-        {% endwith %}
-    {% endfor %}
-
-    {% for table in entry.table5colMatrix %}
-        {% with identifier="table5colMatrix["|add:table.id|add:"]" %}
-        <li class="sortable_list_element" data-id="{{ identifier }}">
-            <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
-                <label><input 
-                    type ="checkbox" 
-                    name = "{{ identifier }}"
-                    {% if identifier in entrySections %}checked="checked"{% endif %}
-                    > Include Table</label>
-                <table>
-                    {% if table.hasHeaderRow.0 == 'yes' %}
-                        <tr>
-                            <th> {{ table.table4col.0.col1 | safe }} </th>
-                            <th> {{ table.table4col.0.col2 | safe }} </th>
-                            <th> {{ table.table4col.0.col3 | safe }} </th>
-                            <th> {{ table.table4col.0.col4 | safe }} </th>
-                            <th> {{ table.table4col.0.col5 | safe }} </th>
-                        </tr>
-                        {% for row in table.table5col|slice:"1:" %}
-                            <tr>
-                                <td> {{ row.col1 | safe }} </td>
-                                <td> {{ row.col2 | safe }} </td>
-                                <td> {{ row.col3 | safe }} </td>
-                                <td> {{ row.col4 | safe }} </td>
-                                <td> {{ row.col5 | safe }} </td>
-                            </tr>
-                        {% endfor %}
-                    {% else %}
-                        {% for row in table.table5col %}
-                            <tr>
-                                <td> {{ row.col1 | safe }} </td>
-                                <td> {{ row.col2 | safe }} </td>
-                                <td> {{ row.col3 | safe }} </td>
-                                <td> {{ row.col4 | safe }} </td>
-                                <td> {{ row.col5 | safe }} </td>
-                            </tr>
-                        {% endfor %}
-                    {% endif %}
-                </table>
-            </div>
-        </li>
-        {% endwith %}
-    {% endfor %}
-
-    {% for accordion in entry.accordionneo %}
-        {% with identifier="accordionneo["|add:accordion.id|add:"]" %}
-        <li class="sortable_list_element" data-id="{{ identifier }}">
-            <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
-                <label><input 
-                    ype ="checkbox" 
-                    name="{{ identifier }}"
-                    {% if identifier in entrySections %}checked="checked"{% endif %}
-                    > Include Accordion</label>
-                {% if accordion.accordionTitle != null %}
-                    <h5>{{ accordion.accordionTitle }}</h5>
-                {% endif %}
-                {% for elem in accordion.accordionmatrix %}
-                    <details>
-                        <summary class= "{{ accordion.accordionClasses }}">{{ elem.accordionblocktitle }} </summary>
-                        {{ elem.accordionblockcontent | safe }}
-                    </details>
+                    </li>
+                    {% endwith %}
                 {% endfor %}
-            </div>
-        </li>
-        {% endwith %}
-    {% endfor %}
+            {% endfor %}
 
-</ul>
-</form>
+            {% for faq in entry.faq %}
+                {% with identifier="faq["|add:faq.id|add:"]" %}
+                <li class="sortable_list_element" data-id="{{ identifier }}">
+                    <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
+                        <label><input 
+                            type="checkbox" 
+                            name="{{ identifier }}"
+                            {% if identifier in entrySections %}checked="checked"{% endif %}
+                            > Include FAQ</label>
+                        <h5>{{ faq.question }}</h5>
+                        <div>{{ faq.answer | safe }}</div>
+                    </div>
+                </li>
+                {% endwith %}
+            {% endfor %}
 
-<span style="color: lightgrey; font-size: 9px; float: right;">GraphQL CMS XBlock [2022-08-01]</span>
+            {% for tip in entry.tip %}
+                {% with identifier="tip["|add:tip.id|add:"]" %}
+                <li class="sortable_list_element" data-id="{{ identifier }}">
+                    <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;" class = "{{ tip.tipCssClass }}">
+                        <label><input 
+                            type="checkbox" 
+                            name="{{ identifier }}"
+                            {% if identifier in entrySections %}checked="checked"{% endif %}
+                            > Include Tip</label>
+                        <h5>{{ tip.tipTitle }}</h5>
+                        <div>{{ tip.tipContent | safe }}</div>
+                    </div>
+                </li>
+                {% endwith %}
+            {% endfor %}
 
-<div class="xblock-actions">
-    <ul>
-        <li class="action-item">
-            <input id="graphQlCmsXblock-save" type="submit" class="button action-primary save-button" value="Save" onclick="return false;" />
-        </li>
-        <li class="action-item">
-            <a id="graphQlCmsXblock-cancel"  href="#" class="button cancel-button">Cancel</a>
-        </li>
-    </ul>
-</div>
-<!-- close wrapper -->
+            {% for table in entry.table2colMatrix %}
+                {% with identifier="table2colMatrix["|add:table.id|add:"]" %}
+                <li class="sortable_list_element" data-id="{{ identifier }}">
+                    <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
+                        <label><input 
+                            type="checkbox" 
+                            name="{{ identifier }}"
+                            {% if identifier in entrySections %}checked="checked"{% endif %}
+                            > Include Table</label>
+                        <table>
+                            {% if table.hasHeaderRow.0 == 'yes' %}
+                                <tr>
+                                    <th> {{ table.table2col.0.col1 | safe }} </th>
+                                    <th> {{ table.table2col.0.col2 | safe }} </th>
+                                </tr>
+                                {% for row in table.table2col|slice:"1:" %}
+                                    <tr>
+                                        <td> {{ row.col1 | safe }} </td>
+                                        <td> {{ row.col2 | safe }} </td>
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                {% for row in table.table2col %}
+                                    <tr>
+                                        <td> {{ row.col1 | safe }} </td>
+                                        <td> {{ row.col2 | safe }} </td>
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
+                        </table>
+                    </div>
+                </li>
+                {% endwith %}
+            {% endfor %}
+
+            {% for table in entry.table3colMatrix %}
+                {% with identifier="table3colMatrix["|add:table.id|add:"]" %}
+                <li class="sortable_list_element" data-id="{{ identifier }}">
+                    <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
+                        <label><input 
+                            type ="checkbox" 
+                            name="{{ identifier }}"
+                            {% if identifier in entrySections %}checked="checked"{% endif %}
+                            > Include Table</label>
+                        <table>
+                            {% if table.hasHeaderRow.0 == 'yes' %}
+                                <tr>
+                                    <th> {{ table.table3col.0.col1 | safe }} </th>
+                                    <th> {{ table.table3col.0.col2 | safe }} </th>
+                                    <th> {{ table.table3col.0.col3 | safe }} </th>
+                                </tr>
+                                {% for row in table.table3col|slice:"1:" %}
+                                    <tr>
+                                        <td> {{ row.col1 | safe }} </td>
+                                        <td> {{ row.col2 | safe }} </td>
+                                        <td> {{ row.col3 | safe }} </td>
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                {% for row in table.table3col %}
+                                    <tr>
+                                        <td> {{ row.col1 | safe }} </td>
+                                        <td> {{ row.col2 | safe }} </td>
+                                        <td> {{ row.col3 | safe }} </td>
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
+                        </table>
+                    </div>
+                </li>
+                {% endwith %}
+            {% endfor %}
+
+            {% for table in entry.table4colMatrix %}
+                {% with identifier="table4colMatrix["|add:table.id|add:"]" %}
+                <li class="sortable_list_element" data-id="{{ identifier }}">
+                    <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
+                        <label><input 
+                            type="checkbox" 
+                            name="{{ identifier }}"
+                            {% if identifier in entrySections %}checked="checked"{% endif %}
+                            > Include Table</label>
+                        <table>
+                            {% if table.hasHeaderRow.0 == 'yes' %}
+                                <tr>
+                                    <th> {{ table.table4col.0.col1 | safe }} </th>
+                                    <th> {{ table.table4col.0.col2 | safe }} </th>
+                                    <th> {{ table.table4col.0.col3 | safe }} </th>
+                                    <th> {{ table.table4col.0.col4 | safe }} </th>
+                                </tr>
+                                {% for row in table.table4col|slice:"1:" %}
+                                    <tr>
+                                        <td> {{ row.col1 | safe }} </td>
+                                        <td> {{ row.col2 | safe }} </td>
+                                        <td> {{ row.col3 | safe }} </td>
+                                        <td> {{ row.col4 | safe }} </td>
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                {% for row in table.table4col %}
+                                    <tr>
+                                        <td> {{ row.col1 | safe }} </td>
+                                        <td> {{ row.col2 | safe }} </td>
+                                        <td> {{ row.col3 | safe }} </td>
+                                        <td> {{ row.col4 | safe }} </td>
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
+                        </table>
+                    </div>
+                </li>
+                {% endwith %}
+            {% endfor %}
+
+            {% for table in entry.table5colMatrix %}
+                {% with identifier="table5colMatrix["|add:table.id|add:"]" %}
+                <li class="sortable_list_element" data-id="{{ identifier }}">
+                    <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
+                        <label><input 
+                            type ="checkbox" 
+                            name = "{{ identifier }}"
+                            {% if identifier in entrySections %}checked="checked"{% endif %}
+                            > Include Table</label>
+                        <table>
+                            {% if table.hasHeaderRow.0 == 'yes' %}
+                                <tr>
+                                    <th> {{ table.table4col.0.col1 | safe }} </th>
+                                    <th> {{ table.table4col.0.col2 | safe }} </th>
+                                    <th> {{ table.table4col.0.col3 | safe }} </th>
+                                    <th> {{ table.table4col.0.col4 | safe }} </th>
+                                    <th> {{ table.table4col.0.col5 | safe }} </th>
+                                </tr>
+                                {% for row in table.table5col|slice:"1:" %}
+                                    <tr>
+                                        <td> {{ row.col1 | safe }} </td>
+                                        <td> {{ row.col2 | safe }} </td>
+                                        <td> {{ row.col3 | safe }} </td>
+                                        <td> {{ row.col4 | safe }} </td>
+                                        <td> {{ row.col5 | safe }} </td>
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                {% for row in table.table5col %}
+                                    <tr>
+                                        <td> {{ row.col1 | safe }} </td>
+                                        <td> {{ row.col2 | safe }} </td>
+                                        <td> {{ row.col3 | safe }} </td>
+                                        <td> {{ row.col4 | safe }} </td>
+                                        <td> {{ row.col5 | safe }} </td>
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
+                        </table>
+                    </div>
+                </li>
+                {% endwith %}
+            {% endfor %}
+
+            {% for accordion in entry.accordionneo %}
+                {% with identifier="accordionneo["|add:accordion.id|add:"]" %}
+                <li class="sortable_list_element" data-id="{{ identifier }}">
+                    <div style="padding: 0.8em; margin: 0.5em; background: lightgray; border-radius: 7px;">
+                        <label><input 
+                            ype ="checkbox" 
+                            name="{{ identifier }}"
+                            {% if identifier in entrySections %}checked="checked"{% endif %}
+                            > Include Accordion</label>
+                        {% if accordion.accordionTitle != null %}
+                            <h5>{{ accordion.accordionTitle }}</h5>
+                        {% endif %}
+                        {% for elem in accordion.accordionmatrix %}
+                            <details>
+                                <summary class= "{{ accordion.accordionClasses }}">{{ elem.accordionblocktitle }} </summary>
+                                {{ elem.accordionblockcontent | safe }}
+                            </details>
+                        {% endfor %}
+                    </div>
+                </li>
+                {% endwith %}
+            {% endfor %}
+
+        </ul>
+        </form>
+
+        <span style="color: lightgrey; font-size: 9px; float: right;">GraphQL CMS XBlock [2022-08-01]</span>
+
+        <div class="xblock-actions">
+            <ul>
+                <li class="action-item">
+                    <input id="graphQlCmsXblock-save" type="submit" class="button action-primary save-button" value="Save" onclick="return false;" />
+                </li>
+                <li class="action-item">
+                    <a id="graphQlCmsXblock-cancel"  href="#" class="button cancel-button">Cancel</a>
+                </li>
+            </ul>
+        </div>
+    <!-- close wrapper #graphqlcms-settings-tab -->
+    </div>
 </div>
