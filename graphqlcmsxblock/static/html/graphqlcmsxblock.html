@@ -3,7 +3,7 @@
     <h1>{{ entry.title }}</h1>
 
     {% for block in blocks %}
-      <div class="blockType{{  block.type }}" style="padding: 0.8em; margin: 0.5em; border-bottom: 1px solid lightgray;">
+      <div class="blockType{{  block.type }}" style="padding: 0.8em; margin: 0.5em;">
 
       {% if block.type in 'clauseText,lmsAdvancedConcepts,lmsText' %}
         {{ block.block | safe }}
