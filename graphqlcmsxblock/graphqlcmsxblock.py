@@ -538,7 +538,7 @@ class GraphQlCmsXBlock(XBlock):
     entrySections = List(default=[])
     blockOrder = List(default=[])
 
-    cmsApi = 'https://dev.cms.intellcreative.ca/api'
+    cmsApi = 'https://cms.dev.usecreativeintell.com/api'
 
 
     def student_view(self, context=None):
